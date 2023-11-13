@@ -85,7 +85,10 @@
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
       git
+gnome.gnome-tweaks
 firefox
+vim
+gnumake
     #  thunderbird
     ];
   };
