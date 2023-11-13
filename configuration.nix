@@ -10,6 +10,33 @@
       ./hardware-configuration.nix
     ];
 services.fwupd.enable = true;
+virtualisation.docker.enable = true;
+
+  nix = {
+    # use unstable nix so we can access flakes
+    package = pkgs.nixUnstable;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+      keep-outputs = true
+      keep-derivations = true
+    '';
+  };
+console.useXkbConfig = true;
+    services.xserver.xkbOptions = "ctrl:nocaps";
+#wayland requirments/stuff
+  security.polkit.enable = true;
+  hardware.opengl.enable = true;
+  #xdg.portal.enable = true;
+  #xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+
+  environment.pathsToLink = [ "/libexec" "/share/zsh" ];
+  environment.localBinInPath = true;
+
+
+#maybe set this to false after figuring out users.matt.hashedPassword
+ users.mutableUsers = true;
+
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -78,11 +105,16 @@ services.fwupd.enable = true;
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+programs.zsh.enable = true;
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.matt = {
     isNormalUser = true;
+home = "/home/matt";
     description = "Matt N";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "docker" "networkmanager" "wheel" ];
+openssh.authorizedKeys.keys = ["ssh blah blah"];
+shell = pkgs.zsh;
+
     packages = with pkgs; [
       git
 gnome.gnome-tweaks
@@ -111,10 +143,22 @@ gnumake
   #   enableSSHSupport = true;
   # };
 
-  # List services that you want to enable:
+   fonts = {
+    fontDir.enable = true;
+
+    fonts = [
+      pkgs.fira-code
+    ];
+  };
+ 
+
+# List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  services.openssh.enable = true;
+  services.openssh.settings.PasswordAuthentication = true;
+  services.openssh.settings.PermitRootLogin = "no";
+
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
