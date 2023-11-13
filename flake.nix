@@ -10,6 +10,8 @@
     # We use the unstable nixpkgs repo for some packages.
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
     home-manager = {
       url = "github:nix-community/home-manager/release-23.05";
       # We want home-manager to use the same set of nixpkgs as our system.
@@ -20,7 +22,7 @@
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... }@inputs: {
+  outputs = { self, nixpkgs, nixpkgs-unstable, nixos-hardware, home-manager, ... }@inputs: {
       # Overlays is the list of overlays we want to apply from flake inputs.
       overlays = [
         inputs.neovim-nightly-overlay.overlay
@@ -28,7 +30,10 @@
       ];
      nixosConfigurations.baremetal = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      modules = [ ./configuration.nix ];
+      modules = [
+        ./configuration.nix
+       nixos-hardware.nixosModules.framework-13-7040-amd
+      ];
     };
   };
 }
