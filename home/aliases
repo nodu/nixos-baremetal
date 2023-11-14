@@ -1,0 +1,348 @@
+echo 'aliases.sh sourced.'
+
+alias azd="docker run -it mcr.microsoft.com/azure-cli az"
+# azd --version
+
+# Tunnel traffic
+alias tunnel='ssh -D 8080 -C -N pi@me -v; echo "Change location to Tunnel SOCKS 8080"'
+# took out option -q, quiet mode and -f background mode.  -D port, -N do not execute remote command, -C compression
+
+# Start in Code
+#cd ~/Code
+
+function pause {
+	printf >/dev/tty '%s' "${*:-Press any key to continue... }"
+	[[ $ZSH_VERSION ]] && read -krs # Use -u0 to read from STDIN
+	[[ $BASH_VERSION ]] && read </dev/tty -rsn1
+	printf '\n'
+}
+
+
+# Kubernetes/Azure
+# source ~/repos/dotenv/shortcuts/kubernetes
+
+# alias k='kubectl'
+# alias kub='kubectl'
+# alias kube='kubectl'
+#
+# # Load kubectl completions
+# if [ /usr/local/bin/kubectl ] || [ /usr/bin/kubectl ]; then source <(kubectl completion zsh); fi
+
+#-------- Color Manpages
+export LESS_TERMCAP_mb=$'\E[01;31m'    # begin blinking
+export LESS_TERMCAP_md=$'\E[01;31m'    # begin bold
+export LESS_TERMCAP_me=$'\E[0m'        # end mode
+export LESS_TERMCAP_se=$'\E[0m'        # end standout-mode
+export LESS_TERMCAP_so=$'\E[01;44;33m' # begin standout-mode - info box
+export LESS_TERMCAP_ue=$'\E[0m'        # end underline
+export LESS_TERMCAP_us=$'\E[01;32m'    # begin underline
+#export MANPAGER="/usr/bin/most -s"             # color using most
+
+alias vi='nvim'
+alias vim='nvim'
+alias vv='nvimNewSplit "v"'
+alias vh='nvimNewSplit "h"'
+
+# NVM post install
+#export NVM_DIR="$HOME/.config"
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion, but there's a but with kubectl completions, so commenting out
+
+# Send WOL packaet to base
+alias wakeupbase='ssh duckdns.org -p 1422 /usr/bin/etherwake -D "70:8B:CD:55:FF:7E"'
+alias wakeupbase='ssh routerr /usr/bin/etherwake -D "70:8B:CD:55:FF:7E"'
+
+alias ping='ping -c 5'
+alias www='python3 -m http.server'
+
+# curl -P 104.45.159.118 ftp://40.71.174.122/vsftpd --user 'admin:password' -v
+# tcpdump host 192.168.1.3 -n | grep SOMETHING
+
+mn-help-byobuKeys() {
+	echo ""
+	echo "Byobu Cheat Sheet"
+	echo ""
+	echo "Shift+F11 - Full Screen Pane"
+	echo ""
+	echo "Shift-F2                     Create a horizontal split"
+	echo "Ctrl-F2                      Create a vertical split"
+	echo ""
+	echo "F3/F4                        Move focus among windows"
+	echo "Shift-F3/F4                  Move focus among splits"
+	echo ""
+	echo "Shift-Left/Right/Up/Down     Move focus among splits"
+	echo "Alt-Left/Right               Move focus among windows"
+
+	echo ""
+	echo "Just press Shift +F1 to get byobu command shortcuts"
+
+	echo "You can search scroll back like vim! - '/' 'n'"
+	echo "Save scrollback with Shift+F7:  cat $BYOBU_RUN_DIR/printscreen > scrollback_history.txt"
+}
+
+alias saveScrollBack='cat $BYOBU_RUN_DIR/printscreen > ~/Code/scrollback-$(date -I)-$(date +%s).txt'
+
+mn-time-zones-gravity() {
+	overtime show UTC America/Los_Angeles Asia/Hong_Kong Europe/London Europe/Brussels Australia/Melbourne America/Chicago Asia/Kolkata
+}
+
+mn-time-zones-e20() {
+	overtime show UTC America/Los_Angeles Australia/Melbourne
+}
+
+mn-time-zones-bod() {
+	#overtime show America/New_York America/Los_Angeles Asia/Hong_Kong Europe/London
+	overtime show America/Los_Angeles Asia/Hong_Kong Europe/London
+}
+
+mn-time-zones-game() {
+	overtime show America/Los_Angeles America/New_York Asia/Hong_Kong Asia/Ho_Chi_Minh
+}
+
+localTimeHK() {
+	if [ -z "$1" ]; then
+		echo "Not WORKING"
+		echo date --date='TZ="America/Los_Angeles" 09:00 next Fri'
+		echo date --date='TZ="Europe/London" 09:00 next Fri'
+		echo date --date='TZ="Asia/Hong_Kong" 09:00 next Fri'
+		echo date --date='TZ="" 09:00 next Fri'
+		return
+	fi
+
+	date --date=$(TZ="Asia/Hong_Kong" $1)
+}
+
+timingsUSA() {
+	echo "Local times: "
+	date --date='TZ="America/Los_Angeles" 09:00 today'
+	date --date='TZ="America/Los_Angeles" 18:00 today'
+}
+
+timings() {
+	echo "Local times: "
+	date --date='TZ="Asia/Hong_Kong" 09:00 today'
+	date --date='TZ="Asia/Hong_Kong" 18:00 today'
+
+}
+alias b-split-horizontal="byobu split-window -h"
+alias b-split-vertical="byobu split-window -v"
+
+setupGravityWorkspace() {
+	byobu rename-window Gravity
+
+	cd ~/Code/Gravity
+	byobu split-window -v
+
+	byobu send-keys 'cd ~/Code/Gravity/web' 'C-m'
+	byobu send-keys 'grunt serve'
+	byobu split-window -h
+	byobu send-keys 'cd ~/Code/Gravity/main' 'C-m'
+	byobu send-keys 'docker-compose up'
+}
+
+nvimNewSplit() {
+	rm -f ~/.nvim_current_dir
+	echo $PWD >~/.nvim_current_dir
+	byobu split-window -$1
+	byobu send-keys 'cd $(cat ~/.nvim_current_dir)' 'C-m'
+	byobu send-keys 'rm -f ~/.nvim_current_dir' 'C-m'
+	byobu send-keys 'nvim .' 'C-m'
+}
+
+#alias bat='docker run -it --rm -e BAT_THEME -e BAT_STYLE -e BAT_TABS -v "$(pwd):/myapp" danlynn/bat'
+
+# Startup items:
+#motivate
+cd ~/repos/notes && echo "" && echo "Notes Repo" && git status && cd -
+cd ~/repos/todo && echo "" && echo "todo Repo" && git status && cd -
+cd ~/repos/dotenv && echo "" && echo "dotenv Repo" && git status && cd -
+cd ~/repos/nixos-config && echo "" && echo "nixos-config Repo" && git status && cd -
+cd ~/.config/nvim/ && echo "" && echo "nvim Repo" && git status && cd -
+
+mn-help-myHelpers() {
+	grep -E "() {" ~/dotenv/shortcuts/aliases.sh
+	grep -E "() {" ~/dotenv/.zshrc
+	grep -E "alias" ~/dotenv/shortcuts/aliases.sh
+	grep -E "alias" ~/dotenv/.zshrc
+	ls -al /usr/local/bin
+}
+
+echo ""
+echo "
+CheatSheets:
+
+mn-help-byobuKeys
+mn-help-vimCheatSheet
+mn-help-myHelpers
+"
+echo ""
+
+echo "F motivation and want: discipline"
+
+function dsf() { diff -u $1 $2 | diff-so-fancy; }
+
+TRANS_USERPASS="user:pass"
+
+alias trans-ls="docker exec -it transmission transmission-remote -n $TRANS_USERPASS -l"
+
+function trans-add() {
+	docker exec -it transmission transmission-remote -n $TRANS_USERPASS -a $1
+}
+function trans-rm() {
+	docker exec -it transmission transmission-remote -n $TRANS_USERPASS -t $1 -r
+}
+function trans-stop() {
+	docker exec -it transmission transmission-remote -n $TRANS_USERPASS -t $1 -S
+}
+function trans-start() {
+	docker exec -it transmission transmission-remote -n $TRANS_USERPASS -t $1 -s
+}
+function trans-start-all() {
+	docker exec -it transmission transmission-remote -n $TRANS_USERPASS --torrent all --start
+}
+
+alias switch-to-windows='~/dotenv/switch-to-windows.sh'
+#alias aws='docker run --rm -it -v ~/dotenv/aws:/root/.aws -v $(pwd):/aws amazon/aws-cli'
+
+alias aws-sync-chromeosdownloads-delete-dry='aws --profile backup-cali s3 sync ~/Downloads s3://nodu-backup/ChromeOSDownloads --delete --dryrun'
+alias aws-sync-chromeosdownloads-delete='aws --profile backup-cali s3 sync ~/Downloads s3://nodu-backup/ChromeOSDownloads --delete'
+alias aws-sync-chromeosdownloads='aws --profile backup-cali s3 sync ~/Downloads s3://nodu-backup/ChromeOSDownloads'
+alias aws-sync-chromeosdownloads-to-local-delete-dry='aws --profile backup-cali s3 sync s3://nodu-backup/ChromeOSDownloads ~/Downloads --delete --dryrun'
+alias aws-sync-chromeosdownloads-to-local-dry='aws --profile backup-cali s3 sync s3://nodu-backup/ChromeOSDownloads ~/Downloads --dryrun'
+alias aws-sync-chromeosdownloads-to-local='aws --profile backup-cali s3 sync s3://nodu-backup/ChromeOSDownloads ~/Downloads'
+
+alias aws-sync-pir-t-delete-dry='aws --profile nodu-dl s3 sync ~/Downloads/readyToTransfer s3://nodu-dl/t --delete --dryrun'
+alias aws-sync-pir-t-delete='aws --profile nodu-dl s3 sync ~/Downloads/readyToTransfer s3://nodu-dl/t --delete'
+alias aws-sync-pir-t='aws --profile nodu-dl s3 sync ~/Downloads/readyToTransfer s3://nodu-dl/'
+alias cleanUpT='/bin/rm -rf ~/Downloads/readyToTransfer/*'
+alias aws-sync-nodu-dl-here='aws --profile nodu-dl s3 sync s3://nodu-dl .'
+
+alias dl-down='aws --profile nodu-dl s3 sync s3://nodu-dl ~/Downloads/nodu-dl/'
+alias dl-down-dry='aws --profile nodu-dl s3 sync s3://nodu-dl ~/Downloads/nodu-dl/ --dry'
+alias dl-down-dry-delete='aws --profile nodu-dl s3 sync s3://nodu-dl ~/Downloads/nodu-dl/ --dry --delete'
+alias dl-down-delete='aws --profile nodu-dl s3 sync s3://nodu-dl ~/Downloads/nodu-dl/ --delete'
+
+alias dl-up='aws --profile nodu-dl s3 sync ~/Downloads/nodu-dl s3://nodu-dl/'
+alias dl-up-dry='aws --profile nodu-dl s3 sync ~/Downloads/nodu-dl s3://nodu-dl/ --dry'
+alias dl-up-dry-delete='aws --profile nodu-dl s3 sync ~/Downloads/nodu-dl s3://nodu-dl/ --dry --delete'
+alias dl-up-delete='aws --profile nodu-dl s3 sync ~/Downloads/nodu-dl s3://nodu-dl/ --delete'
+
+dl-up-item() {
+	echo 'aws --profile nodu-dl s3 cp' $1 $3
+	aws --profile nodu-dl s3 cp $1 $3
+}
+
+dl-ls() {
+	echo "example: aws-ls-dl sandman/"
+	aws --profile nodu-dl s3 ls --human-readable s3://nodu-dl/$1
+}
+
+dl-mv() {
+	aws --profile nodu-dl s3 mv s3://nodu-dl/$1 s3://nodu-dl/$2
+}
+
+alias vpn-up='nmcli c up Office'
+alias vpn-down='nmcli c down Office'
+alias vpn-network-restart='systemctl restart NetworkManager.service'
+
+alias syncNotWatched='rsync -rvhP baser:/mnt/disk1/t/complete/NotWatched/ ~/Downloads/NotWatched'
+
+alias moveMKVToReadyToTransfer="find ~/Downloads/complete -type f -name '*.mkv' -exec mv -i {} ~/Downloads/readyToTransfer/ \;"
+
+#Hashicorp Vault
+alias vault-login-matt='vault login -method=userpass username=matt'
+
+function vault-get() {
+	# vault-get production/gravity/app-secret
+	vault kv get secret/$1
+}
+
+function vault-dump() {
+	# vault-dump production/gravity/app-secret
+	OUTPUT=$(echo $1 | tr '/' '_')
+	vault kv get --format json secret/$1 | jq '.data.data' >$OUTPUT.json
+}
+
+function vault-list() {
+	# vault-list production/gravity
+	vault kv list secret/$1
+}
+
+alias edit-zsh="v ~/repos/dotenv/.zshrc"
+alias edit-osx-alias="v ~/repos/dotenv/shortcuts/macos_aliases.sh"
+
+#TODO - Move all cheatsheets to notes repo
+alias edit-vimCheatSheet="nvim ~/repos/dotenv/shortcuts/vimCheatSheet"
+
+mn-help-vimCheatSheet() {
+	cat ~/repos/dotenv/shortcuts/vimCheatSheet
+}
+
+alias spud-start='az vm start --resource-group Matt --name SPUD'
+alias spud-stop='az vm stop --resource-group Matt --name SPUD && az vm deallocate --resource-group MATT --name SPUD'
+
+alias pi-autoUploader='/home/pi/dotenv/Docker/t/config/pi-autoUploader.sh'
+
+mute-inputs() {
+	amixer -D pulse sset Capture toggle && amixer get Capture | grep '\[off\]' && notify-send "MIC switched OFF" || notify-send "MIC switched ON"
+}
+
+install_slack() {
+	INSTALL_DIR=$(mktemp -d)
+	VERSION_SLACK=4.9.1
+	curl -o $INSTALL_DIR/slack.deb -sSL https://downloads.slack-edge.com/linux_releases/slack-desktop-${VERSION_SLACK}-amd64.deb
+	sudo dpkg -i $INSTALL_DIR/slack.deb
+}
+
+install_spotify() {
+	curl -sS https://download.spotify.com/debian/pubkey.gpg | sudo apt-key add -
+	curl -sS https://download.spotify.com/debian/pubkey_0D811D58.gpg | sudo apt-key add -
+	echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
+
+	sudo apt-get update
+	sudo apt-get install spotify-client
+}
+
+
+alias backup-aws-to-chia="cp-rsync ~/Downloads/aws /Volumes/Chia/"
+alias backup-drive-to-chia="cp-rsync --exclude '.tmp.driveupload' /Users/matt/My\ Drive  /Volumes/Chia/"
+alias backup-gravity-drive-to-chia="cp-rsync /Users/matt/Downloads/202207\ Gravity\ Drive\ Backup /Volumes/Chia/"
+
+alias backup-aws-to-box="cp-rsync ~/Downloads/aws bau:/mnt/box/Backup/"
+alias backup-drive-to-box="cp-rsync --exclude '.tmp.driveupload' /Users/matt/My\ Drive  bau:/mnt/box/Backup/"
+alias backup-gravity-drive-to-box="cp-rsync /Users/matt/Downloads/202207\ Gravity\ Drive\ Backup bau:/mnt/box/Backup/"
+
+alias backup-downloads-to-chia="cp-rsync ~/Downloads /Volumes/Chia/"
+alias backup-downloads-to-box="cp-rsync ~/Downloads bau:/mnt/box/Backup/"
+
+alias sshfs-mount-pihole2box='sshfs pihole2-remote:/mnt/box /home/matt/Downloads/pihole2-remote'
+
+# Schedule sleep in X minutes, use like: sleep-in 60
+function sleep-in() {
+	local minutes=$1
+	sudo shutdown -s "+$minutes"
+}
+function wake-in() {
+	local minutes=$1
+	local datetime=$(date -v+${minutes}M +"%m/%d/%y %H:%M:%S")
+	sudo pmset schedule wake "$datetime"
+}
+function tomato() {
+	sleep-in 25
+	wake-in 30
+}
+
+function sleep-schedule() {
+	ps aux | grep shutdown
+	echo ""
+	echo "stop shutdown:
+  sudo killall shutdown"
+	echo ""
+	pmset -g sched
+	echo ""
+	echo "stop wakeup:
+  sudo pmset schedule cancel #"
+}
+
+
+alias mn-source-gcp='source functions_gcp'
