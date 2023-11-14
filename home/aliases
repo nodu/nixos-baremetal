@@ -40,8 +40,6 @@ export LESS_TERMCAP_us=$'\E[01;32m'    # begin underline
 
 alias vi='nvim'
 alias vim='nvim'
-alias vv='nvimNewSplit "v"'
-alias vh='nvimNewSplit "h"'
 
 # NVM post install
 #export NVM_DIR="$HOME/.config"
@@ -153,10 +151,11 @@ nvimNewSplit() {
 
 # Startup items:
 #motivate
-cd ~/repos/notes && echo "" && echo "Notes Repo" && git status && cd -
+cd ~/repos/notes && echo "" && echo "notes Repo" && git status && cd -
+cd ~/repos/defaults && echo "" && echo "defaults Repo" && git status && cd -
 cd ~/repos/todo && echo "" && echo "todo Repo" && git status && cd -
 cd ~/repos/dotenv && echo "" && echo "dotenv Repo" && git status && cd -
-cd ~/repos/nixos-config && echo "" && echo "nixos-config Repo" && git status && cd -
+cd ~/repos/nixos-baremetal && echo "" && echo "nixos-config Repo" && git status && cd -
 cd ~/.config/nvim/ && echo "" && echo "nvim Repo" && git status && cd -
 
 mn-help-myHelpers() {
