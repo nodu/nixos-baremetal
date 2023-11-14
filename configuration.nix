@@ -22,6 +22,10 @@
       keep-derivations = true
     '';
   };
+  nixpkgs.config.permittedInsecurePackages = [
+    #add due to failing update
+    "electron-24.8.6"
+  ];
   console.useXkbConfig = true;
   services.xserver.xkbOptions = "ctrl:nocaps";
   #wayland requirments/stuff
@@ -76,9 +80,8 @@
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
-  services.xserver.windowManager = {
-    i3.enable = true;
-  };
+  services.xserver.windowManager.i3.enable = true;
+
   # Configure keymap in X11
   services.xserver = {
     layout = "us";
@@ -120,9 +123,6 @@
 
     packages = with pkgs; [
       git
-      gnome.gnome-tweaks
-      firefox
-      vim
       gnumake
       #  thunderbird
     ];

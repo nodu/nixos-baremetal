@@ -56,12 +56,13 @@ in
     pkgs.authy
     pkgs.google-chrome
     #   oldPkgs.chromium
-    #   pkgs.obsidian
+    pkgs.obsidian
+    pkgs.bitwarden
     ##   pkgs.baobab
     #   pkgs.xfce.thunar
-    #   pkgs.vlc
+    pkgs.vlc
     #   pkgs.jellyfin-media-player
-    #   # pkgs.spotify #no arm64 package
+    pkgs.spotify #no arm64 package
     #   pkgs.rclone
     #   pkgs.rclone-browser
 
@@ -81,21 +82,22 @@ in
     pkgs.gcc
     #    pkgs.buildkit
     #    pkgs.neofetch
-    #
+    # Gnome
+    pkgs.gnome.gnome-tweaks
     pkgs.lshw
     #    # network
     #(pkgs.callPackage
     #./nordvpn.nix
     #{ })
     pkgs.wget
-    #    pkgs.speedtest-cli
+    pkgs.speedtest-cli
     #    pkgs.nmap
     #    pkgs.inetutils
     #    pkgs.httpstat
     #    pkgs.tshark
     #    pkgs.sshfs
     #
-    #    pkgs.ffmpeg
+    pkgs.ffmpeg
     #
     #    pkgs.gum
     pkgs.yt-dlp
@@ -296,8 +298,8 @@ in
       # that I'm just going to keep it consistent.
       pbcopy = "xclip";
       pbpaste = "xclip -o";
-      nx-update = "cd ~/repos/nixos-config/ && make switch; cd -";
-      nx-update-flake = "cd ~/repos/nixos-config/ && nix flake update; cd -";
+      nx-update = "cd ~/repos/nixos-baremetal/ && make switch; cd -";
+      nx-update-flake = "cd ~/repos/nixos-barmetal/ && nix flake update; cd -";
       nx-search = "nix search nixpkgs";
     };
 
@@ -392,6 +394,7 @@ in
         { key = "NumpadSubtract"; mods = "Alt"; action = "DecreaseFontSize"; }
         { key = "F"; mods = "Alt"; action = "SearchBackward"; }
         { key = "I"; mods = "Alt"; action = "ToggleViMode"; }
+        { key = "N"; mods = "Shift|Control"; action = "CreateNewWindow"; }
       ];
 
       # Colors (Solarized Dark)
@@ -505,11 +508,11 @@ in
 
   #xresources.extraConfig = builtins.readFile ./Xresources;
 
-  # Make cursor not tiny on HiDPI screens
   home.pointerCursor = {
     name = "Vanilla-DMZ";
     package = pkgs.vanilla-dmz;
-    size = 128;
+    size = 32;
     x11.enable = true;
+    gtk.enable = true;
   };
 }
