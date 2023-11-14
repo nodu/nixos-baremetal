@@ -22,60 +22,61 @@
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, nixos-hardware, home-manager, ... }@inputs: 
-let
+  outputs = { self, nixpkgs, nixpkgs-unstable, nixos-hardware, home-manager, ... }@inputs:
+    let
       system = "x86_64-linux";
-  home-manager = inputs.home-manager.nixosModules;
-  pkgs = import nixpkgs { inherit system; };
-  unstable = import nixpkgs-unstable { inherit system; };
+      home-manager = inputs.home-manager.nixosModules;
+      pkgs = import nixpkgs { inherit system; };
+      unstable = import nixpkgs-unstable { inherit system; };
 
 
       overlays = [
         inputs.neovim-nightly-overlay.overlay
         #(import ./overlays/sddm.nix)
       ];
-in 
-{
+    in
+    {
 
       # Overlays is the list of overlays we want to apply from flake inputs.
-     nixosConfigurations.baremetal = nixpkgs.lib.nixosSystem {
-inherit system;
-      modules = [
-        ./configuration.nix
-       nixos-hardware.nixosModules.framework-13-7040-amd
-{ nixpkgs.overlays = overlays; } 
+      nixosConfigurations.baremetal = nixpkgs.lib.nixosSystem {
+        inherit system;
+        modules = [
+          ./configuration.nix
+          nixos-hardware.nixosModules.framework-13-7040-amd
+          { nixpkgs.overlays = overlays; }
 
-   home-manager.home-manager 
-    { 
-      home-manager.useGlobalPkgs = true; 
-      home-manager.useUserPackages = true; 
-      home-manager.extraSpecialArgs = { inherit unstable; }; 
-      home-manager.users.matt = import ./home/home-manager.nix 
-        { 
-          inputs = inputs; 
-        }; 
-    }
+          home-manager.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit unstable; };
+            home-manager.users.matt = import ./home/home-manager.nix
+              {
+                inputs = inputs;
+              };
+          }
 
 
-      ];
-   }; };
+        ];
+      };
+    };
 }
 
 
-      #mkSystem = import ./lib/mksystem.nix {
-        #inherit nixpkgs nixpkgs-unstable overlays inputs;
-      #};
-    #in
-    #{
-      ## x86_64-linux
-      #nixosConfigurations.vm-aarch64 = mkSystem "vm-aarch64" {
-        #system = "aarch64-linux";
-        #user = "matt";
-      #};
+#mkSystem = import ./lib/mksystem.nix {
+#inherit nixpkgs nixpkgs-unstable overlays inputs;
+#};
+#in
+#{
+## x86_64-linux
+#nixosConfigurations.vm-aarch64 = mkSystem "vm-aarch64" {
+#system = "aarch64-linux";
+#user = "matt";
+#};
 
-      #nixosConfigurations.vm-intel = mkSystem "vm-intel" rec {
-        #system = "x86_64-linux";
-        #user = "matt";
-      #};
-  #  };
+#nixosConfigurations.vm-intel = mkSystem "vm-intel" rec {
+#system = "x86_64-linux";
+#user = "matt";
+#};
+#  };
 #}
