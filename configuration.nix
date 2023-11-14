@@ -6,11 +6,12 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
+      # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
-services.fwupd.enable = true;
-virtualisation.docker.enable = true;
+  services.fwupd.enable = true;
+  virtualisation.docker.enable = true;
 
   nix = {
     # use unstable nix so we can access flakes
@@ -21,9 +22,9 @@ virtualisation.docker.enable = true;
       keep-derivations = true
     '';
   };
-console.useXkbConfig = true;
-    services.xserver.xkbOptions = "ctrl:nocaps";
-#wayland requirments/stuff
+  console.useXkbConfig = true;
+  services.xserver.xkbOptions = "ctrl:nocaps";
+  #wayland requirments/stuff
   security.polkit.enable = true;
   hardware.opengl.enable = true;
   #xdg.portal.enable = true;
@@ -33,8 +34,8 @@ console.useXkbConfig = true;
   environment.localBinInPath = true;
 
 
-#maybe set this to false after figuring out users.matt.hashedPassword
- users.mutableUsers = true;
+  #maybe set this to false after figuring out users.matt.hashedPassword
+  users.mutableUsers = true;
 
 
   # Bootloader.
@@ -75,9 +76,9 @@ console.useXkbConfig = true;
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
-services.xserver.windowManager = {
-  i3.enable = true;
-};
+  services.xserver.windowManager = {
+    i3.enable = true;
+  };
   # Configure keymap in X11
   services.xserver = {
     layout = "us";
@@ -107,23 +108,23 @@ services.xserver.windowManager = {
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-programs.zsh.enable = true;
+  programs.zsh.enable = true;
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.matt = {
     isNormalUser = true;
-home = "/home/matt";
+    home = "/home/matt";
     description = "Matt N";
     extraGroups = [ "docker" "networkmanager" "wheel" ];
-openssh.authorizedKeys.keys = ["ssh blah blah"];
-shell = pkgs.zsh;
+    openssh.authorizedKeys.keys = [ "ssh blah blah" ];
+    shell = pkgs.zsh;
 
     packages = with pkgs; [
       git
-gnome.gnome-tweaks
-firefox
-vim
-gnumake
-    #  thunderbird
+      gnome.gnome-tweaks
+      firefox
+      vim
+      gnumake
+      #  thunderbird
     ];
   };
 
@@ -133,8 +134,8 @@ gnumake
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
+    #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    #  wget
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -145,16 +146,16 @@ gnumake
   #   enableSSHSupport = true;
   # };
 
-   fonts = {
+  fonts = {
     fontDir.enable = true;
 
     fonts = [
       pkgs.fira-code
     ];
   };
- 
 
-# List services that you want to enable:
+
+  # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;

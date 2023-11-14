@@ -1,8 +1,8 @@
-ln -s ~/repos/nixos-config/nixos-ssh-config ~/.ssh/config
+ln -s ~/repos/nixos-baremetal/nixos-ssh-config ~/.ssh/config
 
 mkdir ~/repos
 
-git clone git@github.com:nodu/nixos-baremetal.git ~/repos/nixos-config
+git clone git@github.com:nodu/nixos-baremetal.git ~/repos/nixos-baremetal
 git clone git@github.com:nodu/defaults.git ~/repos/defaults/
 git clone git@github.com:nodu/dotenv.git ~/repos/dotenv/
 git clone git@github.com:nodu/notes.git ~/repos/notes

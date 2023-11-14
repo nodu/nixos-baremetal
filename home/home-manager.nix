@@ -84,9 +84,9 @@ in
     #
     pkgs.lshw
     #    # network
-    #    (pkgs.callPackage
-    #      ./nordvpn.nix
-    #      { })
+    #(pkgs.callPackage
+    #./nordvpn.nix
+    #{ })
     pkgs.wget
     #    pkgs.speedtest-cli
     #    pkgs.nmap
@@ -207,8 +207,8 @@ in
     maxCacheTtl = 31536000;
     pinentryFlavor = "gtk2";
   };
-# Setup i3 exclusively in HM; remove from configiguration.nix
-#https://github.com/srid/nix-config/blob/705a70c094da53aa50cf560179b973529617eb31/nix/home/i3.nix
+  # Setup i3 exclusively in HM; remove from configiguration.nix
+  #https://github.com/srid/nix-config/blob/705a70c094da53aa50cf560179b973529617eb31/nix/home/i3.nix
   programs.rofi = {
     enable = true;
     #package = unstable.rofi-wayland;
