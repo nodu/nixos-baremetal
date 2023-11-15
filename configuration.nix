@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports =
@@ -33,6 +33,33 @@
   hardware.opengl.enable = true;
   #xdg.portal.enable = true;
   #xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+
+  security.pam.services.login.fprintAuth = false;
+  # https://github.com/NixOS/nixpkgs/issues/171136#issuecomment-1627779037
+  # similarly to how other distributions handle the fingerprinting login
+  security.pam.services.gdm-fingerprint = lib.mkIf (config.services.fprintd.enable) {
+    # lock on suspend not working? no i3 lock mechanism?
+    text = ''
+      auth       required                    pam_shells.so
+      auth       requisite                   pam_nologin.so
+      auth       requisite                   pam_faillock.so      preauth
+      auth       required                    ${pkgs.fprintd}/lib/security/pam_fprintd.so
+      auth       optional                    pam_permit.so
+      auth       required                    pam_env.so
+      auth       [success=ok default=1]      ${pkgs.gnome.gdm}/lib/security/pam_gdm.so
+      auth       optional                    ${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so
+
+      account    include                     login
+
+      password   required                    pam_deny.so
+
+      session    include                     login
+      session    optional                    ${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start
+    '';
+  };
+  services.logind.extraConfig = ''
+    HandlePowerKey=suspend
+  '';
 
   environment.pathsToLink = [ "/libexec" "/share/zsh" ];
   environment.localBinInPath = true;
@@ -80,6 +107,14 @@
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
+
+  environment.gnome.excludePackages = (with pkgs; [
+    epiphany # web browser
+    gnome-tour
+  ]) ++ (with pkgs.gnome; [
+    geary
+  ]);
+
   services.xserver.windowManager.i3.enable = true;
 
   # Configure keymap in X11
@@ -122,20 +157,22 @@
     shell = pkgs.zsh;
 
     packages = with pkgs; [
-      git
-      gnumake
-      #  thunderbird
+
     ];
   };
+  programs.zsh.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    #  wget
+  environment.systemPackages = [
+    pkgs.git
+    pkgs.gnumake
+    pkgs.gh
+    pkgs.vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    pkgs.wget
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -161,7 +198,7 @@
   services.openssh.enable = true;
   services.openssh.settings.PasswordAuthentication = true;
   services.openssh.settings.PermitRootLogin = "no";
-
+  services.fstrim.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
