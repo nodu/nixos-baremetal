@@ -9,7 +9,10 @@
     [
       # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./home/vpns.nix
     ];
+
+  services.nordvpn.enable = true;
   services.fwupd.enable = true;
   virtualisation.docker.enable = true;
 
@@ -146,13 +149,12 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  programs.zsh.enable = true;
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.matt = {
     isNormalUser = true;
     home = "/home/matt";
     description = "Matt N";
-    extraGroups = [ "docker" "networkmanager" "wheel" ];
+    extraGroups = [ "nordvpn" "docker" "networkmanager" "wheel" ];
     openssh.authorizedKeys.keys = [ "ssh blah blah" ];
     shell = pkgs.zsh;
 
@@ -198,13 +200,23 @@
   services.openssh.enable = true;
   services.openssh.settings.PasswordAuthentication = true;
   services.openssh.settings.PermitRootLogin = "no";
+
   services.fstrim.enable = true;
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  networking.firewall =
+    {
+      enable = true;
+      allowedTCPPorts = [ 443 ]; #nordvpn
+      allowedUDPPorts = [ 1194 ]; #nordvpn
+
+    };
+  networking.firewall.checkReversePath = false; #nordvpn
+  networking.enableIPv6 = true;
+  networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
+
+  # Make hosts writable for nordvpn mesh
+  environment.etc.hosts.mode = "0644";
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

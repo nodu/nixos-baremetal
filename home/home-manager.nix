@@ -71,7 +71,7 @@ in
     pkgs.bat
     pkgs.fzf
     pkgs.gotop
-    #    pkgs.jq
+    pkgs.jq
     #    pkgs.jqp
     pkgs.ripgrep
     #    pkgs.tree
@@ -82,13 +82,22 @@ in
     pkgs.gcc
     #    pkgs.buildkit
     #    pkgs.neofetch
+
     # Gnome
     pkgs.gnome.gnome-tweaks
+    pkgs.gnome.atomix
+    pkgs.gnome.hitori
+    pkgs.gnome.iagno
+    pkgs.gnomeExtensions.power-profile-switcher
+    pkgs.gnomeExtensions.grand-theft-focus
+    pkgs.gnomeExtensions.gnordvpn-local
+    pkgs.gnome.dconf-editor
+    pkgs.xscreensaver
+    pkgs.xss-lock
+
     pkgs.lshw
-    #    # network
-    #(pkgs.callPackage
-    #./nordvpn.nix
-    #{ })
+    # network
+
     pkgs.wget
     pkgs.speedtest-cli
     #    pkgs.nmap
@@ -106,7 +115,7 @@ in
     #
     pkgs.go
     pkgs.nodejs-18_x
-    #    pkgs.python3Minimal
+    pkgs.python3Minimal
     #    #pkgs.postgresql_11
 
     #    #pkgs.redshift
@@ -136,6 +145,7 @@ in
     pkgs.nodePackages.bash-language-server
     pkgs.nodePackages.vscode-json-languageserver
     pkgs.nodePackages.dockerfile-language-server-nodejs
+    unstable.tailwindcss-language-server
     # pkgs.gopls
 
     # nvim Linters
@@ -144,12 +154,10 @@ in
     pkgs.nodePackages.markdownlint-cli
 
     # TODO not quite working:
-    pkgs.emacsPackages.lsp-tailwindcss
     unstable.docker-compose-language-service
   ];
 
   fonts.fontconfig.enable = true;
-
   #---------------------------------------------------------------------
   # Env vars and dotfiles
   #---------------------------------------------------------------------
@@ -200,7 +208,6 @@ in
   #---------------------------------------------------------------------
 
   programs.gpg.enable = true;
-  programs.gh.enable = true;
 
   services.gpg-agent = {
     enable = true;
@@ -299,7 +306,7 @@ in
       pbcopy = "xclip";
       pbpaste = "xclip -o";
       nx-update = "cd ~/repos/nixos-baremetal/ && make switch; cd -";
-      nx-update-flake = "cd ~/repos/nixos-barmetal/ && nix flake update; cd -";
+      nx-update-flake = "cd ~/repos/nixos-baremetal/ && nix flake update; cd -";
       nx-search = "nix search nixpkgs";
     };
 

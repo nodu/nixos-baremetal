@@ -10,13 +10,13 @@ Host bau-slate
     User pi
     #Hostname bau
     Hostname 192.168.8.6
-    IdentityFile "~/.ssh/mba"
+    IdentityFile "~/.ssh/baremetal"
 
 Host bau-mesh-andes
     User pi
     #Hostname bau
     Hostname 100.105.37.182
-    IdentityFile "~/.ssh/mba"
+    IdentityFile "~/.ssh/baremetal"
 
 Host thermo
     User pi

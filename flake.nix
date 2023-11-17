@@ -36,7 +36,6 @@
       ];
     in
     {
-
       # Overlays is the list of overlays we want to apply from flake inputs.
       nixosConfigurations.baremetal = nixpkgs.lib.nixosSystem {
         inherit system;
@@ -44,6 +43,13 @@
           ./configuration.nix
           nixos-hardware.nixosModules.framework-13-7040-amd
           { nixpkgs.overlays = overlays; }
+          {
+            nixpkgs.config.packageOverrides = pkgs: {
+              nordvpn = (pkgs.callPackage
+                ./home/vpn.nix
+                { });
+            };
+          }
 
           home-manager.home-manager
           {
@@ -61,22 +67,3 @@
       };
     };
 }
-
-
-#mkSystem = import ./lib/mksystem.nix {
-#inherit nixpkgs nixpkgs-unstable overlays inputs;
-#};
-#in
-#{
-## x86_64-linux
-#nixosConfigurations.vm-aarch64 = mkSystem "vm-aarch64" {
-#system = "aarch64-linux";
-#user = "matt";
-#};
-
-#nixosConfigurations.vm-intel = mkSystem "vm-intel" rec {
-#system = "x86_64-linux";
-#user = "matt";
-#};
-#  };
-#}
