@@ -8,7 +8,6 @@ Host github.com
 
 Host bau-slate
     User pi
-    #Hostname bau
     Hostname 192.168.8.6
     IdentityFile "~/.ssh/baremetal"
 
@@ -17,17 +16,6 @@ Host bau-mesh-andes
     #Hostname bau
     Hostname 100.105.37.182
     IdentityFile "~/.ssh/baremetal"
-
-Host thermo
-    User pi
-    Hostname 192.168.0.9
-    IdentityFile "~/.ssh/thermostat"
-
-Host bau-remote
-    User pi
-    Hostname 98.42.132.119
-    Port 8443
-    IdentityFile "~/.ssh/mba"
 
 Host *
     IdentitiesOnly=yes
