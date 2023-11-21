@@ -27,7 +27,7 @@
       system = "x86_64-linux";
       home-manager = inputs.home-manager.nixosModules;
       pkgs = import nixpkgs { inherit system; };
-      unstable = import nixpkgs-unstable { inherit system; };
+      unstable = import nixpkgs-unstable { inherit system; config.allowUnfree = true; };
 
 
       overlays = [

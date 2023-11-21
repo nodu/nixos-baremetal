@@ -53,7 +53,7 @@ in
 
   home.packages = [
     #   #GUI Apps
-    pkgs.authy
+    unstable.authy
     pkgs.google-chrome
     #   oldPkgs.chromium
     pkgs.obsidian
