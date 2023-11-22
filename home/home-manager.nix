@@ -61,7 +61,7 @@ in
     ##   pkgs.baobab
     #   pkgs.xfce.thunar
     pkgs.vlc
-    #   pkgs.jellyfin-media-player
+    pkgs.jellyfin-media-player
     pkgs.spotify #no arm64 package
     #   pkgs.rclone
     #   pkgs.rclone-browser
@@ -86,7 +86,7 @@ in
     # Gnome
     pkgs.gnome.gnome-tweaks
     pkgs.gnome.atomix
-    pkgs.gnome.hitori
+    pkgs.gnome.gnome-sudoku
     pkgs.gnome.iagno
     pkgs.gnomeExtensions.power-profile-switcher
     pkgs.gnomeExtensions.grand-theft-focus
@@ -201,6 +201,12 @@ in
         categories = [ "Application" "Network" "WebBrowser" ];
         mimeType = [ "text/html" "text/xml" ];
       };
+      settings = {
+        type = "Application";
+        name = "Settings";
+        exec = "env XDG_CURRENT_DESKTOP=Gnome gnome-control-center";
+        categories = [ "Application" "Settings" ];
+      };
     };
 
   #---------------------------------------------------------------------
@@ -238,10 +244,12 @@ in
       font = "FiraCode Nerd Font 10";
       terminal = "alacritty";
       sorting-method = "fzf";
-      kb-mode-next = "Tab";
-      kb-mode-previous = "ISO_Left_Tab";
+      kb-mode-next = "Control+n";
+      kb-mode-previous = "Control+p";
       kb-element-prev = "";
       kb-element-next = "";
+      kb-row-up = "ISO_Left_Tab";
+      kb-row-down = "Tab";
       combi-hide-mode-prefix = true;
       display-combi = "";
       display-calc = " ";
