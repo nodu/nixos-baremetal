@@ -132,8 +132,15 @@ in
     #    #pkgs.ChatGPT.nvim
     #    pkgs.shell_gpt
 
+    # i3
     pkgs.playerctl
-    # pkgs.xorg.xbacklight
+    pkgs.brightnessctl
+    pkgs.xscreensaver
+    pkgs.xss-lock
+    # i3 screenshot
+    pkgs.maim
+    pkgs.xdotool
+    pkgs.xclip
 
     # nvim LSPs
     pkgs.lua-language-server
