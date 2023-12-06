@@ -58,6 +58,8 @@ bindsym XF86AudioRaiseVolume exec "amixer set Master -q 5%+ unmute"
 bindsym XF86AudioLowerVolume exec "amixer set Master -q 5%- unmute"
 bindsym XF86AudioMute exec "amixer -q sset Master,0 toggle"
 
+bindsym XF86AudioMedia exec spotify
+
 # Sreen brightness controls
 bindsym XF86MonBrightnessUp exec brightnessctl s +10% # increase screen brightness
 bindsym XF86MonBrightnessDown exec brightnessctl s 10%- # decrease screen brightness
@@ -67,7 +69,6 @@ bindsym XF86AudioPlay exec playerctl play-pause
 bindsym XF86AudioPause exec playerctl play-pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
-
 
 # start a terminal
 bindsym $mod+n exec alacritty
@@ -155,6 +156,14 @@ bindsym $mod+Shift+7 move container to workspace number $ws7
 bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
 #bindsym $mod+Shift+0 move container to workspace number $ws10
+
+# Force windows to open in specific workspaces: Use xprop to find the class name (use the 2nd one)
+assign [class="Spotify"] $ws9
+assign [class="spotify"] $ws9
+for_window [class="Spotify"] move container to workspace $ws9
+
+assign [class="Google-chrome" title="WhatsApp"] $ws8
+assign [class="Google-chrome" title="Gmail"] $ws8
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
