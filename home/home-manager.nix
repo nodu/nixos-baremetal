@@ -477,7 +477,8 @@ in
 
     modules = {
       ipv6.enable = false;
-      "wireless _first_".enable = false;
+      "wireless _first_".enable = true;
+      "wireless _first_".position = 5;
       "battery all".enable = true;
       "disk /" = {
         position = 1;
@@ -499,7 +500,7 @@ in
         };
       };
       "volume master" = {
-        position = 5;
+        position = 6;
         settings = {
           mixer = "Master";
           format = " %volume";
@@ -508,7 +509,7 @@ in
         };
       };
       "tztime local" = {
-        position = 6;
+        position = 7;
         settings = { format = "%Y-%m-%d %H:%M:%S"; };
       };
     };
