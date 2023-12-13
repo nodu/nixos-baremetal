@@ -276,7 +276,18 @@ bindsym Print mode "$mode_print"
 
 exec --no-startup-id /usr/bin/gnome-screensaver
 
+# Get Monitor names:
+# xrandr --query
+set $mode_display Ext Screen (e) DP-2 ON, (m) Mirror ON, (o) DP-2 OFF
+mode "$mode_display" {
+    bindsym e exec --no-startup-id xrandr --output DP-2 --auto --right-of eDP-1, mode "default"
+    bindsym m exec --no-startup-id xrandr --output DP-2 --auto --same-as eDP-1, mode "default"
+    bindsym o exec --no-startup-id xrandr --output DP-2 --auto --off, mode "default"
 
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+x mode "$mode_display"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
