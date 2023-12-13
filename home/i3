@@ -43,6 +43,8 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 # No background
 exec --no-startup-id xsetroot -solid "#1D1F21"
 
+exec --no-startup-id nm-applet
+
 #----------------------------------------------------------------------
 # Keybindings
 #----------------------------------------------------------------------
@@ -294,6 +296,7 @@ bindsym $mod+x mode "$mode_display"
 bar {
     position top
     status_command i3status
+    tray_output primary
 
     font pango:Fira Code 12
     colors {

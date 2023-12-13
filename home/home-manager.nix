@@ -35,7 +35,7 @@ let
 in
 {
   imports = [
-    #./sway/sway.nix
+    ./sway/sway.nix
     # ./hyprland/hyprland.nix
   ];
 
@@ -141,6 +141,8 @@ in
     pkgs.maim
     pkgs.xdotool
     pkgs.xclip
+    pkgs.networkmanagerapplet
+    pkgs.dunst
 
     # nvim LSPs
     pkgs.lua-language-server
@@ -477,7 +479,7 @@ in
 
     modules = {
       ipv6.enable = false;
-      "wireless _first_".enable = true;
+      "wireless _first_".enable = false;
       "wireless _first_".position = 5;
       "battery all".enable = true;
       "disk /" = {
@@ -493,6 +495,7 @@ in
         settings.format = "󰍛 F:%free A:%available (U:%used) / T:%total";
       };
       "ethernet _first_" = {
+        enable = false;
         position = 4;
         settings = {
           format_up = "E: %ip"; #
