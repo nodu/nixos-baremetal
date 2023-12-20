@@ -11,14 +11,13 @@ Host bau-slate
     Hostname 192.168.8.6
     IdentityFile "~/.ssh/baremetal"
 
-Host bau-sd
+Host bau
     User pi
-    Hostname 192.168.0.209
+    Hostname 192.168.1.69
     IdentityFile "~/.ssh/baremetal"
 
 Host bau-mesh-andes
     User pi
-    #Hostname bau
     Hostname 100.105.37.182
     IdentityFile "~/.ssh/baremetal"
 
