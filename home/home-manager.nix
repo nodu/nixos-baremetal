@@ -317,7 +317,7 @@ in
     enable = true;
     enableCompletion = true;
     enableAutosuggestions = true;
-    enableSyntaxHighlighting = true;
+    syntaxHighlighting.enable = true;
     autocd = true;
     history.expireDuplicatesFirst = true;
     history.extended = true;
