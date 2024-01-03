@@ -96,15 +96,14 @@ in
 
     pkgs.lshw
     # network
-
+    pkgs.inetutils
     pkgs.wget
     pkgs.speedtest-cli
+    pkgs.httpstat
     #    pkgs.nmap
-    #    pkgs.inetutils
-    #    pkgs.httpstat
     #    pkgs.tshark
-    #    pkgs.sshfs
-    #
+    pkgs.sshfs
+
     pkgs.ffmpeg
 
     #    pkgs.gum
@@ -171,6 +170,22 @@ in
 
   #home.file.".inputrc".source = ./inputrc;
 
+  # https://github.com/netbrain/zwift
+  # docker run -v zwift-$USER:/data --name zwift-copy-op busybox true
+  # docker cp .zwift-credentials zwift-copy-op:/data
+  # docker rm zwift-copy-op
+  home.sessionPath = [ "$HOME/.local/bin" ];
+  home.file = {
+    "zwift.sh" = {
+      source = pkgs.fetchurl {
+        url = "https://raw.githubusercontent.com/netbrain/zwift/master/zwift.sh";
+        hash = "sha256-joipzHtLvy+l4H+NOLTSpVf8bzVGUF4JVDcyfQIt5II=";
+      };
+      target = ".local/bin/zwift";
+      executable = true;
+    };
+  };
+
   xdg.configFile = {
     "aliases".text = builtins.readFile ./aliases;
     "m-os.sh".text = builtins.readFile ./m-os.sh;
@@ -203,6 +218,12 @@ in
         name = "Settings";
         exec = "env XDG_CURRENT_DESKTOP=Gnome gnome-control-center";
         categories = [ "Application" "Settings" ];
+      };
+      zwift = {
+        type = "Application";
+        name = "Zwift";
+        exec = "/home/matt/.local/bin/zwift";
+        categories = [ "Application" "Game" ];
       };
     };
 
