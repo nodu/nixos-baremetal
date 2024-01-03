@@ -36,6 +36,7 @@ in
 {
   imports = [
     ./sway/sway.nix
+    ./i3/i3.nix
     # ./hyprland/hyprland.nix
   ];
 
@@ -57,7 +58,6 @@ in
     pkgs.google-chrome
     #   oldPkgs.chromium
     pkgs.obsidian
-    pkgs.bitwarden
     ##   pkgs.baobab
     #   pkgs.xfce.thunar
     pkgs.vlc
@@ -82,6 +82,7 @@ in
     pkgs.gcc
     #    pkgs.buildkit
     #    pkgs.neofetch
+    unstable.alacritty-theme
 
     # Gnome
     pkgs.gnome.gnome-tweaks
@@ -92,8 +93,6 @@ in
     pkgs.gnomeExtensions.grand-theft-focus
     pkgs.gnomeExtensions.gnordvpn-local
     pkgs.gnome.dconf-editor
-    pkgs.xscreensaver
-    pkgs.xss-lock
 
     pkgs.lshw
     # network
@@ -107,13 +106,14 @@ in
     #    pkgs.sshfs
     #
     pkgs.ffmpeg
-    #
+
     #    pkgs.gum
     pkgs.yt-dlp
     #    pkgs.ytfzf
     pkgs.tealdeer
     #
     pkgs.go
+
     pkgs.nodejs-18_x
     pkgs.python3Minimal
     #    #pkgs.postgresql_11
@@ -132,17 +132,6 @@ in
     #    #pkgs.ChatGPT.nvim
     #    pkgs.shell_gpt
 
-    # i3
-    pkgs.playerctl
-    pkgs.brightnessctl
-    pkgs.xscreensaver
-    pkgs.xss-lock
-    # i3 screenshot
-    pkgs.maim
-    pkgs.xdotool
-    pkgs.xclip
-    pkgs.networkmanagerapplet
-    pkgs.dunst
 
     # nvim LSPs
     pkgs.lua-language-server
@@ -186,7 +175,6 @@ in
     "aliases".text = builtins.readFile ./aliases;
     "m-os.sh".text = builtins.readFile ./m-os.sh;
     "shellConfig".text = builtins.readFile ./shellConfig;
-    "i3/config".text = builtins.readFile ./i3;
     "fzf-m-os-preview-function.sh".source = config.lib.file.mkOutOfStoreSymlink ./fzf-m-os-preview-function.sh;
     "rofi/rofi-theme-deathemonic.rasi".text = builtins.readFile ./rofi-theme-deathemonic.rasi;
 

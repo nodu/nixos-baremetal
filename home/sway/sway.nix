@@ -47,6 +47,3 @@
     # settings = builtins.toJSON (lib.importJSON ./waybar-config.json);
   };
 }
-
-
-
