@@ -54,7 +54,7 @@ in
 
   home.packages = [
     #   #GUI Apps
-    unstable.authy
+    pkgs.authy
     pkgs.google-chrome
     #   oldPkgs.chromium
     pkgs.obsidian
@@ -82,7 +82,7 @@ in
     pkgs.gcc
     #    pkgs.buildkit
     #    pkgs.neofetch
-    unstable.alacritty-theme
+    pkgs.alacritty-theme
 
     # Gnome
     pkgs.gnome.gnome-tweaks
@@ -105,6 +105,7 @@ in
     pkgs.sshfs
 
     pkgs.ffmpeg
+    pkgs.obs-studio
 
     #    pkgs.gum
     pkgs.yt-dlp
@@ -142,7 +143,7 @@ in
     pkgs.nodePackages.bash-language-server
     pkgs.nodePackages.vscode-json-languageserver
     pkgs.nodePackages.dockerfile-language-server-nodejs
-    unstable.tailwindcss-language-server
+    pkgs.tailwindcss-language-server
     # pkgs.gopls
 
     # nvim Linters
@@ -151,7 +152,7 @@ in
     pkgs.nodePackages.markdownlint-cli
 
     # TODO not quite working:
-    unstable.docker-compose-language-service
+    pkgs.docker-compose-language-service
   ];
 
   fonts.fontconfig.enable = true;

@@ -280,9 +280,9 @@ exec --no-startup-id /usr/bin/gnome-screensaver
 # xrandr --query
 set $mode_display Ext Screen (r) DP-2 ON, (m) Mirror ON, (o) DP-2 OFF, (d) DPMS/Screensaver off, (e) DPMS/Screensaver on
 mode "$mode_display" {
-    bindsym r exec --no-startup-id xrandr --output DP-3 --auto --right-of eDP-1, mode "default"
-    bindsym m exec --no-startup-id xrandr --output DP-3 --auto --same-as eDP-1, mode "default"
-    bindsym o exec --no-startup-id xrandr --output DP-3 --auto --off, mode "default"
+    bindsym r exec --no-startup-id xrandr --output DP-3 --output DP-2 --auto --right-of eDP-1, mode "default"
+    bindsym m exec --no-startup-id xrandr --output DP-3 --output DP-2 --auto --same-as eDP-1, mode "default"
+    bindsym o exec --no-startup-id xrandr --output DP-3 --output DP-2 --auto --off, mode "default"
 
     # Disable DPMS and Screensaver
     bindsym d exec --no-startup-id xset s off -dpms, mode "default"

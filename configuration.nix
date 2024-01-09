@@ -27,7 +27,7 @@
   };
   nixpkgs.config.permittedInsecurePackages = [
     #add due to failing update
-    "electron-24.8.6"
+    "electron-25.9.0"
   ];
   console.useXkbConfig = true;
   services.xserver.xkbOptions = "ctrl:nocaps";
@@ -188,7 +188,7 @@
   fonts = {
     fontDir.enable = true;
 
-    fonts = [
+    packages = [
       pkgs.fira-code
     ];
   };
