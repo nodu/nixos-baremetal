@@ -132,6 +132,7 @@ in
     #    #pkgs.ChatGPT.nvim
     #    pkgs.shell_gpt
 
+    # pkgs.beekeeper-studio
 
     # nvim LSPs
     pkgs.lua-language-server
@@ -144,6 +145,7 @@ in
     pkgs.nodePackages.vscode-json-languageserver
     pkgs.nodePackages.dockerfile-language-server-nodejs
     pkgs.tailwindcss-language-server
+    pkgs.ruff-lsp
     # pkgs.gopls
 
     # nvim Linters
@@ -306,10 +308,12 @@ in
     config = {
       whitelist = {
         prefix = [
-          "$HOME/code/go/src/github.com/mattn"
         ];
 
-        exact = [ "$HOME/.envrc" ];
+        exact = [
+          "~/repos/job-scraper/"
+          "~/repos/www/"
+        ];
       };
     };
   };
@@ -320,8 +324,6 @@ in
     enableAutosuggestions = true;
     syntaxHighlighting.enable = true;
     autocd = true;
-    history.expireDuplicatesFirst = true;
-    history.extended = true;
     #completionInit
 
     shellAliases = {
@@ -338,7 +340,11 @@ in
     };
 
     history = {
-      size = 10000;
+      size = 1000000;
+      save = 1000000;
+      expireDuplicatesFirst = true;
+      extended = true;
+      share = true;
     };
 
     oh-my-zsh = {
