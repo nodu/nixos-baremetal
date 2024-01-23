@@ -1,29 +1,44 @@
 # My m. OS shortcuts
 
 #TODO Notes
-alias t='cd ~/repos/todo && v todo.md && cd -'
-alias tdb='v ~/repos/todo/backlog.md'
+t() {
+	cd ~/repos/todo || exit
+  git pull
 
-tda() { # 'ta * new note to add'
-	# Add to beginning of file
-	# sed -i "1i$1" ~/repos/todo/todo.md
-	# sed -i -e "$a $1" ~/repos/todo/todo.md
-	echo "- [ ] $1" >>~/repos/todo/backlog.md
+  v todo.md
+
+  git add .
+	git commit -m "Update Todo $(date)"
+  git push
+	cd - || exit
 }
 
-tdpull() { # pull todo
+ta() { # 'ta * new note to add'
+ 	cd ~/repos/todo || exit
+  git pull
+
+	sed -i 6i"- [ ] $1" ~/repos/todo/backlog.md
+
+  git add .
+  git commit -m "Add to Backlog $(date)"
+  git push
+	cd - || exit
+	# echo "- [ ] $1" >>~/repos/todo/backlog.md
+}
+
+tpull() { # pull todo
 	cd ~/repos/todo || exit
 	git pull
 	cd - || exit
 }
 
-tdpush() { # diff/upload todo.md
+tpush() { # diff/upload todo.md
 	cd ~/repos/todo || exit
 	git push origin master
 	cd - || exit
 }
 
-tdcommit() { #commit todos
+tcommit() { #commit todos
 	cd ~/repos/todo || exit
 	git diff todo.md
 	git add todo.md
@@ -31,13 +46,13 @@ tdcommit() { #commit todos
 	cd - || exit
 }
 
-tddiff() { # diff todo.md
+tdiff() { # diff todo.md
 	cd ~/repos/todo || exit
 	git diff todo.md
 	cd - || exit
 }
 
-tdcleanup() {
+tcleanup() {
 	cd ~/repos/todo || exit
 	grep "\- \[x\]" todo.md >>done.md
 	grep "\- \[n\]" todo.md >>no.md
