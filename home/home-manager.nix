@@ -62,7 +62,8 @@ in
     #   pkgs.xfce.thunar
     pkgs.vlc
     pkgs.jellyfin-media-player
-    pkgs.spotify #no arm64 package
+    pkgs.spotify
+    pkgs.discord
     #   pkgs.rclone
     #   pkgs.rclone-browser
 
@@ -114,8 +115,6 @@ in
     #
     pkgs.go
 
-    pkgs.nodejs-18_x
-    pkgs.python3Minimal
     #    #pkgs.postgresql_11
 
     #    #pkgs.redshift
