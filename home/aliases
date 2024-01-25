@@ -151,12 +151,22 @@ nvimNewSplit() {
 
 # Startup items:
 #motivate
-cd ~/repos/notes && echo "" && echo "notes Repo" && git status && cd -
-cd ~/repos/defaults && echo "" && echo "defaults Repo" && git status && cd -
-cd ~/repos/todo && echo "" && echo "todo Repo" && git status && cd -
-cd ~/repos/dotenv && echo "" && echo "dotenv Repo" && git status && cd -
-cd ~/repos/nixos-baremetal && echo "" && echo "nixos-config Repo" && git status && cd -
-cd ~/.config/nvim/ && echo "" && echo "nvim Repo" && git status && cd -
+function check_git_status {
+    local start_dir="$1"
+
+    # Check if the provided directory exists
+    if [ ! -d "$start_dir" ]; then
+        echo "The directory $start_dir does not exist."
+        return 1
+    fi
+
+    find "$start_dir" -type d -name '.git' | while read dir; do
+        sh -c "cd '$dir'/../ && git_status=\$(git status -s); if [ ! -z \"\$git_status\" ]; then echo -e \"\nGIT STATUS IN ${dir//\.git/}\"; echo \"\$git_status\"; fi"
+    done
+}
+check_git_status ~/repos
+check_git_status ~/.config
+
 
 mn-help-myHelpers() {
 	grep -E "() {" ~/dotenv/shortcuts/aliases.sh
@@ -176,7 +186,6 @@ mn-help-myHelpers
 "
 echo ""
 
-echo "F motivation and want: discipline"
 
 function dsf() { diff -u $1 $2 | diff-so-fancy; }
 
