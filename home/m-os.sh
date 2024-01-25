@@ -5,7 +5,7 @@ t() {
 	cd ~/repos/todo || exit
   git pull
 
-  v todo.md
+  nvim todo.md
 
   git add .
 	git commit -m "Update Todo $(date)"
