@@ -1,4 +1,11 @@
 # My m. OS shortcuts
+n() {
+	cd ~/repos/notes || exit
+
+  nvim  .
+
+	cd - || exit
+}
 
 #TODO Notes
 t() {
@@ -7,13 +14,17 @@ t() {
 
   nvim todo.md
 
-  git add .
-	git commit -m "Update Todo $(date)"
-  git push
+  git_status=$(git status -s)
+  if [ ! -z "$git_status" ]; then
+    git add .
+    git commit -m "Update Todo $(date)"
+    git push
+  fi
+
 	cd - || exit
 }
 
-ta() { # 'ta * new note to add'
+ta() { # ta 'new note to add'
  	cd ~/repos/todo || exit
   git pull
 
@@ -22,6 +33,7 @@ ta() { # 'ta * new note to add'
   git add .
   git commit -m "Add to Backlog $(date)"
   git push
+
 	cd - || exit
 	# echo "- [ ] $1" >>~/repos/todo/backlog.md
 }
@@ -89,7 +101,9 @@ m.git-quickcommit-all() {
 	git commit -m "Update"
 	git push
 }
-
+m.git-rebase-continue() {
+  git rebase --continue
+}
 m.gpg-encrypt-sign() {
 	gpg --encrypt --sign -r "$1" "$2"
 }
