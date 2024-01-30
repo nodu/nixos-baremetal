@@ -99,11 +99,6 @@ bindsym $mod+Shift+l move right
 # enter fullscreen mode for the focused container
 bindsym $mod+Shift+f fullscreen toggle
 
-# Icons: https://fontawesome.com/cheatsheet/free/solid
-set $workspace1 "1: Home "
-set $workspace2 "2 Workspace "
-set $workspace3 "3: Communication "
-set $workspace6 "6: Audio  "
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+Shift+s layout stacking
@@ -116,8 +111,10 @@ bindsym $mod+Ctrl+f floating toggle
 # change focus between tiling / floating windows
 bindsym $mod+Ctrl+Shift+f focus mode_toggle
 
-# focus the parent container
-bindsym $mod+Shift+a focus parent
+# focus the parent/child container
+bindsym $mod+a focus parent
+bindsym $mod+c focus child
+
 
 bindsym $mod+Shift+o exec thunar /host/matt/Downloads
 # focus the child container
@@ -125,16 +122,29 @@ bindsym $mod+Shift+o exec thunar /host/matt/Downloads
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1"
-set $ws2 "2"
-set $ws3 "3"
-set $ws4 "4"
-set $ws5 "5"
+# Icons: https://fontawesome.com/cheatsheet/free/solid
+set $ws1 "1: Home "
+set $ws2 "2: Workspace "
+set $ws3 "3: Communication "
+set $ws4 "4: Overflow"
+set $ws5 "5: Audio "
 set $ws6 "6"
 set $ws7 "7"
 set $ws8 "8"
 set $ws9 "9"
-#set $ws10 "10"
+
+# Force windows to open in specific workspaces: Use xprop to find the class name (use the 2nd one)
+assign [class="Spotify"] $ws5
+assign [class="spotify"] $ws5
+for_window [class="Spotify"] move container to workspace $ws5
+
+assign [class="Google-chrome" title="WhatsApp"] $ws3
+assign [class="Google-chrome" title="Gmail"] $ws3
+assign [class="Discord"] $ws3
+assign [class="discord"] $ws3
+
+workspace $ws1 output DP-3 DP-2 eDP-1
+workspace $ws2 output DP-3 DP-2 eDP-1
 
 # switch to workspace
 bindsym $mod+1 workspace number $ws1
@@ -160,13 +170,6 @@ bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
 #bindsym $mod+Shift+0 move container to workspace number $ws10
 
-# Force windows to open in specific workspaces: Use xprop to find the class name (use the 2nd one)
-assign [class="Spotify"] $ws9
-assign [class="spotify"] $ws9
-for_window [class="Spotify"] move container to workspace $ws9
-
-assign [class="Google-chrome" title="WhatsApp"] $ws8
-assign [class="Google-chrome" title="Gmail"] $ws8
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -278,16 +281,16 @@ exec --no-startup-id /usr/bin/gnome-screensaver
 
 # Get Monitor names:
 # xrandr --query
-set $mode_display Ext Screen (r) DP-2 ON, (m) Mirror ON, (o) DP-2 OFF, (d) DPMS/Screensaver off, (e) DPMS/Screensaver on
+set $mode_display Ext Screen (r) DP-2 ON, (m) Mirror ON, (o) DP-2 OFF, (Shift+s) DPMS/Screensaver off, (s) DPMS/Screensaver on
 mode "$mode_display" {
-    bindsym r exec --no-startup-id xrandr --output DP-3 --auto --right-of eDP-1 --output DP-2 --auto --right-of eDP-1, mode "default"
+    bindsym r exec --no-startup-id xrandr --output DP-3 --auto --above eDP-1 --output DP-2 --auto --above eDP-1, mode "default"
     bindsym m exec --no-startup-id xrandr --output DP-3 --auto --same-as eDP-1 --output DP-2 --auto --same-as eDP-1, mode "default"
     bindsym o exec --no-startup-id xrandr --output DP-3 --auto --off --output DP-2 --auto --off, mode "default"
 
     # Disable DPMS and Screensaver
-    bindsym d exec --no-startup-id xset s off -dpms, mode "default"
+    bindsym Shift+s exec --no-startup-id xset s off -dpms, mode "default"
     # Enable DPMS and Screensaver
-    bindsym e exec --no-startup-id xset s on +dpms, mode "default"
+    bindsym s exec --no-startup-id xset s on +dpms, mode "default"
 
     bindsym Return mode "default"
     bindsym Escape mode "default"

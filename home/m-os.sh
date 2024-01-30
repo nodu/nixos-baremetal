@@ -327,3 +327,20 @@ function open() {
 function o() {
 	xdg-open $1
 }
+m.screen() {
+  xrandr --query
+  xset q
+  xrandr --listmonitors
+}
+
+m.screen-mirror() {
+ xrandr --output DP-3 --auto --same-as eDP-1 --output DP-2 --auto --same-as eDP-1
+}
+
+m.screen-above() {
+ xrandr --output DP-3 --auto --above eDP-1 --output DP-2 --auto --above eDP-1
+}
+
+m.screen-off() {
+ xrandr --output DP-3 --auto --off --output DP-2 --auto --off
+}
