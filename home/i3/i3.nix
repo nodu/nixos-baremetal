@@ -2,22 +2,35 @@
 {
   xdg.configFile = {
     "i3/config".text = builtins.readFile ./i3;
+    "i3/monitor-mirror.sh" = {
+      text = builtins.readFile ./monitor-mirror.sh;
+      executable = true;
+    };
+    "i3/monitor-above.sh" = {
+      text = builtins.readFile ./monitor-above.sh;
+      executable = true;
+    };
+    "i3/toggle-screensaver.sh" = {
+      text = builtins.readFile ./toggle-screensaver.sh;
+      executable = true;
+    };
   };
 
   #Packages
-  home.packages = with pkgs; [
-    pkgs.playerctl
-    pkgs.brightnessctl
-    pkgs.xscreensaver
-    pkgs.xss-lock
-    pkgs.maim
-    pkgs.xdotool
-    pkgs.xclip
-    pkgs.networkmanagerapplet
-    pkgs.dunst
-    pkgs.blueman
-    pkgs.xorg.xhost
-  ];
+  home.packages = with pkgs;
+    [
+      pkgs.playerctl
+      pkgs.brightnessctl
+      pkgs.xscreensaver
+      pkgs.xss-lock
+      pkgs.maim
+      pkgs.xdotool
+      pkgs.xclip
+      pkgs.networkmanagerapplet
+      pkgs.dunst
+      pkgs.blueman
+      pkgs.xorg.xhost
+    ];
   programs.i3status = {
     enable = true;
 

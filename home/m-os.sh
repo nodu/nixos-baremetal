@@ -24,7 +24,7 @@ t() {
 	cd - || exit
 }
 
-ta() { # ta 'new note to add'
+ta() { # Add Todo - ta 'new note to add'
  	cd ~/repos/todo || exit
   git pull
 
@@ -306,8 +306,15 @@ function m.show-def() {
 		declare -f "$1"
 	fi
 }
+
+m.mos-show() {
+  declare -f "$1"
+  type -a "$1"
+}
+
 function m() {
-	print -z -- "$(m.list-alias-functions | fzf --preview "source ~/repos/nixos-config/users/mattn/aliases > /dev/null 2>&1; $HOME/.config/fzf-m-os-preview-function.sh {1}")"
+	# print -z -- "$(m.list-alias-functions | fzf --preview "source ~/repos/nixos-config/users/mattn/aliases > /dev/null 2>&1; $HOME/.config/fzf-m-os-preview-function.sh {1}")"
+  print -z -- "$(m.list-alias-functions | fzf --preview "source ~/repos/nixos-config/users/mattn/aliases > /dev/null 2>&1; declare -f  {1}")"
 }
 
 function m2() {
@@ -328,19 +335,26 @@ function o() {
 	xdg-open $1
 }
 m.screen() {
+  echo "xrandr --query"
+  echo "-------------------------------"
   xrandr --query
+
+  echo ""
+  echo "xset q"
+  echo "-------------------------------"
   xset q
+
+  echo ""
+  echo "xrandr --listmonitors"
+  echo "-------------------------------"
   xrandr --listmonitors
 }
 
-m.screen-mirror() {
- xrandr --output DP-3 --auto --same-as eDP-1 --output DP-2 --auto --same-as eDP-1
-}
-
 m.screen-above() {
- xrandr --output DP-3 --auto --above eDP-1 --output DP-2 --auto --above eDP-1
+  ~/.config/i3/monitor-above.sh
 }
 
-m.screen-off() {
- xrandr --output DP-3 --auto --off --output DP-2 --auto --off
+m.screen-mirror() {
+  ~/.config/i3/monitor-mirror.sh
 }
+
