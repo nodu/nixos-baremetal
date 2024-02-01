@@ -252,11 +252,16 @@ function m.ff() {
 	fi
 }
 
+ff() {
+  m.ff
+}
+
 function m.fc() {
 	local file
 	file=$(fzf --preview 'bat --style=numbers --color=always --line-range :500 {}')
 	if [[ $file ]]; then
 		cat "$file"
+    echo $file
 	else
 		echo "cancelled m.ff"
 	fi
@@ -265,6 +270,7 @@ function m.fc() {
 function m.fd() {
 	local dir
 	dir=$(find ${1:-.} -type d 2>/dev/null | fzf +m) && cd "$dir"
+  echo $dir
 	ls
 }
 
