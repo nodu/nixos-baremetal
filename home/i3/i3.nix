@@ -87,6 +87,7 @@
     enable = true;
     settings = {
       global = {
+        follow = "keyboard";
         width = 300;
         height = 300;
         offset = "30x50";
