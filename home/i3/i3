@@ -139,6 +139,8 @@ assign [class="spotify"] $ws5
 for_window [class="Spotify"] move container to workspace $ws5
 
 assign [class="Google-chrome" title="WhatsApp"] $ws3
+assign [class="Google-chrome" title="Messages"] $ws3
+assign [class="Google-chrome" title="FB Messenger"] $ws3
 assign [class="Google-chrome" title="Gmail"] $ws3
 assign [class="Discord"] $ws3
 assign [class="discord"] $ws3
