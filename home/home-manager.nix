@@ -81,6 +81,8 @@ in
     pkgs.zip
     pkgs.unzip
     pkgs.gcc
+    pkgs.normcap
+
     #    pkgs.buildkit
     #    pkgs.neofetch
     pkgs.alacritty-theme
@@ -113,7 +115,7 @@ in
     #    pkgs.ytfzf
     pkgs.tealdeer
     #
-    pkgs.go
+    # pkgs.go
 
     #    #pkgs.postgresql_11
 
@@ -215,6 +217,12 @@ in
         categories = [ "Application" "Network" "WebBrowser" ];
         mimeType = [ "text/html" "text/xml" ];
       };
+      normcap = {
+        type = "Application";
+        name = "normcap - OCR screenshot";
+        exec = "normcap";
+        categories = [ "Application" ];
+      };
       settings = {
         type = "Application";
         name = "Settings";
@@ -243,7 +251,7 @@ in
     pinentryFlavor = "gtk2";
   };
   # Setup i3 exclusively in HM; remove from configiguration.nix
-  #https://github.com/srid/nix-config/blob/705a70c094da53aa50cf560179b973529617eb31/nix/home/i3.nix
+  # https://github.com/srid/nix-config/blob/705a70c094da53aa50cf560179b973529617eb31/nix/home/i3.nix
   programs.rofi = {
     enable = true;
     #package = unstable.rofi-wayland;
