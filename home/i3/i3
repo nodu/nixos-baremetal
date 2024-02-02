@@ -147,6 +147,8 @@ assign [class="discord"] $ws3
 
 workspace $ws1 output DP-3 DP-2 eDP-1
 workspace $ws2 output DP-3 DP-2 eDP-1
+workspace $ws3 output DP-3 DP-2 eDP-1
+workspace $ws5 output eDP-1
 
 # switch to workspace
 bindsym $mod+1 workspace number $ws1
@@ -261,10 +263,11 @@ mode "$mode_system" {
 bindsym $mod+BackSpace mode "$mode_system"
 
 
-set $mode_print Screenshots (s) selection (clip), (w) window (Clip), (f) fullscreen (clip) / (ctrl+s) selection, (ctrl+w) window, (ctrl+f) fullscreen
+set $mode_print Screenshot: n: normcap, s: selection (clip), (w) window (Clip), (f) fullscreen (clip) / (ctrl+s) selection, (ctrl+w) window, (ctrl+f) fullscreen
 
 mode "$mode_print" {
 ## Screenshots in clipboards
+    bindsym n exec --no-startup-id normcap, mode "default"
     bindsym s exec --no-startup-id maim --format=png --select | xclip -selection clipboard -t image/png, mode "default"
     bindsym w exec --no-startup-id maim --format=png --window $(xdotool getactivewindow) | xclip -selection clipboard -t image/png, mode "default"
     bindsym f exec --no-startup-id maim --format=png | xclip -selection clipboard -t image/png, mode "default"
