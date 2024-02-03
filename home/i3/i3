@@ -78,6 +78,9 @@ bindsym $mod+n exec alacritty
 bindsym $mod+d split h
 bindsym $mod+Shift+d split v
 
+# Run normcap
+bindsym $mod+s exec normcap
+
 # kill focused window
 bindsym $mod+Shift+q kill
 bindsym $mod+F4 kill
