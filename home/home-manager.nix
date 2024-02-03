@@ -66,6 +66,7 @@ in
     pkgs.discord
     #   pkgs.rclone
     #   pkgs.rclone-browser
+    pkgs.libsForQt5.kdeconnect-kde
 
     (pkgs.nerdfonts.override { fonts = [ "FiraCode" "RobotoMono" ]; })
     pkgs.fd

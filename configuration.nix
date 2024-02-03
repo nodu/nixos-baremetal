@@ -164,6 +164,7 @@
   };
   programs.zsh.enable = true;
 
+  programs.steam.enable = true;
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
@@ -209,6 +210,13 @@
       enable = true;
       allowedTCPPorts = [ 443 ]; #nordvpn
       allowedUDPPorts = [ 1194 ]; #nordvpn
+
+      allowedUDPPortRanges = [
+        { from = 1714; to = 1764; } #kdeconnect
+      ];
+      allowedTCPPortRanges = [
+        { from = 1714; to = 1764; } #kdeconnect
+      ];
 
     };
   networking.firewall.checkReversePath = false; #nordvpn
