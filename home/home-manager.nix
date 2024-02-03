@@ -153,6 +153,7 @@ in
     pkgs.stylua
     pkgs.nixpkgs-fmt
     pkgs.nodePackages.markdownlint-cli
+    pkgs.nodePackages.prettier
 
     # TODO not quite working:
     pkgs.docker-compose-language-service
