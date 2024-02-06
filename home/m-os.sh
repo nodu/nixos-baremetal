@@ -38,6 +38,12 @@ ta() { # Add Todo - ta 'new note to add'
 	# echo "- [ ] $1" >>~/repos/todo/backlog.md
 }
 
+tsearch() { # Search Backlog and Todo for arg
+	cd ~/repos/todo || exit
+  grep -rniI --exclude-dir={bundles,dist,node_modules,bower_components} todo.md backlog.md -e "$1"
+	cd - || exit
+}
+
 tpull() { # pull todo
 	cd ~/repos/todo || exit
 	git pull
@@ -238,8 +244,39 @@ alias m.git-unstage-file='git reset HEAD'
 
 alias m.tldrf='tldr --list | fzf --preview "tldr {1} --color=always" --preview-window=right,70% | xargs tldr'
 
-function m.ffmpeg-reduce() {
-	ffmpeg -i "$1" -vcodec libx265 -crf 28 "$1_reduced.mp4"
+function m.ffmpeg-info() {
+	ffmpeg -i "$1"
+}
+# chatgpt command for extracting audio from mkv
+# ffmpeg -i 2024-02-06\ 09-30-08_keeper.ai_tech_interview_1.mkv -vn -acodec pcm_s16le -ar 44100 -ac 2 output.wav
+#
+# Whisper.cpp 16-bit WAV
+# ::: ffmpeg -i input.mp3 -ar 16000 -ac 1 -c:a pcm_s16le output16.wav
+# ::: ffmpeg -i input.mp3 -ar 16000 -ac 2 -c:a pcm_s16le output_stereo_16.wav
+
+# ffmpeg -i 2024-02-06\ 09-30-08_keeper.ai_tech_interview_1.mkv -ar 16000 -ac 1 -acodec pcm_s16le output.wav
+# gpt:
+# ffmpeg -i 2024-02-06\ 09-30-08_keeper.ai_tech_interview_1.mkv -vn  -ac 2 output.wav
+#
+function m.ffmpeg-reduce-ultrafast() {
+  file=$1
+  filename=${file%. *}
+  extension=${file##*.}
+
+  ffmpeg -i "$file" -c:v libx265 -crf 28 -preset ultrafast  "${filename}_ultrafast_reduced.$extension"
+}
+
+function m.ffmpeg-reduce-fast() {
+  file=$1
+  filename=${file%. *}
+  extension=${file##*.}
+
+  ffmpeg -i "$file" -c:v libx265 -crf 28 -preset fast  "${filename}_fast_reduced.$extension"
+}
+
+function m.ffmpeg-extract-wav() {
+  file=$1
+  ffmpeg -i "$file" -vn -acodec pcm_s16le -ar 16000 -ac 2 "${file}_16Bit.wav"
 }
 
 function m.ff() {
