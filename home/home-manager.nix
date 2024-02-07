@@ -346,6 +346,9 @@ in
       nx-update = "cd ~/repos/nixos-baremetal/ && make switch; cd -";
       nx-update-flake = "cd ~/repos/nixos-baremetal/ && nix flake update; cd -";
       nx-search = "nix search nixpkgs";
+      shell-python = "nix-shell -p python3";
+      shell-js-ts = "nix-shell -p nodejs_20 nodePackages_latest.ts-node yarn";
+
     };
 
     history = {
