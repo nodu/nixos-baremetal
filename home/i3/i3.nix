@@ -30,6 +30,7 @@
       pkgs.dunst
       pkgs.blueman
       pkgs.xorg.xhost
+      pkgs.feh
     ];
   programs.i3status = {
     enable = true;
