@@ -1,7 +1,12 @@
 { pkgs, lib, ... }:
 {
   xdg.configFile = {
-    "i3/config".text = builtins.readFile ./i3;
+    "i3/scripts" = {
+      source = ./scripts;
+      recursive = true;
+    };
+    "i3/config".text = builtins.readFile ./i3.config;
+    "i3/i3blocks.conf".text = builtins.readFile ./i3blocks.conf;
     "i3/monitor-mirror.sh" = {
       text = builtins.readFile ./monitor-mirror.sh;
       executable = true;
@@ -31,9 +36,15 @@
       pkgs.blueman
       pkgs.xorg.xhost
       pkgs.feh
+      pkgs.i3blocks
+      pkgs.i3lock-color
+      # needed for i3blocks scripts:
+      pkgs.python3
+      pkgs.acpi
+      pkgs.font-awesome
     ];
   programs.i3status = {
-    enable = true;
+    enable = false;
 
     general = {
       colors = true;
@@ -99,6 +110,29 @@
 
       };
       urgency_normal = { background = "#37474f"; foreground = "#eceff1"; timeout = 10; };
+    };
+  };
+  services.picom = {
+    enable = true;
+    shadow = true;
+    shadowOpacity = 0.75;
+    fade = true;
+    fadeDelta = 5;
+    settings = {
+      no-fading-openclose = true;
+    };
+  };
+
+  services.redshift = {
+    enable = true;
+    longitude = 122.431297;
+    latitude = 37.77397;
+    tray = true;
+    settings = {
+      redshift = {
+        brightness-day = "1";
+        brightness-night = "0.5";
+      };
     };
   };
 }

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+BAT=$(cat /sys/class/power_supply/BAT1/capacity)
+# Full and short texts
+echo "$LABEL$BAT"
+echo "BAT: $BAT"
+
+# Set urgent flag below 5% or use orange below 20%
+[ $BAT -le 10 ] && exit 33
+[ $BAT -le 20 ] && echo "#FF8000"
+
+exit 0
