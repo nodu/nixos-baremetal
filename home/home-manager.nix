@@ -120,7 +120,6 @@ in
 
     #    #pkgs.postgresql_11
 
-    #    #pkgs.redshift
     #    #pkgs.kubectl
     #    #pkgs.krew
     #    #pkgs.terraform
@@ -345,9 +344,10 @@ in
       pbpaste = "xclip -o";
       nx-update = "cd ~/repos/nixos-baremetal/ && make switch; cd -";
       nx-update-flake = "cd ~/repos/nixos-baremetal/ && nix flake update; cd -";
+      nx-update-input = "nix flake lock --update-input"; # nix flake lock --update-input nixos-hardware
       nx-search = "nix search nixpkgs";
-      shell-python = "nix-shell -p python3";
-      shell-js-ts = "nix-shell -p nodejs_20 nodePackages_latest.ts-node yarn";
+      shell-python = "nix-shell -p python3 entr";
+      shell-js-ts = "shellHook='echo \"ls *.ts | entr -r ts-node file.ts\"' nix-shell -p nodejs_20 nodePackages_latest.ts-node yarn entr";
 
     };
 

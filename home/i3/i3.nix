@@ -125,7 +125,7 @@
 
   services.redshift = {
     enable = true;
-    longitude = 122.431297;
+    longitude = -122.431297;
     latitude = 37.77397;
     tray = true;
     settings = {
