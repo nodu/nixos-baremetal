@@ -20,7 +20,7 @@ window {
     border:                         2px;
     border-color:                   @BDR;
     border-radius:                  10px;
-    width:                          1000px;
+    width:                          1300px;
     anchor:                         center;
     x-offset:                       0;
     y-offset:                       0;
@@ -95,6 +95,7 @@ mainbox {
 }
 
 element {
+  children: [element-index, element-icon, element-text];
     background-color:               @BG;
     text-color:                     @FG;
     orientation:                    horizontal;
