@@ -5,7 +5,7 @@ if [ "$dpms_state" == "Enabled" ]; then
   xset -dpms
   dunstify "DPMS: Off"
 else
-  xset +dpms
+  xset +dpms dpms 0 300 300
   dunstify "DPMS: On"
 fi
 
