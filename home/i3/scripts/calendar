@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 ###### Variables ######
-DATEFTM="${DATEFTM:-+%a %d %b %Y}"
+DATEFTM="${DATEFTM:-+%a %d %b}"
 SHORTFMT="${SHORTFMT:-+%d/%m/%Y}"
 LABEL="${LABEL:- }"
 FONT="${FONT:-Monospace 10}"
@@ -138,10 +138,8 @@ case "$BLOCK_BUTTON" in
 esac
 
 #Only show icon
-echo $LABEL
-echo $LABEL
+echo $(date "$DATEFTM") $LABEL
+echo $(date "$SHORTFMT") $LABEL
 
 # print blocklet text
-#echo $LABEL$(date "$DATEFTM")
-#echo $LABEL$(date "$SHORTFMT")
 ###### Main body ######
