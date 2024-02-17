@@ -242,6 +242,21 @@ alias m.mv-rsync="rsync --recursive --links --times --devices --specials --parti
 alias m.git-uncommit-last='git reset --soft HEAD~1'
 alias m.git-unstage-file='git reset HEAD'
 
+function m.git-restore-staged() {
+	git restore --staged "$1"
+}
+
+function m.git-show () {
+  git log --graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"  | \
+   fzf --ansi --no-sort --reverse --tiebreak=index --preview \
+   'f() { set -- $(echo -- "$@" | grep -o "[a-f0-9]\{7\}"); [ $# -eq 0 ] || git show --color=always $1 ; }; f {}' \
+   --bind "j:down,k:up,alt-j:preview-down,alt-k:preview-up,ctrl-f:preview-page-down,ctrl-b:preview-page-up,q:abort,ctrl-m:execute:
+                (grep -o '[a-f0-9]\{7\}' | head -1 |
+                xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
+                {}
+FZF-EOF" --preview-window=right:60%
+}
+
 alias m.tldrf='tldr --list | fzf --preview "tldr {1} --color=always" --preview-window=right,70% | xargs tldr'
 
 function m.ffmpeg-info() {

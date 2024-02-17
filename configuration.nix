@@ -208,7 +208,7 @@
   networking.firewall =
     {
       enable = true;
-      allowedTCPPorts = [ 443 ]; #nordvpn
+      allowedTCPPorts = [ 443 1701 9001 ]; #443 nordvpn, 1701/9001 weylus
       allowedUDPPorts = [ 1194 ]; #nordvpn
 
       allowedUDPPortRanges = [

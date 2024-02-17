@@ -192,6 +192,7 @@ in
   };
 
   xdg.configFile = {
+    "apps.sh".text = builtins.readFile ./apps.sh;
     "aliases".text = builtins.readFile ./aliases;
     "m-os.sh".text = builtins.readFile ./m-os.sh;
     "shellConfig".text = builtins.readFile ./shellConfig;
@@ -366,9 +367,6 @@ in
       nx-update-flake = "cd ~/repos/nixos-baremetal/ && nix flake update; cd -";
       nx-update-input = "nix flake lock --update-input"; # nix flake lock --update-input nixos-hardware
       nx-search = "nix search nixpkgs";
-      shell-python = "nix-shell -p python3 entr";
-      shell-js-ts = "shellHook='echo \"ls *.ts | entr -r ts-node file.ts\"' nix-shell -p nodejs_20 nodePackages_latest.ts-node yarn entr";
-
     };
 
     history = {
@@ -392,6 +390,7 @@ in
     '';
 
     initExtra = ''
+      source $HOME/.config/apps.sh
       source $HOME/.config/aliases
       source $HOME/.config/m-os.sh
       source $HOME/.config/defaults/basic.sh

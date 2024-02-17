@@ -42,6 +42,7 @@
       pkgs.python3
       pkgs.acpi
       pkgs.font-awesome
+      pkgs.libnotify
     ];
   programs.i3status = {
     enable = false;
@@ -117,10 +118,19 @@
     shadow = true;
     shadowOpacity = 0.75;
     fade = true;
+    vSync = true;
     fadeDelta = 5;
     settings = {
       no-fading-openclose = true;
+      # unredir-if-possible = false;  # if tearing in fullscreen
     };
+    wintypes = {
+      dropdown_menu = { opacity = 1.000000; shadow = false; };
+      popup_menu = { opacity = 1.000000; shadow = false; };
+      utility = { opacity = 1.000000; shadow = false; };
+      menu = { opacity = 1.000000; shadow = false; };
+    };
+
   };
 
   services.redshift = {
