@@ -147,6 +147,7 @@ in
     pkgs.nodePackages.dockerfile-language-server-nodejs
     pkgs.tailwindcss-language-server
     pkgs.ruff-lsp
+    pkgs.shellcheck
     # pkgs.gopls
 
     # nvim Linters
@@ -154,6 +155,7 @@ in
     pkgs.nixpkgs-fmt
     pkgs.nodePackages.markdownlint-cli
     pkgs.nodePackages.prettier
+    pkgs.shfmt
 
     # TODO not quite working:
     pkgs.docker-compose-language-service

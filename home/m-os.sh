@@ -2,7 +2,7 @@
 n() {
 	cd ~/repos/notes || exit
 
-  nvim  .
+	nvim .
 
 	cd - || exit
 }
@@ -10,29 +10,29 @@ n() {
 #TODO Notes
 t() {
 	cd ~/repos/todo || exit
-  git pull
+	git pull
 
-  nvim todo.md
+	nvim todo.md
 
-  git_status=$(git status -s)
-  if [ ! -z "$git_status" ]; then
-    git add .
-    git commit -m "Update Todo $(date)"
-    git push
-  fi
+	git_status=$(git status -s)
+	if [ ! -z "$git_status" ]; then
+		git add .
+		git commit -m "Update Todo $(date)"
+		git push
+	fi
 
 	cd - || exit
 }
 
 ta() { # Add Todo - ta 'new note to add'
- 	cd ~/repos/todo || exit
-  git pull
+	cd ~/repos/todo || exit
+	git pull
 
 	sed -i 6i"- [ ] $1" ~/repos/todo/backlog.md
 
-  git add .
-  git commit -m "Add to Backlog $(date)"
-  git push
+	git add .
+	git commit -m "Add to Backlog $(date)"
+	git push
 
 	cd - || exit
 	# echo "- [ ] $1" >>~/repos/todo/backlog.md
@@ -40,7 +40,7 @@ ta() { # Add Todo - ta 'new note to add'
 
 tsearch() { # Search Backlog and Todo for arg
 	cd ~/repos/todo || exit
-  grep -rniI --exclude-dir={bundles,dist,node_modules,bower_components} todo.md backlog.md -e "$1"
+	grep -rniI --exclude-dir={bundles,dist,node_modules,bower_components} todo.md backlog.md -e "$1"
 	cd - || exit
 }
 
@@ -108,7 +108,7 @@ m.git-quickcommit-all() {
 	git push
 }
 m.git-rebase-continue() {
-  git rebase --continue
+	git rebase --continue
 }
 m.gpg-encrypt-sign() {
 	gpg --encrypt --sign -r "$1" "$2"
@@ -138,7 +138,10 @@ m.time-global() {
 	echo 'Hong Kong: (+8)   ' $(TZ='Asia/Hong_Kong' date)
 }
 
-alias m.time-zones='timedatectl list-timezones --no-pager'
+m.time-zones() {
+	timedatectl list-timezones --no-pager
+}
+
 m.time-meet() {
 	#!/usr/bin/env bash
 	# ./meet.sh || meet.sh 09/22
@@ -236,21 +239,30 @@ alias m.speedtest="speedtest-cli"
 # --exclude 'file or dir'
 # --info=progress2 try if too verbose also remove -v
 
-alias m.cp-rsync="rsync --recursive --links --times --devices --specials --partial --human-readable --progress -v"
-alias m.mv-rsync="rsync --recursive --links --times --devices --specials --partial --human-readable --progress -v --remove-source-files"
+function m.cp-rsync() {
+	rsync --recursive --links --times --devices --specials --partial --human-readable --progress -v
+}
+function m.mv-rsync() {
+	rsync --recursive --links --times --devices --specials --partial --human-readable --progress -v --remove-source-files
+}
 
-alias m.git-uncommit-last='git reset --soft HEAD~1'
-alias m.git-unstage-file='git reset HEAD'
+function m.git-uncommit-last() {
+	git reset --soft HEAD~1
+}
+
+function m.git-unstage-file() {
+	git reset HEAD
+}
 
 function m.git-restore-staged() {
 	git restore --staged "$1"
 }
 
-function m.git-show () {
-  git log --graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"  | \
-   fzf --ansi --no-sort --reverse --tiebreak=index --preview \
-   'f() { set -- $(echo -- "$@" | grep -o "[a-f0-9]\{7\}"); [ $# -eq 0 ] || git show --color=always $1 ; }; f {}' \
-   --bind "j:down,k:up,alt-j:preview-down,alt-k:preview-up,ctrl-f:preview-page-down,ctrl-b:preview-page-up,q:abort,ctrl-m:execute:
+function m.git-show() {
+	git log --graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" |
+		fzf --ansi --no-sort --reverse --tiebreak=index --preview \
+			'f() { set -- $(echo -- "$@" | grep -o "[a-f0-9]\{7\}"); [ $# -eq 0 ] || git show --color=always $1 ; }; f {}' \
+			--bind "j:down,k:up,alt-j:preview-down,alt-k:preview-up,ctrl-f:preview-page-down,ctrl-b:preview-page-up,q:abort,ctrl-m:execute:
                 (grep -o '[a-f0-9]\{7\}' | head -1 |
                 xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
                 {}
@@ -274,24 +286,24 @@ function m.ffmpeg-info() {
 # ffmpeg -i 2024-02-06\ 09-30-08_keeper.ai_tech_interview_1.mkv -vn  -ac 2 output.wav
 #
 function m.ffmpeg-reduce-ultrafast() {
-  file=$1
-  filename=${file%. *}
-  extension=${file##*.}
+	file=$1
+	filename=${file%. *}
+	extension=${file##*.}
 
-  ffmpeg -i "$file" -c:v libx265 -crf 28 -preset ultrafast  "${filename}_ultrafast_reduced.$extension"
+	ffmpeg -i "$file" -c:v libx265 -crf 28 -preset ultrafast "${filename}_ultrafast_reduced.$extension"
 }
 
 function m.ffmpeg-reduce-fast() {
-  file=$1
-  filename=${file%. *}
-  extension=${file##*.}
+	file=$1
+	filename=${file%. *}
+	extension=${file##*.}
 
-  ffmpeg -i "$file" -c:v libx265 -crf 28 -preset fast  "${filename}_fast_reduced.$extension"
+	ffmpeg -i "$file" -c:v libx265 -crf 28 -preset fast "${filename}_fast_reduced.$extension"
 }
 
 function m.ffmpeg-extract-wav() {
-  file=$1
-  ffmpeg -i "$file" -vn -acodec pcm_s16le -ar 16000 -ac 2 "${file}_16Bit.wav"
+	file=$1
+	ffmpeg -i "$file" -vn -acodec pcm_s16le -ar 16000 -ac 2 "${file}_16Bit.wav"
 }
 
 function m.ff() {
@@ -305,7 +317,7 @@ function m.ff() {
 }
 
 ff() {
-  m.ff
+	m.ff
 }
 
 function m.fc() {
@@ -313,7 +325,7 @@ function m.fc() {
 	file=$(fzf --preview 'bat --style=numbers --color=always --line-range :500 {}')
 	if [[ $file ]]; then
 		cat "$file"
-    echo $file
+		echo $file
 	else
 		echo "cancelled m.ff"
 	fi
@@ -322,7 +334,7 @@ function m.fc() {
 function m.fd() {
 	local dir
 	dir=$(find ${1:-.} -type d 2>/dev/null | fzf +m) && cd "$dir"
-  echo $dir
+	echo "$dir"
 	ls
 }
 
@@ -366,13 +378,13 @@ function m.show-def() {
 }
 
 m.mos-show() {
-  declare -f "$1"
-  type -a "$1"
+	declare -f "$1"
+	type -a "$1"
 }
 
 function m() {
 	# print -z -- "$(m.list-alias-functions | fzf --preview "source ~/repos/nixos-config/users/mattn/aliases > /dev/null 2>&1; $HOME/.config/fzf-m-os-preview-function.sh {1}")"
-  print -z -- "$(m.list-alias-functions | fzf --preview "source ~/repos/nixos-config/users/mattn/aliases > /dev/null 2>&1; declare -f  {1}")"
+	print -z -- "$(m.list-alias-functions | fzf --preview "source ~/repos/nixos-config/users/mattn/aliases > /dev/null 2>&1; declare -f  {1}")"
 }
 
 function m2() {
@@ -393,26 +405,25 @@ function o() {
 	xdg-open $1
 }
 m.screen() {
-  echo "xrandr --query"
-  echo "-------------------------------"
-  xrandr --query
+	echo "xrandr --query"
+	echo "-------------------------------"
+	xrandr --query
 
-  echo ""
-  echo "xset q"
-  echo "-------------------------------"
-  xset q
+	echo ""
+	echo "xset q"
+	echo "-------------------------------"
+	xset q
 
-  echo ""
-  echo "xrandr --listmonitors"
-  echo "-------------------------------"
-  xrandr --listmonitors
+	echo ""
+	echo "xrandr --listmonitors"
+	echo "-------------------------------"
+	xrandr --listmonitors
 }
 
 m.screen-above() {
-  ~/.config/i3/monitor-above.sh
+	~/.config/i3/monitor-above.sh
 }
 
 m.screen-mirror() {
-  ~/.config/i3/monitor-mirror.sh
+	~/.config/i3/monitor-mirror.sh
 }
-
