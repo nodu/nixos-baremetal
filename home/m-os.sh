@@ -15,7 +15,7 @@ t() {
 	nvim todo.md
 
 	git_status=$(git status -s)
-	if [ ! -z "$git_status" ]; then
+	if [ -n "$git_status" ]; then
 		git add .
 		git commit -m "Update Todo $(date)"
 		git push
@@ -211,25 +211,67 @@ m.time-time.is-table() {
 	firefox "https://time.is/compare/900AM_4_Feb_2023_in_HKT/Kolkata/GMT/London/San_Francisco"
 }
 
-alias m.weather-sf='curl wttr.in/sanfrancisco\?u'
-alias m.weather-chicago='curl wttr.in/chicago\?u'
-alias m.weather-terralinda='curl wttr.in/94903\?u'
-alias m.weather='curl wttr.in\?u'
+m.weather_sf() {
+	curl wttr.in/sanfrancisco
+}
 
-alias m.whereami-latlong='curl ipinfo.io/loc'
-alias m.whereami-country='curl ipinfo.io/country'
-alias m.whereami='curl ipinfo.io/json'
+m.weather_chicago() {
+	curl wttr.in/chicago
+}
 
-alias m.vlcc='vlc -I ncurses'
-alias m.vlcc-brain='vlc -I ncurses "/host/matt/My Drive/Audio/Brain.fm" --random'
+m.weather_terralinda() {
+	curl wttr.in/94903
+}
 
-alias m.source-alias="source ~/repos/nixos-config/users/mattn/aliases"
+m.weather() {
+	curl wttr.in
+}
 
-alias m.edit-vim="v ~/repos/nixos-config/users/mattn/vim-config.nix"
-alias m.edit-alias="v ~/repos/nixos-config/users/mattn/aliases"
-alias m.edit-i3="v ~/repos/nixos-config/users/mattn/i3"
-alias m.edit-home-manager="nvim ~/repos/nixos-config/users/mattn/home-manager.nix"
-alias m.speedtest="speedtest-cli"
+# Location information functions
+m.whereami_latlong() {
+	curl ipinfo.io/loc
+}
+
+m.whereami_country() {
+	curl ipinfo.io/country
+}
+
+m.whereami() {
+	curl ipinfo.io/json
+}
+
+m.vlcc() {
+	vlc -I ncurses
+}
+
+m.vlcc_brain() {
+	vlc -I ncurses "/host/matt/My Drive/Audio/Brain.fm" --random
+}
+
+m.source_alias() {
+	source /home/matt/repos/nixos-baremetal/home/aliases
+}
+
+m.edit_vim() {
+	nvim ~/.config/nvim/
+}
+
+m.edit_alias() {
+	nvim ~/repos/nixos-baremetal/home/aliases
+}
+
+m.edit_i3() {
+	nvim ~/repos/nixos-baremetal/home/i3/i3.config
+}
+
+m.edit_home_manager() {
+	nvim ~/repos/nixos-baremetal/home/home-manager.nix
+}
+
+# Internet speed test function
+m.speedtest() {
+	speedtest-cli
+}
 
 # -a = -rlptgoD; removed -po
 # -p, --perms                 preserve permissions
@@ -268,8 +310,6 @@ function m.git-show() {
                 {}
 FZF-EOF" --preview-window=right:60%
 }
-
-alias m.tldrf='tldr --list | fzf --preview "tldr {1} --color=always" --preview-window=right,70% | xargs tldr'
 
 function m.ffmpeg-info() {
 	ffmpeg -i "$1"
@@ -351,8 +391,20 @@ function m.env() {
 	out=$(env | fzf)
 	echo "$(echo "$out" | cut -d= -f2)"
 }
-alias m.x='xrandr-auto'
-alias sgpt='OPENAI_API_KEY=$(gpg --decrypt $HOME/.chatgpt-secret.txt.gpg 2>/dev/null) sgpt'
+# Custom xrandr auto-adjustment function
+m.x() {
+	xrandr-auto
+}
+
+# Set OPENAI_API_KEY from a decrypted file and run sgpt
+sgpt() {
+	OPENAI_API_KEY=$(gpg --decrypt $HOME/.chatgpt-secret.txt.gpg 2>/dev/null) sgpt "$@"
+}
+
+# Interactive tldr with fzf for command usage summaries
+m.tldrf() {
+	tldr --list | fzf --preview "tldr {1} --color=always" --preview-window=right,70% | xargs tldr
+}
 
 function m.list-alias-functions() {
 	# TODO list full definitions, then only paste func name/alias to command line
@@ -383,19 +435,11 @@ m.mos-show() {
 }
 
 function m() {
-	# print -z -- "$(m.list-alias-functions | fzf --preview "source ~/repos/nixos-config/users/mattn/aliases > /dev/null 2>&1; $HOME/.config/fzf-m-os-preview-function.sh {1}")"
-	print -z -- "$(m.list-alias-functions | fzf --preview "source ~/repos/nixos-config/users/mattn/aliases > /dev/null 2>&1; declare -f  {1}")"
-}
-
-function m2() {
-	CMD=$(
-		(
-			(alias)
-			(functions | grep "()" | cut -d ' ' -f1 | grep -v "^_")
-		) | fzf | cut -d '=' -f1
-	)
-
-	eval "$CMD"
+	tmpfile=$(mktemp)
+	typeset -f >"$tmpfile"
+	selected_command=$(compgen -c | fzf --preview "source $tmpfile > /dev/null 2>&1; declare -f {1}")
+	echo -n "$selected_command" | xclip -selection clipboard
+	echo "Command copied to clipboard: $selected_command"
 }
 
 function open() {
@@ -427,3 +471,24 @@ m.screen-above() {
 m.screen-mirror() {
 	~/.config/i3/monitor-mirror.sh
 }
+
+m.www() {
+	python3 -m http.server
+}
+
+check_git_status() {
+	local start_dir="$1"
+
+	# Check if the provided directory exists
+	if [ ! -d "$start_dir" ]; then
+		echo "The directory $start_dir does not exist."
+		return 1
+	fi
+
+	find "$start_dir" -type d -name '.git' | while read dir; do
+		sh -c "cd '$dir'/../ && git_status=\$(git status -s); if [ ! -z \"\$git_status\" ]; then echo -e \"\nGIT STATUS IN ${dir//\.git/}\"; echo \"\$git_status\"; fi"
+	done
+}
+
+check_git_status ~/repos
+check_git_status ~/.config #nvim

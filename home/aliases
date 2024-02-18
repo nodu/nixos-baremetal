@@ -1,4 +1,4 @@
-echo 'aliases.sh sourced.'
+# echo 'aliases.sh sourced.'
 
 alias azd="docker run -it mcr.microsoft.com/azure-cli az"
 # azd --version
@@ -51,7 +51,6 @@ alias wakeupbase='ssh duckdns.org -p 1422 /usr/bin/etherwake -D "70:8B:CD:55:FF:
 alias wakeupbase='ssh routerr /usr/bin/etherwake -D "70:8B:CD:55:FF:7E"'
 
 alias ping='ping -c 5'
-alias www='python3 -m http.server'
 
 # curl -P 104.45.159.118 ftp://40.71.174.122/vsftpd --user 'admin:password' -v
 # tcpdump host 192.168.1.3 -n | grep SOMETHING
@@ -151,40 +150,25 @@ nvimNewSplit() {
 
 # Startup items:
 #motivate
-function check_git_status {
-    local start_dir="$1"
-
-    # Check if the provided directory exists
-    if [ ! -d "$start_dir" ]; then
-        echo "The directory $start_dir does not exist."
-        return 1
-    fi
-
-    find "$start_dir" -type d -name '.git' | while read dir; do
-      sh -c "cd '$dir'/../ && git_status=\$(git status -s); if [ ! -z \"\$git_status\" ]; then echo -e \"\nGIT STATUS IN ${dir//\.git/}\"; echo \"\$git_status\"; fi"
-    done
-}
-check_git_status ~/repos
-check_git_status ~/.config
 
 
-mn-help-myHelpers() {
-	grep -E "() {" ~/dotenv/shortcuts/aliases.sh
-	grep -E "() {" ~/dotenv/.zshrc
-	grep -E "alias" ~/dotenv/shortcuts/aliases.sh
-	grep -E "alias" ~/dotenv/.zshrc
-	ls -al /usr/local/bin
-}
+# mn-help-myHelpers() {
+# 	grep -E "() {" ~/dotenv/shortcuts/aliases.sh
+# 	grep -E "() {" ~/dotenv/.zshrc
+# 	grep -E "alias" ~/dotenv/shortcuts/aliases.sh
+# 	grep -E "alias" ~/dotenv/.zshrc
+# 	ls -al /usr/local/bin
+# }
 
-echo ""
-echo "
-CheatSheets:
-
-mn-help-byobuKeys
-mn-help-vimCheatSheet
-mn-help-myHelpers
-"
-echo ""
+# echo ""
+# echo "
+# CheatSheets:
+#
+# mn-help-byobuKeys
+# mn-help-vimCheatSheet
+# mn-help-myHelpers
+# "
+# echo ""
 
 
 function dsf() { diff -u $1 $2 | diff-so-fancy; }
