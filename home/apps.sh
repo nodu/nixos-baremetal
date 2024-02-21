@@ -1,17 +1,21 @@
+function shell-go() {
+	nix-shell -p go gopls
+}
+
 function shell-python() {
-  nix-shell -p python3 entr
+	nix-shell -p python3 entr
 }
 
 function weylus() {
-  nix-shell -p weylus --run weylus
+	nix-shell -p weylus --run weylus
 }
 
 function gimp() {
-  nix-shell -p gimp --run gimp
+	nix-shell -p gimp --run gimp
 }
 
 function shell-js-ts() {
-    cat > tsshell.nix <<EOF
+	cat >tsshell.nix <<EOF
 { pkgs ? import <nixpkgs> {} }:
 
 pkgs.mkShell {
@@ -23,7 +27,7 @@ pkgs.mkShell {
   '';
 }
 EOF
-    nix-shell tsshell.nix
 
-    rm -f tsshell.nix
+	nix-shell tsshell.nix
+	rm -f tsshell.nix
 }
