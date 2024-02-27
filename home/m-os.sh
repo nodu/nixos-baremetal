@@ -7,6 +7,14 @@ n() {
 	cd - || exit
 }
 
+vn() {
+	cd ~/repos/nixos-baremetal || exit
+
+	nvim .
+
+	cd - || exit
+}
+
 #TODO Notes
 t() {
 	cd ~/repos/todo || exit
