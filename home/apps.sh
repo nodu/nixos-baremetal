@@ -1,5 +1,22 @@
 function shell-go() {
-	nix-shell -p go gopls
+	cat >goshell.nix <<EOF
+{ pkgs ? import <nixpkgs> {} }:
+
+pkgs.mkShell {
+  buildInputs = [ pkgs.go pkgs.gopls pkgs.entr ];
+
+  shellHook = ''
+    source $HOME/.config/m-os.sh
+
+    echo "Go shell..."
+    echo "ls *.ts 2>/dev/null | entr -r go run main.go"
+  '';
+}
+EOF
+
+	nix-shell goshell.nix
+	rm -f goshell.nix
+
 }
 
 function shell-python() {
