@@ -9,7 +9,7 @@ pkgs.mkShell {
     source $HOME/.config/m-os.sh
 
     echo "Go shell..."
-    echo "ls *.ts 2>/dev/null | entr -r go run main.go"
+    echo "ls *.go 2>/dev/null | entr -r go run main.go"
   '';
 }
 EOF
