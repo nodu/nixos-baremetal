@@ -1,17 +1,27 @@
 # My m. OS shortcuts
+v() {
+	if [ -n "$1" ]; then
+		nvim "$1"
+	else
+		nvim .
+	fi
+}
+
 n() {
 	cd ~/repos/notes || exit
-
 	nvim .
-
 	cd - || exit
 }
 
 vn() {
 	cd ~/repos/nixos-baremetal || exit
-
 	nvim .
+	cd - || exit
+}
 
+vv() {
+	cd ~/.config/nvim || exit
+	nvim .
 	cd - || exit
 }
 
@@ -233,19 +243,6 @@ m.weather_terralinda() {
 
 m.weather() {
 	curl wttr.in
-}
-
-# Location information functions
-m.whereami_latlong() {
-	curl ipinfo.io/loc
-}
-
-m.whereami_country() {
-	curl ipinfo.io/country
-}
-
-m.whereami() {
-	curl ipinfo.io/json
 }
 
 m.vlcc() {

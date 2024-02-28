@@ -119,6 +119,13 @@
   ]);
 
   services.xserver.windowManager.i3.enable = true;
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+    package = null;
+  };
+  # services.xserver.displayManager.defaultSession = "sway";
+  services.xserver.displayManager.defaultSession = "none+i3";
 
   # Configure keymap in X11
   services.xserver = {

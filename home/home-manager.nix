@@ -83,6 +83,9 @@ in
     pkgs.unzip
     pkgs.gcc
     pkgs.normcap
+    pkgs.xdotool
+    pkgs.pulseaudio
+    pkgs.helvum
 
     #    pkgs.buildkit
     #    pkgs.neofetch
@@ -98,6 +101,7 @@ in
     pkgs.gnomeExtensions.gnordvpn-local
     pkgs.gnome.dconf-editor
 
+    pkgs.killall
     pkgs.lshw
     # network
     pkgs.inetutils
@@ -181,7 +185,7 @@ in
   # docker run -v zwift-$USER:/data --name zwift-copy-op busybox true
   # docker cp .zwift-credentials zwift-copy-op:/data
   # docker rm zwift-copy-op
-  home.sessionPath = [ "$HOME/.local/bin" ];
+  home.sessionPath = [ "$HOME/.local/bin" "$HOME/go/bin" ];
   home.file = {
     "zwift.sh" = {
       source = pkgs.fetchurl {
@@ -206,8 +210,8 @@ in
     "defaults".source = fetchFromGitHub {
       owner = "nodu";
       repo = "defaults";
-      rev = "6481752";
-      sha256 = "ho+/UrZROa+mm17FbJv3SjP3lYKPjI7yprFetYnAZz0=";
+      rev = "710dfec";
+      sha256 = "Q+zUzeS2Imu0+bcrHtk1AT4em91pZFYTxpWuzj/9niY=";
     };
   };
 
@@ -267,7 +271,7 @@ in
 
     extraConfig = {
       modes = "combi";
-      modi = "emoji"; #calc,run,filebrowser,
+      modi = "emoji,run,filebrowser"; #calc,run,filebrowser,
       combi-modes = "window,drun";
       show-icons = true;
       sort = true;
@@ -276,8 +280,8 @@ in
       font = "FiraCode Nerd Font 10";
       terminal = "alacritty";
       sorting-method = "fzf";
-      # kb-mode-next = "Control+n";
-      # kb-mode-previous = "Control+p";
+      kb-mode-next = "Tab";
+      kb-mode-previous = "ISO_Left_Tab"; #Shift+Tab
       kb-element-prev = "";
       kb-element-next = "";
       # kb-row-up = "ISO_Left_Tab";
@@ -394,8 +398,8 @@ in
     initExtra = ''
       source $HOME/.config/apps.sh
       source $HOME/.config/aliases
-      source $HOME/.config/m-os.sh
       source $HOME/.config/defaults/basic.sh
+      source $HOME/.config/m-os.sh
       source $HOME/.config/shellConfig
       eval "$(direnv hook zsh)"
     '';

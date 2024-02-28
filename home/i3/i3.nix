@@ -7,12 +7,20 @@
     };
     "i3/config".text = builtins.readFile ./i3.config;
     "i3/i3blocks.conf".text = builtins.readFile ./i3blocks.conf;
+    "i3/notify-sleep.sh" = {
+      text = builtins.readFile ./notify-sleep.sh;
+      executable = true;
+    };
     "i3/monitor-mirror.sh" = {
       text = builtins.readFile ./monitor-mirror.sh;
       executable = true;
     };
     "i3/monitor-above.sh" = {
       text = builtins.readFile ./monitor-above.sh;
+      executable = true;
+    };
+    "i3/monitor-disable.sh" = {
+      text = builtins.readFile ./monitor-disable.sh;
       executable = true;
     };
     "i3/toggle-screensaver.sh" = {
@@ -44,6 +52,10 @@
       pkgs.font-awesome
       pkgs.libnotify
     ];
+  services.screen-locker.xss-lock = {
+    # https://discourse.nixos.org/t/how-to-config-hybrid-sleep-after-idle-and-lock/8728/9
+    extraOptions = "--session 2";
+  };
   programs.i3status = {
     enable = false;
 
