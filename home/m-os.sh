@@ -42,6 +42,22 @@ t() {
 	cd - || exit
 }
 
+tb() {
+	cd ~/repos/todo || exit
+	git pull
+
+	nvim backlog.md
+
+	git_status=$(git status -s)
+	if [ -n "$git_status" ]; then
+		git add .
+		git commit -m "Update Todo $(date)"
+		git push
+	fi
+
+	cd - || exit
+}
+
 ta() { # Add Todo - ta 'new note to add'
 	cd ~/repos/todo || exit
 	git pull
@@ -497,3 +513,13 @@ check_git_status() {
 
 check_git_status ~/repos
 check_git_status ~/.config #nvim
+
+alias nvim-new='NVIM_APPNAME="neovim-config" nvim'
+alias nvim-plugin-testing='NVIM_APPNAME="nvim-plugin-testing" nvim'
+
+m.rclone-downloads-dry() {
+	rclone sync -vP --exclude ses/ ~/Downloads/ gdrive:NixOS-Downloads --dry-run
+}
+m.rclone-downloads() {
+	rclone sync -vP --exclude ses/ ~/Downloads/ gdrive:NixOS-Downloads
+}

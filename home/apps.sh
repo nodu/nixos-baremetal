@@ -18,7 +18,26 @@ EOF
 	rm -f goshell.nix
 
 }
+function shell-lua() {
+	cat >luashell.nix <<EOF
+{ pkgs ? import <nixpkgs> {} }:
 
+pkgs.mkShell {
+  buildInputs = [ pkgs.lua pkgs.entr ];
+
+  shellHook = ''
+    source $HOME/.config/m-os.sh
+
+    echo "Lua shell..."
+    echo "ls *.lua 2>/dev/null | entr -r .lua"
+  '';
+}
+EOF
+
+	nix-shell luashell.nix
+	rm -f luashell.nix
+
+}
 function shell-python() {
 	nix-shell -p python3 entr
 }
