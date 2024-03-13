@@ -144,6 +144,11 @@ m.git-quickcommit-all() {
 m.git-rebase-continue() {
 	git rebase --continue
 }
+m.gpg-import() {
+	echo "Provide a private.key for $1"
+	gpp --import "$1"
+}
+
 m.gpg-encrypt-sign() {
 	gpg --encrypt --sign -r "$1" "$2"
 }

@@ -279,23 +279,6 @@ mute-inputs() {
 	amixer -D pulse sset Capture toggle && amixer get Capture | grep '\[off\]' && notify-send "MIC switched OFF" || notify-send "MIC switched ON"
 }
 
-install_slack() {
-	INSTALL_DIR=$(mktemp -d)
-	VERSION_SLACK=4.9.1
-	curl -o $INSTALL_DIR/slack.deb -sSL https://downloads.slack-edge.com/linux_releases/slack-desktop-${VERSION_SLACK}-amd64.deb
-	sudo dpkg -i $INSTALL_DIR/slack.deb
-}
-
-install_spotify() {
-	curl -sS https://download.spotify.com/debian/pubkey.gpg | sudo apt-key add -
-	curl -sS https://download.spotify.com/debian/pubkey_0D811D58.gpg | sudo apt-key add -
-	echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
-
-	sudo apt-get update
-	sudo apt-get install spotify-client
-}
-
-
 alias backup-aws-to-chia="cp-rsync ~/Downloads/aws /Volumes/Chia/"
 alias backup-drive-to-chia="cp-rsync --exclude '.tmp.driveupload' /Users/matt/My\ Drive  /Volumes/Chia/"
 alias backup-gravity-drive-to-chia="cp-rsync /Users/matt/Downloads/202207\ Gravity\ Drive\ Backup /Volumes/Chia/"
