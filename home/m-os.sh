@@ -3,7 +3,7 @@ v() {
 	if [ -n "$1" ]; then
 		nvim "$1"
 	else
-		nvim .
+		nvim
 	fi
 }
 
@@ -15,13 +15,13 @@ n() {
 
 vn() {
 	cd ~/repos/nixos-baremetal || exit
-	nvim .
+	nvim
 	cd - || exit
 }
 
 vv() {
 	cd ~/.config/nvim || exit
-	nvim .
+	nvim
 	cd - || exit
 }
 
@@ -325,7 +325,7 @@ function m.git-show() {
 	git log --graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" |
 		fzf --ansi --no-sort --reverse --tiebreak=index --preview \
 			'f() { set -- $(echo -- "$@" | grep -o "[a-f0-9]\{7\}"); [ $# -eq 0 ] || git show --color=always $1 ; }; f {}' \
-			--bind "j:down,k:up,alt-j:preview-down,alt-k:preview-up,ctrl-f:preview-page-down,ctrl-b:preview-page-up,q:abort,ctrl-m:execute:
+			--bind "ctrl-d:preview-page-down,ctrl-u:preview-page-up,enter:execute:
                 (grep -o '[a-f0-9]\{7\}' | head -1 |
                 xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
                 {}
@@ -455,10 +455,13 @@ m.mos-show() {
 	type -a "$1"
 }
 
+#menu
 function m() {
 	tmpfile=$(mktemp)
 	typeset -f >"$tmpfile"
-	selected_command=$(compgen -c | fzf --preview "source $tmpfile > /dev/null 2>&1; declare -f {1}")
+	# TODO fix fzf --bind 'enter:exectue'
+	# compgen -c | fzf --bind "ctrl-d:preview-page-down,ctrl-u:preview-page-up,enter:execute({})" --preview "source $tmpfile > /dev/null 2>&1; declare -f {1}"
+	selected_command=$(compgen -c | fzf --bind "ctrl-d:preview-page-down,ctrl-u:preview-page-up" --preview "source $tmpfile > /dev/null 2>&1; declare -f {1}")
 	echo -n "$selected_command" | xclip -selection clipboard
 	echo "Command copied to clipboard: $selected_command"
 }
