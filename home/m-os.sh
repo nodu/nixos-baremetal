@@ -466,7 +466,7 @@ function m() {
 	typeset -f >"$tmpfile"
 	# TODO fix fzf --bind 'enter:exectue'
 	# compgen -c | fzf --bind "ctrl-d:preview-page-down,ctrl-u:preview-page-up,enter:execute({})" --preview "source $tmpfile > /dev/null 2>&1; declare -f {1}"
-	selected_command=$(compgen -c | fzf --bind "ctrl-d:preview-page-down,ctrl-u:preview-page-up" --preview "source $tmpfile > /dev/null 2>&1; declare -f {1}")
+	selected_command=$(compgen -c | fzf --bind "ctrl-n:down,ctrl-p:up,ctrl-d:preview-page-down,ctrl-u:preview-page-up" --preview "source $tmpfile > /dev/null 2>&1; declare -f {1}")
 	echo -n "$selected_command" | xclip -selection clipboard
 	echo "Command copied to clipboard: $selected_command"
 }
