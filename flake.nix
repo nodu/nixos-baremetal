@@ -18,7 +18,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Other packages
+    nix-colors.url = "github:misterio77/nix-colors";
+
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
 

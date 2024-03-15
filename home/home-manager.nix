@@ -8,19 +8,12 @@ let
     fetchFromGitHub
     ;
 
-  # For our MANPAGER env var
-  # https://github.com/sharkdp/bat/issues/1145
-  # MN - not needed, but keeping in case of future breakage
-  manpager = (pkgs.writeShellScriptBin "manpager" ''
-    col -bx < "$1" | bat --language man -p
-  '');
-
   # Note: Nix Search for package, click on platform to find binary build status
   # Get specific versions of packages here:
-  # https://lazamar.co.uk/nix-versions/
+  #   https://lazamar.co.uk/nix-versions/
   # To get the sha256 hash:
-  # nix-prefetch-url --unpack https://github.com/NixOS/nixpkgs/archive/e49c28b3baa3a93bdadb8966dd128f9985ea0a09.tar.gz
-  # or use an empty sha256 = ""; string, it'll show the hash; prefetch is safer
+  #   nix-prefetch-url --unpack https://github.com/NixOS/nixpkgs/archive/e49c28b3baa3a93bdadb8966dd128f9985ea0a09.tar.gz
+  #   or use an empty sha256 = ""; string, it'll show the hash; prefetch is safer
 
   # oldPkgs = import
   #   (builtins.fetchTarball {
@@ -35,10 +28,14 @@ let
 in
 {
   imports = [
+    inputs.nix-colors.homeManagerModules.default
     ./sway/sway.nix
     ./i3/i3.nix
     # ./hyprland/hyprland.nix
   ];
+
+  colorScheme = inputs.nix-colors.colorSchemes.tokyo-night-storm;
+
 
   #cat "$1" | col -bx | bat --language man --style plain
   # Home-manager 22.11 requires this be set. We never set it so we have
@@ -53,31 +50,35 @@ in
   #---------------------------------------------------------------------
 
   home.packages = [
-    #   #GUI Apps
+    (pkgs.nerdfonts.override { fonts = [ "FiraCode" "RobotoMono" ]; })
+    # oldPkgs.chromium #example how to import specific versions
+
+    # GUI Apps
     pkgs.authy
     pkgs.google-chrome
-    #   oldPkgs.chromium
+    pkgs.obs-studio
     pkgs.obsidian
-    ##   pkgs.baobab
-    #   pkgs.xfce.thunar
     pkgs.vlc
     pkgs.jellyfin-media-player
+    pkgs.kodi
     pkgs.spotify
     pkgs.discord
-    pkgs.rclone
-    pkgs.libsForQt5.kdeconnect-kde
+    #pkgs.baobab
 
-    (pkgs.nerdfonts.override { fonts = [ "FiraCode" "RobotoMono" ]; })
+    # Utilities
+    pkgs.libsForQt5.kdeconnect-kde
+    pkgs.neofetch
+    pkgs.rclone
     pkgs.fd
     pkgs.bat
+    pkgs.gum
+    pkgs.glow
     pkgs.fzf
     pkgs.gotop
     pkgs.jq
-    #    pkgs.jqp
+    pkgs.jqp #jq playground tui
     pkgs.ripgrep
-    #    pkgs.tree
-    #    pkgs.watch
-    #    pkgs.zathura
+    pkgs.tree
     pkgs.zip
     pkgs.unzip
     pkgs.gcc
@@ -85,10 +86,13 @@ in
     pkgs.xdotool
     pkgs.pulseaudio
     pkgs.helvum
-
-    #    pkgs.buildkit
-    #    pkgs.neofetch
-    pkgs.alacritty-theme
+    pkgs.entr
+    pkgs.ffmpeg
+    pkgs.killall
+    pkgs.lshw
+    pkgs.yt-dlp
+    pkgs.gamemode
+    pkgs.tealdeer
 
     # Gnome
     pkgs.gnome.gnome-tweaks
@@ -99,44 +103,34 @@ in
     pkgs.gnomeExtensions.grand-theft-focus
     pkgs.gnomeExtensions.gnordvpn-local
     pkgs.gnome.dconf-editor
+    pkgs.gnomeExtensions.gamemode-indicator-in-system-settings
 
-    pkgs.killall
-    pkgs.lshw
-    # network
+    # Network
     pkgs.inetutils
     pkgs.wget
     pkgs.speedtest-cli
     pkgs.httpstat
-    #    pkgs.nmap
-    #    pkgs.tshark
     pkgs.sshfs
+    #pkgs.nmap
+    #pkgs.tshark
 
-    pkgs.ffmpeg
-    pkgs.obs-studio
-
-    #    pkgs.gum
-    pkgs.yt-dlp
-    #    pkgs.ytfzf
-    pkgs.tealdeer
-    #
-    # pkgs.go
-
-    #    #pkgs.postgresql_11
-
-    #    #pkgs.kubectl
-    #    #pkgs.krew
-    #    #pkgs.terraform
-    #    #pkgs.vault
-    #    #pkgs.awscli2
-    #    #pkgs.azure-cli
-    #    #(pkgs.google-cloud-sdk.withExtraComponents [pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin])
-    #    #pkgs.krew
-
-    #    ##try out
-    #    #pkgs.ChatGPT.nvim
-    #    pkgs.shell_gpt
-
+    # pkgs.postgresql_11
+    # pkgs.kubectl
+    # pkgs.krew
+    # pkgs.terraform
+    # pkgs.vault
+    # pkgs.awscli2
+    # pkgs.azure-cli
+    # (pkgs.google-cloud-sdk.withExtraComponents [pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin])
+    # pkgs.krew
     # pkgs.beekeeper-studio
+
+    pkgs.go
+    pkgs.gopls
+    pkgs.python3
+    pkgs.nodejs_20
+    pkgs.nodePackages.ts-node
+    pkgs.yarn
 
     # nvim LSPs
     pkgs.lua-language-server
@@ -175,8 +169,8 @@ in
     EDITOR = "nvim";
     PAGER = "less -FirSwX";
     MANPAGER = "sh -c 'col -bx | ${pkgs.bat}/bin/bat -l man -p'";
+    MANROFFOPT = "-c";
   };
-  #MANPAGER = "${manpager}/bin/manpager";
 
   #home.file.".inputrc".source = ./inputrc;
 
@@ -248,11 +242,16 @@ in
   # Programs
   #---------------------------------------------------------------------
 
-  programs.gpg.enable = true;
+  programs.gpg = {
+    enable = true;
+    settings = {
+      no-symkey-cache = false; # Allow caching of Symmetric Passphrases
+    };
+  };
 
   services.gpg-agent = {
     enable = true;
-    # cache the keys forever so we don't get asked for a password
+    # cache the keys forever so we don't get asked for a password until reboot
     defaultCacheTtl = 31536000;
     maxCacheTtl = 31536000;
     pinentryFlavor = "gtk2";
@@ -283,8 +282,6 @@ in
       kb-mode-previous = "ISO_Left_Tab"; #Shift+Tab
       kb-element-prev = "";
       kb-element-next = "";
-      # kb-row-up = "ISO_Left_Tab";
-      # kb-row-down = "Tab";
       kb-select-1 = "Alt+1";
       kb-select-2 = "Alt+2";
       kb-select-3 = "Alt+3";
@@ -361,10 +358,6 @@ in
     #completionInit
 
     shellAliases = {
-      # Two decades of using a Mac has made this such a strong memory
-      # that I'm just going to keep it consistent.
-      pbcopy = "xclip";
-      pbpaste = "xclip -o";
       nx-update = "cd ~/repos/nixos-baremetal/ && make switch; cd -";
       nx-update-flake = "cd ~/repos/nixos-baremetal/ && nix flake update; cd -";
       nx-update-input = "nix flake lock --update-input"; # nix flake lock --update-input nixos-hardware
@@ -438,133 +431,69 @@ in
   programs.alacritty = {
     enable = true;
 
-    settings = {
-      env.TERM = "xterm-256color";
+    settings =
+      {
+        env.TERM = "xterm-256color";
+        env.WINIT_X11_SCALE_FACTOR = "1"; #https://major.io/p/disable-hidpi-alacritty/ #i3 font size fix
+        font = {
+          size = 12.0;
+          #use_thin_strokes = true;
 
-      font = {
-        size = 12.0;
-        #use_thin_strokes = true;
-
-        normal.family = "FiraCode Nerd Font";
-        bold.family = "FiraCode Nerd Font";
-        italic.family = "FiraCode Nerd Font";
-      };
-
-      cursor.style = "Block";
-      dynamic_title = true;
-      decorations = "transparent";
-      #padding.y = 27;
-
-      key_bindings = [
-        { key = "K"; mods = "Alt"; chars = "ClearHistory"; } #remap
-        # { key = "V"; mods = "Alt"; action = "Paste"; } #no more command for  copy paste
-        # { key = "C"; mods = "Alt"; action = "Copy"; } #cmd is system wide ctrl shift c/v
-        { key = "Key0"; mods = "Alt"; action = "ResetFontSize"; }
-        { key = "Equals"; mods = "Alt"; action = "IncreaseFontSize"; }
-        { key = "Plus"; mods = "Alt"; action = "IncreaseFontSize"; }
-        { key = "NumpadAdd"; mods = "Alt"; action = "IncreaseFontSize"; }
-        { key = "Minus"; mods = "Alt"; action = "DecreaseFontSize"; }
-        { key = "NumpadSubtract"; mods = "Alt"; action = "DecreaseFontSize"; }
-        { key = "F"; mods = "Alt"; action = "SearchBackward"; }
-        { key = "I"; mods = "Alt"; action = "ToggleViMode"; }
-        { key = "N"; mods = "Shift|Control"; action = "CreateNewWindow"; }
-      ];
-
-      # Colors (Solarized Dark)
-      # https://github.com/alacritty/alacritty-theme/tree/master/themes
-      colors = {
-        # Default colors
-        primary = {
-          # Dark
-          #background= "#011318"; # black
-          background = "0x002b36"; #original
-          foreground = "0x839496";
-
-          # Light
-          #background= "0xfdf6e3";
-          #foreground= "0x586e75";
+          normal.family = "FiraCode Nerd Font";
+          bold.family = "FiraCode Nerd Font";
+          italic.family = "FiraCode Nerd Font";
         };
-        # Cursor colors
-        cursor = {
-          text = "#002b36"; # base3
-          cursor = "#839496"; # base0
-        };
-        # Normal colors
-        normal = {
-          black = "#073642"; # base02
-          red = "#dc322f"; # red
-          green = "#859900"; # green
-          yellow = "#b58900"; # yellow
-          blue = "#268bd2"; # blue
-          magenta = "#d33682"; # magenta
-          cyan = "#2aa198"; # cyan
-          white = "#eee8d5"; # base2
-        };
-        # Bright colors
-        bright = {
-          black = "#002b36"; # base03
-          red = "#cb4b16"; # orange
-          green = "#586e75"; # base01
-          yellow = "#657b83"; # base00
-          blue = "#839496"; # base0
-          magenta = "#6c71c4"; # violet
-          cyan = "#93a1a1"; # base1
-          white = "#fdf6e3"; # base3
-        };
-      };
-    };
-  };
 
-  programs.i3status = {
-    enable = true;
+        cursor.style = "Block";
+        dynamic_title = true;
+        decorations = "transparent";
+        history = 100000;
+        #padding.y = 27;
 
-    general = {
-      colors = true;
-      color_good = "#8C9440";
-      color_bad = "#A54242";
-      color_degraded = "#DE935F";
-      interval = 5;
-    };
+        key_bindings = [
+          # { key = "K"; mods = "Alt"; chars = "ClearHistory"; } #remap
+          { key = "Key0"; mods = "Alt"; action = "ResetFontSize"; }
+          { key = "Equals"; mods = "Alt"; action = "IncreaseFontSize"; }
+          { key = "Plus"; mods = "Alt"; action = "IncreaseFontSize"; }
+          { key = "NumpadAdd"; mods = "Alt"; action = "IncreaseFontSize"; }
+          { key = "Minus"; mods = "Alt"; action = "DecreaseFontSize"; }
+          { key = "NumpadSubtract"; mods = "Alt"; action = "DecreaseFontSize"; }
+          { key = "F"; mods = "Alt"; action = "SearchBackward"; }
+          { key = "V"; mods = "Alt"; action = "ToggleViMode"; }
+          { key = "N"; mods = "Shift|Control"; action = "CreateNewWindow"; }
+        ];
+        colors = with config.colorScheme.palette; {
+          bright = {
+            black = "0x${base00}";
+            blue = "0x${base0D}";
+            cyan = "0x${base0C}";
+            green = "0x${base0B}";
+            magenta = "0x${base0E}";
+            red = "0x${base08}";
+            white = "0x${base06}";
+            yellow = "0x${base09}";
+          };
+          cursor = {
+            cursor = "0x${base06}";
+            text = "0x${base06}";
+          };
+          normal = {
+            black = "0x${base00}";
+            blue = "0x${base0D}";
+            cyan = "0x${base0C}";
+            green = "0x${base0B}";
+            magenta = "0x${base0E}";
+            red = "0x${base08}";
+            white = "0x${base06}";
+            yellow = "0x${base0A}";
+          };
+          primary = {
+            background = "0x${base00}";
+            foreground = "0x${base06}";
+          };
+        };
 
-    modules = {
-      ipv6.enable = false;
-      "wireless _first_".enable = false;
-      "wireless _first_".position = 5;
-      "battery all".enable = true;
-      "disk /" = {
-        position = 1;
-        settings = { format = "󰨣 %free (%avail)/ %total"; };
       };
-      load = {
-        position = 2;
-        settings = { format = "󰝲 %1min"; };
-      };
-      memory = {
-        position = 3;
-        settings.format = "󰍛 F:%free A:%available (U:%used) / T:%total";
-      };
-      "ethernet _first_" = {
-        enable = false;
-        position = 4;
-        settings = {
-          format_up = "E: %ip"; #
-          format_down = "E: down";
-        };
-      };
-      "volume master" = {
-        position = 6;
-        settings = {
-          mixer = "Master";
-          format = " %volume";
-          format_muted = "♪ muted (%volume)";
-          device = "default";
-        };
-      };
-      "tztime local" = {
-        position = 7;
-        settings = { format = "%Y-%m-%d %H:%M:%S"; };
-      };
-    };
   };
 
   programs.neovim = {
@@ -580,8 +509,6 @@ in
       source ~/.config/nvim/bootstrap.init.lua
     '';
   };
-
-  #xresources.extraConfig = builtins.readFile ./Xresources;
 
   home.pointerCursor = {
     name = "Vanilla-DMZ";
