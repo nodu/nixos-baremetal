@@ -34,7 +34,8 @@ in
     # ./hyprland/hyprland.nix
   ];
 
-  colorScheme = inputs.nix-colors.colorSchemes.tokyo-night-storm;
+  # https://tinted-theming.github.io/base16-gallery
+  colorScheme = inputs.nix-colors.colorSchemes.tokyo-night-terminal-dark;
 
 
   #cat "$1" | col -bx | bat --language man --style plain
