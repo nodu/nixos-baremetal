@@ -531,3 +531,7 @@ m.rclone-downloads-dry() {
 m.rclone-downloads() {
 	rclone sync -vP --exclude ses/ ~/Downloads/ gdrive:NixOS-Downloads
 }
+
+p() {
+	python "$@"
+}
