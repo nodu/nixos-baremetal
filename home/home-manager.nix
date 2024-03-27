@@ -35,7 +35,8 @@ in
   ];
 
   # https://tinted-theming.github.io/base16-gallery
-  colorScheme = inputs.nix-colors.colorSchemes.tokyo-night-terminal-dark;
+  # colorScheme = inputs.nix-colors.colorSchemes.onedark;
+  colorScheme = inputs.nix-colors.colorSchemes.catppuccin-mocha;
 
 
   #cat "$1" | col -bx | bat --language man --style plain
@@ -51,7 +52,7 @@ in
   #---------------------------------------------------------------------
 
   home.packages = [
-    (pkgs.nerdfonts.override { fonts = [ "FiraCode" "RobotoMono" ]; })
+    (pkgs.nerdfonts.override { fonts = [ "FiraCode" "Hack" ]; })
     # oldPkgs.chromium #example how to import specific versions
 
     # GUI Apps
@@ -64,6 +65,7 @@ in
     pkgs.kodi
     pkgs.spotify
     pkgs.discord
+    pkgs.anki-bin
     #pkgs.baobab
 
     # Utilities
@@ -198,6 +200,7 @@ in
     "shellConfig".text = builtins.readFile ./shellConfig;
     "fzf-m-os-preview-function.sh".source = config.lib.file.mkOutOfStoreSymlink ./fzf-m-os-preview-function.sh;
     "rofi/rofi-theme-deathemonic.rasi".text = builtins.readFile ./rofi-theme-deathemonic.rasi;
+    "rofi/catppuccin-mocha.rasi".text = builtins.readFile ./catppuccin-mocha.rasi;
 
     # After defaults repo is pushed; change the rev to commit hash; make sha254 empty string
     # Then nx-update; Then update sha256 from the failed build
@@ -270,15 +273,28 @@ in
 
     extraConfig = {
       modes = "combi";
-      modi = "emoji,run,filebrowser"; #calc,run,filebrowser,
+      modi = "emoji,calc,run,window"; #calc,run,filebrowser,
       combi-modes = "window,drun";
       show-icons = true;
       sort = true;
       matching = "fuzzy";
       dpi = 220;
-      font = "FiraCode Nerd Font 10";
+      font = "Hack Nerd Font Mono 10";
       terminal = "alacritty";
       sorting-method = "fzf";
+      combi-hide-mode-prefix = true;
+      drun-display-format = "{icon} {name}";
+      disable-history = true;
+      click-to-exit = true;
+      icon-theme = "Oranchelo";
+      hide-scrollbar = true;
+      sidebar-mode = true;
+      display-combi = "";
+      display-calc = "";
+      display-drun = "   Apps ";
+      display-run = "   Run ";
+      display-window = " 﩯  Window";
+      display-Network = " 󰤨  Network";
       kb-mode-next = "Tab";
       kb-mode-previous = "ISO_Left_Tab"; #Shift+Tab
       kb-element-prev = "";
@@ -303,16 +319,9 @@ in
       kb-custom-8 = "";
       kb-custom-9 = "";
       kb-custom-10 = "";
-      combi-hide-mode-prefix = true;
-      display-combi = "";
-      display-calc = " ";
-      display-drun = "";
-      display-window = "";
-      drun-display-format = "{icon} {name}";
-      disable-history = false;
-      click-to-exit = true;
     };
-    "theme" = "./rofi-theme-deathemonic.rasi";
+    # "theme" = "./rofi-theme-deathemonic.rasi";
+    "theme" = "./catppuccin-mocha.rasi";
   };
 
   programs.bash = {
@@ -438,11 +447,31 @@ in
         env.WINIT_X11_SCALE_FACTOR = "1"; #https://major.io/p/disable-hidpi-alacritty/ #i3 font size fix
         font = {
           size = 12.0;
-          #use_thin_strokes = true;
+          normal = {
+            family = "Hack Nerd Font Mono";
+            style = "Regular";
+          };
 
-          normal.family = "FiraCode Nerd Font";
-          bold.family = "FiraCode Nerd Font";
-          italic.family = "FiraCode Nerd Font";
+          bold = {
+            family = "Hack Nerd Font Mono";
+            style = "Bold";
+          };
+
+          italic = {
+            family = "Hack Nerd Font Mono";
+            style = "Italic";
+          };
+
+          bold_italic = {
+            family = "Hack Nerd Font Mono";
+            style = "Bold Italic";
+          };
+
+          # echo -e 'Normal, \x1b[1mbold\x1b[22m, \x1b[3mitalic\x1b[23m, \x1b[1;3mbold italic\x1b[22;23m'
+          # fc-list
+          # https://www.nerdfonts.com/cheat-sheet
+          # don't really love the darkgrey backgroun in term and vim... onedark.
+          # ➜  ~ fc-list | grep NerdFont |grep Hack
         };
 
         cursor.style = "Block";
@@ -450,6 +479,8 @@ in
         decorations = "transparent";
         history = 100000;
         #padding.y = 27;
+
+        draw_bold_text_with_bright_colors = true;
 
         key_bindings = [
           # { key = "K"; mods = "Alt"; chars = "ClearHistory"; } #remap
@@ -464,34 +495,95 @@ in
           { key = "N"; mods = "Shift|Control"; action = "CreateNewWindow"; }
         ];
         colors = with config.colorScheme.palette; {
-          bright = {
-            black = "0x${base00}";
-            blue = "0x${base0D}";
-            cyan = "0x${base0C}";
-            green = "0x${base0B}";
-            magenta = "0x${base0E}";
-            red = "0x${base08}";
-            white = "0x${base06}";
-            yellow = "0x${base09}";
-          };
           cursor = {
             cursor = "0x${base06}";
-            text = "0x${base06}";
+            text = "0x${base00}";
           };
-          normal = {
-            black = "0x${base00}";
-            blue = "0x${base0D}";
-            cyan = "0x${base0C}";
-            green = "0x${base0B}";
-            magenta = "0x${base0E}";
-            red = "0x${base08}";
-            white = "0x${base06}";
-            yellow = "0x${base0A}";
+          vi_mode_cursor = {
+            cursor = "0x${base07}";
+            text = "0x${base00}";
+          };
+          hints = {
+            start = {
+              foreground = "0x${base00}";
+              background = "0x${base0A}";
+            };
+            end = {
+              foreground = "0x${base00}";
+              # background = "0x${A6ADC8}";
+            };
+          };
+          selection = {
+            text = "0x${base00}";
+            background = "0x${base06}";
+          };
+          search.matches = {
+            foreground = "0x${base00}";
+            # background = "0x${A6ADC8}";
+          };
+          footer_bar = {
+            foreground = "0x${base00}";
+            # background = "0x${A6ADC8}";
+          };
+
+          search.focused_match = {
+            foreground = "0x${base00}";
+            background = "0x${base0B}";
           };
           primary = {
             background = "0x${base00}";
-            foreground = "0x${base06}";
+            foreground = "0x${base05}";
+            dim_foreground = "0x${base05}";
+            bright_foreground = "0x${base05}";
           };
+          indexed_colors = [
+            {
+              index = 16;
+              color = "0x${base09}";
+            }
+            {
+              index = 17;
+              color = "0x${base06}";
+            }
+          ];
+          # https://github.com/catppuccin/nvim/blob/main/lua/catppuccin/palettes/mocha.lua
+          # https://github.com/catppuccin/alacritty/blob/main/catppuccin-mocha.toml
+          # https://github.com/tinted-theming/schemes/blob/spec-0.11/base16/catppuccin-mocha.yaml
+          # https://github.com/tinted-theming/base16-schemes/blob/main/catppuccin-mocha.yaml
+          # normal ={
+          # black = "0x${base03}";
+          # white = "0x${BAC2DE}";
+          # magenta = "0x${F5C2E7}";
+          # };
+          #
+          # bright = {
+          # black = "0x${base04}";
+          # white = "0x${A6ADC8}";
+          # yellow = "0x${base0A}";
+          # magenta = "0x${F5C2E7}";
+          # };
+          normal = {
+            black = "0x${base03}";
+            white = "0x${base06}";
+            blue = "0x${base0D}";
+            cyan = "0x${base0C}";
+            green = "0x${base0B}";
+            magenta = "0x${base0E}";
+            red = "0x${base08}";
+            yellow = "0x${base0A}";
+          };
+
+          bright = {
+            black = "0x${base00}";
+            white = "0x${base06}";
+            blue = "0x${base0D}";
+            cyan = "0x${base0C}";
+            green = "0x${base0B}";
+            magenta = "0x${base0E}";
+            red = "0x${base08}";
+            yellow = "0x${base09}";
+          };
+
         };
 
       };
