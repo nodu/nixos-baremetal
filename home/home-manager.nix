@@ -66,6 +66,7 @@ in
     pkgs.spotify
     pkgs.discord
     pkgs.anki-bin
+    pkgs.helvum
     #pkgs.baobab
 
     # Utilities
@@ -88,7 +89,6 @@ in
     pkgs.normcap
     pkgs.xdotool
     pkgs.pulseaudio
-    pkgs.helvum
     pkgs.entr
     pkgs.ffmpeg
     pkgs.killall
