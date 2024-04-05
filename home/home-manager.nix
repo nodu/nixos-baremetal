@@ -405,6 +405,7 @@ in
   };
 
   programs.git = {
+    # located here: ~/.config/git/config
     enable = true;
     userName = "Matt Nodurfth";
     userEmail = "mnodurft@gmail.com";
@@ -416,6 +417,17 @@ in
       prettylog = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
       root = "rev-parse --show-toplevel";
     };
+    includes = [
+      {
+        contents = {
+          user = {
+            email = "matt@mirwork.ai";
+            name = "Matt Nodurfth";
+          };
+        };
+        condition = "gitdir:~/repos/mirwork/";
+      }
+    ];
     extraConfig = {
       core = {
         editor = "nvim";
