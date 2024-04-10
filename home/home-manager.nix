@@ -68,6 +68,7 @@ in
     pkgs.anki-bin
     pkgs.helvum
     #pkgs.baobab
+    pkgs.zoom-us
 
     # Utilities
     pkgs.libsForQt5.kdeconnect-kde
@@ -159,6 +160,7 @@ in
 
     # TODO not quite working:
     pkgs.docker-compose-language-service
+
   ];
 
   fonts.fontconfig.enable = true;
