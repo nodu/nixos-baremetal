@@ -69,6 +69,7 @@ in
     pkgs.helvum
     #pkgs.baobab
     pkgs.zoom-us
+    pkgs.slack
 
     # Utilities
     pkgs.libsForQt5.kdeconnect-kde
