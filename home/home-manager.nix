@@ -373,7 +373,7 @@ in
 
     shellAliases = {
       nx-update = "cd ~/repos/nixos-baremetal/ && make switch; cd -";
-      nx-update-flake = "cd ~/repos/nixos-baremetal/ && nix flake update; cd -";
+      nx-update-flakes = "cd ~/repos/nixos-baremetal/ && nix flake update; cd -";
       nx-update-input = "nix flake lock --update-input"; # nix flake lock --update-input nixos-hardware
       nx-search = "nix search nixpkgs";
     };
