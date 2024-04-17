@@ -11,8 +11,12 @@ nx-update-flakes() {
 }
 
 nx-update-input() {
-	# nix flake lock --update-input nixos-hardware
-	nix flake lock --update-input "$1"
+	if [ -z "$1" ]; then
+		echo "Command:"
+		echo "nix flake lock --update-input nixos-hardware"
+	else
+		nix flake lock --update-input "$1"
+	fi
 }
 
 nx-search() {

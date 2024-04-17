@@ -70,7 +70,7 @@ in
     #pkgs.baobab
     pkgs.zoom-us
     pkgs.slack
-    pkgs.vscode
+    unstable.vscode
 
     # Utilities
     pkgs.libsForQt5.kdeconnect-kde
