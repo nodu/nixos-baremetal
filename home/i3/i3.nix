@@ -41,7 +41,6 @@
       pkgs.xclip
       pkgs.networkmanagerapplet
       pkgs.dunst
-      pkgs.blueman
       pkgs.xorg.xhost
       pkgs.feh
       pkgs.i3blocks
@@ -52,6 +51,9 @@
       pkgs.font-awesome
       pkgs.libnotify
     ];
+
+  services.blueman-applet.enable = true;
+
   services.screen-locker.xss-lock = {
     # https://discourse.nixos.org/t/how-to-config-hybrid-sleep-after-idle-and-lock/8728/9
     extraOptions = "--session 2";

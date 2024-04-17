@@ -198,6 +198,7 @@ in
   };
 
   xdg.configFile = {
+    "nixos-functions.sh".text = builtins.readFile ./nixos-functions.sh;
     "apps.sh".text = builtins.readFile ./apps.sh;
     "aliases".text = builtins.readFile ./aliases;
     "m-os.sh".text = builtins.readFile ./m-os.sh;
@@ -371,12 +372,7 @@ in
     autocd = true;
     #completionInit
 
-    shellAliases = {
-      nx-update = "cd ~/repos/nixos-baremetal/ && make switch; cd -";
-      nx-update-flakes = "cd ~/repos/nixos-baremetal/ && nix flake update; cd -";
-      nx-update-input = "nix flake lock --update-input"; # nix flake lock --update-input nixos-hardware
-      nx-search = "nix search nixpkgs";
-    };
+    shellAliases = { };
 
     history = {
       size = 1000000;
@@ -399,6 +395,7 @@ in
     '';
 
     initExtra = ''
+      source $HOME/.config/nixos-functions.sh
       source $HOME/.config/apps.sh
       source $HOME/.config/aliases
       source $HOME/.config/defaults/basic.sh
