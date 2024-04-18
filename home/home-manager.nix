@@ -384,7 +384,7 @@ in
 
     oh-my-zsh = {
       enable = true;
-      plugins = [ "git" "z" "fzf" "kubectl" "kube-ps1" ];
+      plugins = [ "git" "z" "fzf" "kubectl" "kube-ps1" "web-search" ];
       theme = "robbyrussell";
     };
 
