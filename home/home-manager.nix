@@ -151,7 +151,8 @@ in
     pkgs.tailwindcss-language-server
     pkgs.ruff-lsp
     pkgs.shellcheck
-    # pkgs.gopls
+    # TODO not quite working:
+    pkgs.docker-compose-language-service
 
     # nvim Linters
     pkgs.stylua
@@ -159,10 +160,6 @@ in
     pkgs.nodePackages.markdownlint-cli
     pkgs.nodePackages.prettier
     pkgs.shfmt
-
-    # TODO not quite working:
-    pkgs.docker-compose-language-service
-
   ];
 
   fonts.fontconfig.enable = true;
