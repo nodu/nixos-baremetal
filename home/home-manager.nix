@@ -160,6 +160,11 @@ in
     pkgs.nodePackages.markdownlint-cli
     pkgs.nodePackages.prettier
     pkgs.shfmt
+
+    # nvim daps
+    pkgs.python311Packages.debugpy
+
+    pkgs.cargo
   ];
 
   fonts.fontconfig.enable = true;
