@@ -69,7 +69,6 @@ in
     pkgs.helvum
     #pkgs.baobab
     pkgs.zoom-us
-    pkgs.slack
     unstable.vscode
 
     # Utilities
