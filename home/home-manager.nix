@@ -149,6 +149,7 @@ in
     pkgs.nodePackages.dockerfile-language-server-nodejs
     pkgs.tailwindcss-language-server
     pkgs.ruff-lsp
+    unstable.ruff
     pkgs.shellcheck
     # TODO not quite working:
     pkgs.docker-compose-language-service
