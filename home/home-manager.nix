@@ -98,6 +98,9 @@ in
     pkgs.yt-dlp
     pkgs.gamemode
     pkgs.tealdeer
+    # Check Bios version:
+    # sudo dmidecode | grep -A3 'Vendor:\|Product:' && sudo lshw -C cpu | grep -A3 'product:\|vendor:'
+    pkgs.dmidecode
 
     # Gnome
     pkgs.gnome.gnome-tweaks
@@ -133,7 +136,7 @@ in
     pkgs.go
     pkgs.gopls
     pkgs.python3
-    pkgs.nodejs_20
+    pkgs.nodejs_21
     pkgs.nodePackages.ts-node
     pkgs.yarn
 
