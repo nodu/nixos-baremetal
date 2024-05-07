@@ -15,6 +15,10 @@
       text = builtins.readFile ./monitor-mirror.sh;
       executable = true;
     };
+    "i3/monitor-left.sh" = {
+      text = builtins.readFile ./monitor-left.sh;
+      executable = true;
+    };
     "i3/monitor-above.sh" = {
       text = builtins.readFile ./monitor-above.sh;
       executable = true;
