@@ -283,7 +283,7 @@ in
 
     extraConfig = {
       modes = "combi";
-      modi = "emoji,calc,run,window"; #calc,run,filebrowser,
+      modi = "calc,emoji,run,window"; #calc,run,filebrowser,
       combi-modes = "window,drun";
       show-icons = true;
       sort = true;
