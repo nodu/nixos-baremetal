@@ -116,10 +116,6 @@ tcleanup() {
 	sed -i -e '/- \[x]/ d' backlog.md
 	sed -i -e '/- \[n]/ d' backlog.md
 
-	grep "\- \[x\]" mirwork.md >>done.md
-	grep "\- \[n\]" mirwork.md >>no.md
-	sed -i -e '/- \[x]/ d' mirwork.md
-	sed -i -e '/- \[n]/ d' mirwork.md
 	cd - || exit
 }
 

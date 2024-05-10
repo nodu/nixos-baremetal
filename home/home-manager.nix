@@ -427,11 +427,11 @@ in
       {
         contents = {
           user = {
-            email = "matt@mirwork.ai";
+            email = "matt@work.com";
             name = "Matt Nodurfth";
           };
         };
-        condition = "gitdir:~/repos/mirwork/";
+        condition = "gitdir:~/repos/work/";
       }
     ];
     extraConfig = {
