@@ -160,12 +160,15 @@
   services.xserver.libinput.touchpad.clickMethod = "clickfinger";
   services.xserver.libinput.touchpad.disableWhileTyping = true;
 
+  # Android
+  programs.adb.enable = true;
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.matt = {
     isNormalUser = true;
     home = "/home/matt";
     description = "Matt N";
-    extraGroups = [ "nordvpn" "docker" "networkmanager" "wheel" ];
+    extraGroups = [ "nordvpn" "docker" "networkmanager" "wheel" "adbusers" ];
     openssh.authorizedKeys.keys = [ "ssh blah blah" ];
     shell = pkgs.zsh;
 
