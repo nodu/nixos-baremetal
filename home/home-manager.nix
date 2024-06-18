@@ -11,10 +11,21 @@ let
   # Note: Nix Search for package, click on platform to find binary build status
   # Get specific versions of packages here:
   #   https://lazamar.co.uk/nix-versions/
+  #   ex) https://lazamar.co.uk/nix-versions/?channel=nixos-23.11&package=authy
   # To get the sha256 hash:
   #   nix-prefetch-url --unpack https://github.com/NixOS/nixpkgs/archive/e49c28b3baa3a93bdadb8966dd128f9985ea0a09.tar.gz
   #   or use an empty sha256 = ""; string, it'll show the hash; prefetch is safer
 
+  twentyfourofive = import
+    (builtins.fetchTarball {
+      url = "https://github.com/NixOS/nixpkgs/archive/eb090f7b923b1226e8beb954ce7c8da99030f4a8.tar.gz";
+      sha256 = "15iglsr7h3s435a04313xddah8vds815i9lajcc923s4yl54aj4j";
+    })
+    {
+      system = "x86_64-linux";
+      config.allowUnfree = true;
+    };
+  # { inherit config; };
   # oldPkgs = import
   #   (builtins.fetchTarball {
   #     url = "https://github.com/NixOS/nixpkgs/archive/e49c28b3baa3a93bdadb8966dd128f9985ea0a09.tar.gz";
@@ -56,7 +67,7 @@ in
     # oldPkgs.chromium #example how to import specific versions
 
     # GUI Apps
-    pkgs.authy
+    twentyfourofive.authy
     pkgs.google-chrome
     pkgs.obs-studio
     pkgs.obsidian
@@ -136,7 +147,7 @@ in
     pkgs.go
     pkgs.gopls
     pkgs.python3
-    pkgs.nodejs_21
+    pkgs.nodejs_22
     pkgs.nodePackages.ts-node
     pkgs.yarn
 
@@ -268,7 +279,7 @@ in
     # cache the keys forever so we don't get asked for a password until reboot
     defaultCacheTtl = 31536000;
     maxCacheTtl = 31536000;
-    pinentryFlavor = "gtk2";
+    pinentryPackage = pkgs.pinentry-gtk2;
   };
   # Setup i3 exclusively in HM; remove from configiguration.nix
   # https://github.com/srid/nix-config/blob/705a70c094da53aa50cf560179b973529617eb31/nix/home/i3.nix
@@ -372,7 +383,7 @@ in
   programs.zsh = {
     enable = true;
     enableCompletion = true;
-    enableAutosuggestions = true;
+    autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
     autocd = true;
     #completionInit
@@ -493,14 +504,12 @@ in
         };
 
         cursor.style = "Block";
-        dynamic_title = true;
-        decorations = "transparent";
-        history = 100000;
+        window.dynamic_title = true;
+        window.decorations = "Full";
+        scrolling.history = 100000;
         #padding.y = 27;
 
-        draw_bold_text_with_bright_colors = true;
-
-        key_bindings = [
+        keyboard.bindings = [
           # { key = "K"; mods = "Alt"; chars = "ClearHistory"; } #remap
           { key = "Key0"; mods = "Alt"; action = "ResetFontSize"; }
           { key = "Equals"; mods = "Alt"; action = "IncreaseFontSize"; }
@@ -512,7 +521,9 @@ in
           { key = "V"; mods = "Alt"; action = "ToggleViMode"; }
           { key = "N"; mods = "Shift|Control"; action = "CreateNewWindow"; }
         ];
+
         colors = with config.colorScheme.palette; {
+          draw_bold_text_with_bright_colors = true;
           cursor = {
             cursor = "0x${base06}";
             text = "0x${base00}";
@@ -608,8 +619,10 @@ in
   };
 
   programs.neovim = {
+    # https://github.com/nix-community/neovim-nightly-overlay/issues/525
     enable = true;
-    package = pkgs.neovim-nightly;
+    package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+    defaultEditor = true;
     viAlias = true;
     vimAlias = true;
 

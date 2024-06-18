@@ -16,9 +16,11 @@
   services.fwupd.enable = true;
   virtualisation.docker.enable = true;
 
+  # TODO Remove Set Kernel Version fix for restart/shutdown hanging:
+  boot.kernelPackages = pkgs.linuxPackages_6_9;
+
   nix = {
-    # use unstable nix so we can access flakes
-    package = pkgs.nixUnstable;
+    package = pkgs.nixVersions.latest;
     extraOptions = ''
       experimental-features = nix-command flakes
       keep-outputs = true
@@ -29,8 +31,6 @@
     #add due to failing update
     "electron-25.9.0"
   ];
-  console.useXkbConfig = true;
-  services.xserver.xkbOptions = "ctrl:nocaps";
   #wayland requirments/stuff
   security.polkit.enable = true;
   hardware.opengl.enable = true;
@@ -66,7 +66,7 @@
 
   environment.pathsToLink = [ "/libexec" "/share/zsh" ];
   environment.localBinInPath = true;
-
+  environment.variables.GTK_THEME = "Adwaita:dark";
 
   #maybe set this to false after figuring out users.matt.hashedPassword
   users.mutableUsers = true;
@@ -106,33 +106,37 @@
 
   services.blueman.enable = true;
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-
   environment.gnome.excludePackages = (with pkgs; [
     epiphany # web browser
     gnome-tour
   ]) ++ (with pkgs.gnome; [
     geary
   ]);
+  console.useXkbConfig = true;
+  services.xserver = {
+    # Configure keymap in X11
+    xkb.layout = "us";
+    xkb.variant = "";
+    xkb.options = "ctrl:nocaps";
 
-  services.xserver.windowManager.i3.enable = true;
+    # Enable the X11 windowing system.
+    enable = true;
+
+    # Enable the GNOME Desktop Environment.
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
+
+    windowManager.i3.enable = true;
+
+  };
+
+  # services.displayManager.defaultSession = "sway";
+  services.displayManager.defaultSession = "none+i3";
+
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
     package = null;
-  };
-  # services.xserver.displayManager.defaultSession = "sway";
-  services.xserver.displayManager.defaultSession = "none+i3";
-
-  # Configure keymap in X11
-  services.xserver = {
-    layout = "us";
-    xkbVariant = "";
   };
 
   # Enable CUPS to print documents.
@@ -156,9 +160,10 @@
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-  services.xserver.libinput.touchpad.clickMethod = "clickfinger";
-  services.xserver.libinput.touchpad.disableWhileTyping = true;
+  services.libinput.enable = true;
+  services.libinput.touchpad.clickMethod = "clickfinger";
+  services.libinput.touchpad.disableWhileTyping = true;
+  services.libinput.mouse.disableWhileTyping = true;
 
   # Android
   programs.adb.enable = true;
