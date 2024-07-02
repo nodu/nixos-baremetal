@@ -171,7 +171,7 @@ in
     # nvim Linters
     pkgs.stylua
     pkgs.nixpkgs-fmt
-    pkgs.nodePackages.markdownlint-cli
+    pkgs.markdownlint-cli2
     pkgs.nodePackages.prettier
     pkgs.shfmt
 

@@ -34,8 +34,8 @@
         "defaults"
         "x-gvfs-show"
         "nofail"
-        "uid=1000"
-        "gid=100"
+        # "uid=1000"
+        # "gid=100"
       ];
     };
 
