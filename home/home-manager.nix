@@ -81,6 +81,7 @@ in
     #pkgs.baobab
     pkgs.zoom-us
     unstable.vscode
+    pkgs.scrcpy
 
     # Utilities
     pkgs.libsForQt5.kdeconnect-kde
