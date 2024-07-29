@@ -133,7 +133,7 @@ in
     pkgs.sshfs
     #pkgs.nmap
     #pkgs.tshark
-
+    pkgs.audacity
     # pkgs.postgresql_11
     # pkgs.kubectl
     # pkgs.krew

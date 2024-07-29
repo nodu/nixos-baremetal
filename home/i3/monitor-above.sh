@@ -14,5 +14,5 @@ connected_monitor=$(xrandr | grep ' connected' | grep -v 'eDP\|LVDS' | awk '{ pr
 # fi
 
 xrandr --output $connected_monitor --auto --above eDP-1
-xrandr --output $connected_monitor --primary
+# xrandr --output $connected_monitor --primary
 dunstify "Extended to Secondary Monitor"
