@@ -17,7 +17,7 @@
 
 let
   pname = "nordvpn";
-  version = "3.16.8";
+  version = "3.18.3";
 
   nordVPNBase = stdenv.mkDerivation {
     inherit pname version;
@@ -25,7 +25,7 @@ let
     src = fetchurl {
       url =
         "https://repo.nordvpn.com/deb/nordvpn/debian/pool/main/nordvpn_${version}_amd64.deb";
-      hash = "sha256-IpyaWUqxGp/RBC48hjsheqErxHSiQ7HMHMuJlpHl8ZU=";
+      hash = "sha256-pCveN8cEwEXdvWj2FAatzg89fTLV9eYehEZfKq5JdaY=";
     };
 
     buildInputs = [ libxml2 libidn2 ];
