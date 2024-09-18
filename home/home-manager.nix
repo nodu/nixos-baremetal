@@ -163,7 +163,7 @@ in
     pkgs.nodePackages.vscode-json-languageserver
     pkgs.nodePackages.dockerfile-language-server-nodejs
     pkgs.tailwindcss-language-server
-    pkgs.ruff-lsp
+    # pkgs.ruff-lsp
     unstable.ruff
     pkgs.shellcheck
     # TODO not quite working:
