@@ -16,9 +16,6 @@
   services.fwupd.enable = true;
   virtualisation.docker.enable = true;
 
-  # TODO Remove Set Kernel Version fix for restart/shutdown hanging:
-  boot.kernelPackages = pkgs.linuxPackages_6_9;
-
   nix = {
     package = pkgs.nixVersions.latest;
     extraOptions = ''

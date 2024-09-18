@@ -84,6 +84,7 @@ in
     pkgs.scrcpy
 
     # Utilities
+    pkgs.nix-search-cli
     pkgs.libsForQt5.kdeconnect-kde
     pkgs.neofetch
     pkgs.rclone
