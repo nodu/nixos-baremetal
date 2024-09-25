@@ -82,6 +82,7 @@ in
     pkgs.zoom-us
     unstable.vscode
     pkgs.scrcpy
+    pkgs.uhk-agent
 
     # Utilities
     pkgs.nix-search-cli
@@ -283,6 +284,7 @@ in
     maxCacheTtl = 31536000;
     pinentryPackage = pkgs.pinentry-gtk2;
   };
+
   # Setup i3 exclusively in HM; remove from configiguration.nix
   # https://github.com/srid/nix-config/blob/705a70c094da53aa50cf560179b973529617eb31/nix/home/i3.nix
   programs.rofi = {

@@ -102,6 +102,8 @@
   };
 
   services.blueman.enable = true;
+  hardware.keyboard.uhk.enable = true;
+
 
   environment.gnome.excludePackages = (with pkgs; [
     epiphany # web browser

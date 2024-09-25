@@ -6,17 +6,17 @@ Host github.com
  HostName github.com
  IdentityFile ~/.ssh/baremetal
 
-Host bau-wifi
+Host bau-slate-wifi
     User pi
     Hostname 192.168.8.8
     IdentityFile "~/.ssh/baremetal"
 
-Host bau
+Host bau-slate
     User pi
     Hostname 192.168.8.6
     IdentityFile "~/.ssh/baremetal"
 
-Host bau-hostname
+Host bau
     User pi
     Hostname bau
     IdentityFile "~/.ssh/baremetal"
