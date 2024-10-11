@@ -115,6 +115,7 @@ in
     # Check Bios version:
     # sudo dmidecode | grep -A3 'Vendor:\|Product:' && sudo lshw -C cpu | grep -A3 'product:\|vendor:'
     pkgs.dmidecode
+    pkgs.openpomodoro-cli
 
     # Gnome
     pkgs.gnome.gnome-tweaks

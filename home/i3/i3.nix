@@ -157,9 +157,13 @@
 
   services.redshift = {
     enable = true;
-    longitude = -122.431297;
     latitude = 37.77397;
+    longitude = -122.431297;
     tray = true;
+    temperature = {
+      day = 6500;
+      night = 3700;
+    };
     settings = {
       redshift = {
         brightness-day = "1";
