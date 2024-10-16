@@ -303,7 +303,7 @@ in
 
     extraConfig = {
       modes = "combi";
-      modi = "calc,emoji,run,window"; #calc,run,filebrowser,
+      modi = "combi,emoji,filebrowser,calc,run,window"; #calc,run,filebrowser,
       combi-modes = "window,drun";
       show-icons = true;
       sort = true;
@@ -319,11 +319,13 @@ in
       icon-theme = "Oranchelo";
       hide-scrollbar = true;
       sidebar-mode = true;
-      display-combi = "";
-      display-calc = "";
+      display-filebrowser = "📁";
+      display-combi = "🔎";
+      display-emoji = "😀";
+      display-calc = "🧮";
       display-drun = "   Apps ";
-      display-run = "   Run ";
-      display-window = " 﩯  Window";
+      display-run = "🚀";
+      display-window = "🪟";
       display-Network = " 󰤨  Network";
       kb-mode-next = "Tab";
       kb-mode-previous = "ISO_Left_Tab"; #Shift+Tab
