@@ -7,6 +7,8 @@ v() {
   fi
 }
 
+[ -x "$(command -v nvim)" ] && alias vdiff="nvim -d"
+
 n() {
   cd ~/repos/notes || exit
   nvim .
