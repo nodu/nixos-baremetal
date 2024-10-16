@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+function select_input {
+  local NEW_INPUT SOURCES
+  NEW_INPUT=$(pw-dump | jq -r '.[] | select(.info.props."media.class"=="Audio/Source") | "\(.id)\t\(.info.props."node.description")"' | rofi -dmenu -display-columns 2 -p "Select Audio Input" -location 2 | sed -e 's/[^0-9]*\([0-9]*\).*/\1/g')
+  if ! [[ -z "$NEW_INPUT" ]]; then
+    wpctl set-default "$NEW_INPUT"
+  fi
+}
+
+case $BLOCK_BUTTON in
+1) select_input ;;                                 # Left click to select microphone/input
+2) wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle ;; # Middle click to mute/unmute microphone
+4) wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%+ ;;  # Scroll up to increase the volume
+5) wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%- ;;  # Scroll down to decrease the volume
+3) notify-send "🎤 Input module" "\- Shows input volume 🎙️, 🔇 if muted.
+- Left click to select input.
+- Middle click to mute/unmute input.
+- Scroll to change volume." ;;
+6) setsid -f "$TERMINAL" -e "$EDITOR" "$0" ;; # Long press to edit the script
+esac
+
+vol="$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@)"
+
+# If input (mic) is muted, print 🔇 and exit.
+[ "$vol" != "${vol%\[MUTED\]}" ] && echo 🔇 && exit
+
+vol="${vol#Volume: }"
+
+split() {
+  # For omitting the decimal part without calling an external program.
+  IFS=$2
+  set -- $1
+  printf '%s' "$@"
+}
+
+vol="$(printf "%.0f" "$(split "$vol" ".")")"
+
+case 1 in
+$((vol >= 70))) icon="🎙️" ;;
+$((vol >= 30))) icon="🎤" ;;
+$((vol >= 1))) icon="🎧" ;;
+*) echo 🔇 && exit ;;
+esac
+
+echo "$icon$vol%"

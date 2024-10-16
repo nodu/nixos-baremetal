@@ -101,9 +101,12 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  services.blueman.enable = true;
-  hardware.keyboard.uhk.enable = true;
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
 
+  services.blueman.enable = true;
+
+  hardware.keyboard.uhk.enable = true;
 
   environment.gnome.excludePackages = (with pkgs; [
     epiphany # web browser
@@ -142,7 +145,7 @@
   # services.printing.enable = true;
 
   # Enable sound with pipewire.
-  sound.enable = true;
+  sound.enable = false;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {

@@ -77,12 +77,17 @@ in
     pkgs.spotify
     pkgs.discord
     pkgs.anki-bin
-    pkgs.helvum
     #pkgs.baobab
     pkgs.zoom-us
     unstable.vscode
     pkgs.scrcpy
     pkgs.uhk-agent
+
+    # Sound
+    pkgs.helvum
+    pkgs.qpwgraph
+    pkgs.pwvucontrol
+    pkgs.coppwr
 
     # Utilities
     pkgs.nix-search-cli
@@ -104,7 +109,6 @@ in
     pkgs.gcc
     pkgs.normcap
     pkgs.xdotool
-    pkgs.pulseaudio
     pkgs.entr
     pkgs.ffmpeg
     pkgs.killall
