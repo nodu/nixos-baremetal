@@ -88,6 +88,7 @@ in
     pkgs.qpwgraph
     pkgs.pwvucontrol
     pkgs.coppwr
+    pkgs.audacity
 
     # Utilities
     pkgs.nix-search-cli
@@ -138,9 +139,9 @@ in
     pkgs.speedtest-cli
     pkgs.httpstat
     pkgs.sshfs
-    #pkgs.nmap
+    pkgs.nmap
     #pkgs.tshark
-    pkgs.audacity
+
     # pkgs.postgresql_11
     # pkgs.kubectl
     # pkgs.krew
