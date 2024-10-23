@@ -39,6 +39,7 @@
       # Overlays is the list of overlays we want to apply from flake inputs.
       nixosConfigurations.baremetal = nixpkgs.lib.nixosSystem {
         inherit system;
+        specialArgs = { inherit unstable; };
         modules = [
           ./configuration.nix
           nixos-hardware.nixosModules.framework-13-7040-amd
