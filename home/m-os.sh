@@ -497,11 +497,11 @@ m.screen() {
 }
 
 m.screen-above() {
-  ~/.config/i3/monitor-above.sh
+  ~/.config/i3/monitor.sh above
 }
 
 m.screen-mirror() {
-  ~/.config/i3/monitor-mirror.sh
+  ~/.config/i3/monitor.sh same-as
 }
 
 m.www() {

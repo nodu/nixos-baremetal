@@ -11,20 +11,8 @@
       text = builtins.readFile ./notify-sleep.sh;
       executable = true;
     };
-    "i3/monitor-mirror.sh" = {
-      text = builtins.readFile ./monitor-mirror.sh;
-      executable = true;
-    };
-    "i3/monitor-left.sh" = {
-      text = builtins.readFile ./monitor-left.sh;
-      executable = true;
-    };
-    "i3/monitor-right.sh" = {
-      text = builtins.readFile ./monitor-right.sh;
-      executable = true;
-    };
-    "i3/monitor-above.sh" = {
-      text = builtins.readFile ./monitor-above.sh;
+    "i3/monitor.sh" = {
+      text = builtins.readFile ./monitor.sh;
       executable = true;
     };
     "i3/monitor-disable.sh" = {
