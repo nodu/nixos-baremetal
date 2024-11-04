@@ -274,7 +274,7 @@ m.vlcc() {
 }
 
 m.vlcc_brain() {
-  vlc -I ncurses "/host/matt/My Drive/Audio/Brain.fm" --random
+  vlc -I ncurses "$HOME/Music/Brain.fm" --random
 }
 
 m.source_alias() {
@@ -529,10 +529,10 @@ alias nvim-new='NVIM_APPNAME="neovim-config" nvim'
 alias nvim-plugin-testing='NVIM_APPNAME="nvim-plugin-testing" nvim'
 
 m.rclone-downloads-dry() {
-  rclone sync -vP --exclude ses/ ~/Downloads/ gdrive:NixOS-Downloads --dry-run
+  rclone sync -vP ~/Downloads/ gdrive:NixOS-Downloads --dry-run
 }
 m.rclone-downloads() {
-  rclone sync -vP --exclude ses/ ~/Downloads/ gdrive:NixOS-Downloads
+  rclone sync -vP ~/Downloads/ gdrive:NixOS-Downloads
 }
 
 p() {
