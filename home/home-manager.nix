@@ -82,6 +82,7 @@ in
     unstable.vscode
     pkgs.scrcpy
     pkgs.uhk-agent
+    pkgs.cura
 
     # Sound
     pkgs.helvum
