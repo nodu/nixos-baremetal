@@ -82,7 +82,8 @@ in
     unstable.vscode
     pkgs.scrcpy
     pkgs.uhk-agent
-    pkgs.cura
+    pkgs.prusa-slicer
+    pkgs.bitwarden-desktop
 
     # Sound
     pkgs.helvum
