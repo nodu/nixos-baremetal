@@ -36,5 +36,11 @@ Host bau-mesh-andes
     Hostname 100.105.37.182
     IdentityFile "~/.ssh/baremetal"
 
+Host moode
+    User moode
+    # Hostname moode.local
+    Hostname 192.168.0.102
+    IdentityFile "~/.ssh/baremetalToMoode"
+
 Host *
     IdentitiesOnly=yes

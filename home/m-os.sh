@@ -153,13 +153,48 @@ m.gpg-import() {
 }
 
 m.gpg-encrypt-sign() {
+  # Check if either --help is called or not enough arguments are provided
+  if [[ "$1" == "--help" || $# -ne 2 ]]; then
+    echo "Usage: m.gpg-encrypt-sign <recipient> <file>"
+    echo ""
+    echo "Encrypt and sign a file for a specified recipient using GPG."
+    echo ""
+    echo "Arguments:"
+    echo "  <recipient>  The GPG key ID, email, or user ID of the recipient"
+    echo "  <file>       The file you want to encrypt and sign"
+    return 1
+  fi
+
+  # Encrypt and sign the file
   gpg --encrypt --sign -r "$1" "$2"
 }
 m.gpg-encrypt() {
+  # Check if either --help is called or if no arguments are provided
+  if [[ "$1" == "--help" || $# -ne 1 ]]; then
+    echo "Usage: m.gpg-encrypt <file>"
+    echo ""
+    echo "Encrypt a file symmetrically using GPG."
+    echo ""
+    echo "Arguments:"
+    echo "  <file>   The file you want to encrypt"
+    return 1
+  fi
+
+  # Encrypt the file symmetrically
   gpg --symmetric "$1"
 }
 m.gpg-decrypt() {
-  gpg --decrypt "$1"
+  # Check if a file was actually passed
+  if [[ -z "$1" ]]; then
+    echo "Usage: m.gpg-decrypt <file.gpg>"
+    return 1
+  fi
+
+  # Strip the .gpg extension from the file name if it exists
+  output_file="${1%.gpg}"
+
+  # Perform the decryption, specifying the output file
+  gpg --output "$output_file" --decrypt "$1"
 }
 
 m.base64-decode() {

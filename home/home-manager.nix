@@ -239,8 +239,8 @@ in
     "defaults".source = fetchFromGitHub {
       owner = "nodu";
       repo = "defaults";
-      rev = "d83b29a804bc684356e4411df9dc1c50aa24764e";
-      sha256 = "1TkOgo93ogD60VzykpQJ/QK0uzjL5IaN6JPJeesW8eo=";
+      rev = "e751fc6cc63d8fb5b0977030950504ec855e4297";
+      sha256 = "Oe5xU64hJNnzH2TQgpY1ZDIK5oDqjsVv9hh7PASu4Zk=";
     };
   };
 
