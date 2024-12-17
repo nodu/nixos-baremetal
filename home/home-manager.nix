@@ -125,14 +125,14 @@ in
     pkgs.openpomodoro-cli
 
     # Gnome
-    pkgs.gnome.gnome-tweaks
-    pkgs.gnome.atomix
-    pkgs.gnome.gnome-sudoku
-    pkgs.gnome.iagno
+    pkgs.gnome-tweaks
+    pkgs.atomix
+    pkgs.gnome-sudoku
+    pkgs.iagno
     pkgs.gnomeExtensions.power-profile-switcher
     pkgs.gnomeExtensions.grand-theft-focus
     pkgs.gnomeExtensions.gnordvpn-local
-    pkgs.gnome.dconf-editor
+    pkgs.dconf-editor
     pkgs.gnomeExtensions.gamemode-indicator-in-system-settings
 
     # Network
@@ -168,7 +168,7 @@ in
     pkgs.marksman
     pkgs.nodePackages.vscode-langservers-extracted
     pkgs.nodePackages.typescript-language-server
-    pkgs.nodePackages.pyright
+    pkgs.pyright
     pkgs.nodePackages.bash-language-server
     pkgs.nodePackages.vscode-json-languageserver
     pkgs.nodePackages.dockerfile-language-server-nodejs

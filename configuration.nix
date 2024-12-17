@@ -25,12 +25,10 @@
     '';
   };
   nixpkgs.config.permittedInsecurePackages = [
-    #add due to failing update
-    "electron-25.9.0"
   ];
   #wayland requirments/stuff
   security.polkit.enable = true;
-  hardware.opengl.enable = true;
+  hardware.graphics.enable = true;
   #xdg.portal.enable = true;
   #xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
@@ -46,15 +44,15 @@
       auth       required                    ${pkgs.fprintd}/lib/security/pam_fprintd.so
       auth       optional                    pam_permit.so
       auth       required                    pam_env.so
-      auth       [success=ok default=1]      ${pkgs.gnome.gdm}/lib/security/pam_gdm.so
-      auth       optional                    ${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so
+      auth       [success=ok default=1]      ${pkgs.gdm}/lib/security/pam_gdm.so
+      auth       optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so
 
       account    include                     login
 
       password   required                    pam_deny.so
 
       session    include                     login
-      session    optional                    ${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start
+      session    optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start
     '';
   };
   services.logind.extraConfig = ''
@@ -111,8 +109,8 @@
   environment.gnome.excludePackages = (with pkgs; [
     epiphany # web browser
     gnome-tour
-  ]) ++ (with pkgs.gnome; [
     geary
+  ]) ++ (with pkgs.gnome; [
   ]);
   console.useXkbConfig = true;
   services.xserver = {
@@ -145,7 +143,6 @@
   # services.printing.enable = true;
 
   # Enable sound with pipewire.
-  sound.enable = false;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
