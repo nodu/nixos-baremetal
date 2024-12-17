@@ -73,7 +73,7 @@ in
     pkgs.obsidian
     pkgs.vlc
     pkgs.jellyfin-media-player
-    pkgs.kodi
+    # pkgs.kodi
     pkgs.spotify
     pkgs.discord
     pkgs.anki-bin
@@ -84,6 +84,7 @@ in
     pkgs.uhk-agent
     pkgs.prusa-slicer
     pkgs.bitwarden-desktop
+    pkgs.godot_4
 
     # Sound
     pkgs.helvum
