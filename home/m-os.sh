@@ -345,12 +345,8 @@ m.speedtest() {
 # --exclude 'file or dir'
 # --info=progress2 try if too verbose also remove -v
 
-function m.cp-rsync() {
-  rsync --recursive --links --times --devices --specials --partial --human-readable --progress -v
-}
-function m.mv-rsync() {
-  rsync --recursive --links --times --devices --specials --partial --human-readable --progress -v --remove-source-files
-}
+alias m.cp-rsync='rsync --recursive --links --times --devices --specials --partial --human-readable --progress -v'
+alias m.mv-rsync='rsync --recursive --links --times --devices --specials --partial --human-readable --progress -v --remove-source-files'
 
 function m.git-uncommit-last() {
   git reset --soft HEAD~1
