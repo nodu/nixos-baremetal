@@ -162,6 +162,7 @@ in
     pkgs.nodejs_22
     pkgs.nodePackages.ts-node
     pkgs.yarn
+    pkgs.cargo
 
     # nvim LSPs
     pkgs.lua-language-server
@@ -174,10 +175,11 @@ in
     pkgs.nodePackages.vscode-json-languageserver
     pkgs.nodePackages.dockerfile-language-server-nodejs
     pkgs.tailwindcss-language-server
+    pkgs.shellcheck
+    # TODO: Update to stable
     # pkgs.ruff-lsp
     unstable.ruff
-    pkgs.shellcheck
-    # TODO not quite working:
+    # TODO: not quite working:
     pkgs.docker-compose-language-service
 
     # nvim Linters
@@ -189,8 +191,6 @@ in
 
     # nvim daps
     pkgs.python311Packages.debugpy
-
-    pkgs.cargo
   ];
 
   fonts.fontconfig.enable = true;
@@ -640,6 +640,7 @@ in
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
+    vimdiffAlias = true;
 
     plugins = [
     ];
@@ -647,6 +648,9 @@ in
     extraConfig = ''
       source ~/.config/nvim/bootstrap.init.lua
     '';
+
+    extraPackages = [
+    ];
   };
 
   home.pointerCursor = {
