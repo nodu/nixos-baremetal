@@ -55,9 +55,12 @@
       session    optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start
     '';
   };
+
   services.logind.extraConfig = ''
     HandlePowerKey=suspend
   '';
+  services.upower.criticalPowerAction = "Hibernate";
+
 
   environment.pathsToLink = [ "/libexec" "/share/zsh" ];
   environment.localBinInPath = true;
