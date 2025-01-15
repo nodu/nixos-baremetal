@@ -136,6 +136,12 @@
   # services.displayManager.defaultSession = "sway";
   services.displayManager.defaultSession = "none+i3";
 
+  # Run app images via appimage-run
+  programs.appimage = {
+    enable = true;
+    binfmt = true;
+  };
+
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;

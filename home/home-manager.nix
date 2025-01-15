@@ -69,6 +69,7 @@ in
     # GUI Apps
     twentyfourofive.authy
     pkgs.google-chrome
+    pkgs.firefox
     pkgs.obs-studio
     pkgs.obsidian
     pkgs.vlc
@@ -168,6 +169,7 @@ in
     pkgs.lua-language-server
     pkgs.nil
     pkgs.marksman
+    pkgs.vtsls
     pkgs.nodePackages.vscode-langservers-extracted
     pkgs.nodePackages.typescript-language-server
     pkgs.pyright
@@ -266,6 +268,12 @@ in
         name = "Settings";
         exec = "env XDG_CURRENT_DESKTOP=Gnome gnome-control-center";
         categories = [ "Application" "Settings" ];
+      };
+      sunsama = {
+        type = "Application";
+        name = "Sunsama";
+        exec = "/home/matt/AppImages/sunsama-3.0.5x86_64.appimage";
+        categories = [ "Application" ];
       };
       zwift = {
         type = "Application";

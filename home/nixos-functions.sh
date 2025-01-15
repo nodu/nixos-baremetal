@@ -1,3 +1,9 @@
+nx-metadata() {
+  cd ~/repos/nixos-baremetal/ || exit
+  nix flake metadata
+  cd - || exit
+}
+
 nx-update() {
   cd ~/repos/nixos-baremetal/ || exit
   make switch
