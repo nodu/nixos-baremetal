@@ -13,23 +13,25 @@
 , libidn2
 , zlib
 , wireguard-tools
+, libnl
+, libcap_ng
 }:
 
 let
   pname = "nordvpn";
-  version = "3.19.0";
+  version = "3.19.2";
 
   nordVPNBase = stdenv.mkDerivation {
     inherit pname version;
 
     src = fetchurl {
       url =
-        "https://repo.nordvpn.com/deb/nordvpn/debian/pool/main/nordvpn_${version}_amd64.deb";
-      hash = "sha256-vsl+uneuDEuUmlvRnMILUwRuRkRXVtk5a7OcQ9tYbpY=";
+        "https://repo.nordvpn.com/deb/nordvpn/debian/pool/main/n/nordvpn/nordvpn_${version}_amd64.deb";
+      hash = "sha256-V8SM91Q+DJelrEEipcnwI3BAvput79U13U908u6tjMw=";
     };
 
     buildInputs = [ libxml2 libidn2 ];
-    nativeBuildInputs = [ dpkg autoPatchelfHook stdenv.cc.cc.lib ];
+    nativeBuildInputs = [ dpkg autoPatchelfHook stdenv.cc.cc.lib libcap_ng libnl ];
 
     dontConfigure = true;
     dontBuild = true;
@@ -74,7 +76,6 @@ in
 stdenv.mkDerivation {
   inherit pname version;
 
-  # breakcache 1
   dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;

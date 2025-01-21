@@ -134,6 +134,7 @@ in
     pkgs.gnomeExtensions.power-profile-switcher
     pkgs.gnomeExtensions.grand-theft-focus
     pkgs.gnomeExtensions.gnordvpn-local
+    pkgs.gnomeExtensions.nordvpn-quick-toggle
     pkgs.dconf-editor
     pkgs.gnomeExtensions.gamemode-indicator-in-system-settings
 
