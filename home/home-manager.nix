@@ -69,7 +69,7 @@ in
     # GUI Apps
     twentyfourofive.authy
     pkgs.google-chrome
-    pkgs.firefox
+    # pkgs.firefox
     pkgs.obs-studio
     pkgs.obsidian
     pkgs.vlc
@@ -167,9 +167,11 @@ in
     pkgs.cargo
 
     # nvim LSPs
-    pkgs.lua-language-server
+    ## Mason cannot setup because NixOS cannot run binarys
     pkgs.nil
     pkgs.marksman
+
+    pkgs.lua-language-server
     pkgs.vtsls
     pkgs.nodePackages.vscode-langservers-extracted
     pkgs.nodePackages.typescript-language-server

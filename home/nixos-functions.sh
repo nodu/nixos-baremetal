@@ -19,9 +19,9 @@ nx-update-flakes() {
 nx-update-input() {
   if [ -z "$1" ]; then
     echo "Command:"
-    echo "nix flake lock --update-input nixos-hardware"
+    echo "nix flake update nixos-hardware"
   else
-    nix flake lock --update-input "$1"
+    nix flake update "$1"
   fi
 }
 
