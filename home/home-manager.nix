@@ -69,7 +69,7 @@ in
     # GUI Apps
     twentyfourofive.authy
     pkgs.google-chrome
-    # pkgs.firefox
+    pkgs.firefox
     pkgs.obs-studio
     pkgs.obsidian
     pkgs.vlc
@@ -275,7 +275,7 @@ in
       sunsama = {
         type = "Application";
         name = "Sunsama";
-        exec = "/home/matt/AppImages/sunsama-3.0.5x86_64.appimage";
+        exec = "/home/matt/AppImages/sunsama-3.0.7-build-250130sppknclbo-x86_64.AppImage";
         categories = [ "Application" ];
       };
       zwift = {
