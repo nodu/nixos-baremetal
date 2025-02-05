@@ -47,7 +47,7 @@
           {
             nixpkgs.config.packageOverrides = pkgs: {
               nordvpn = (pkgs.callPackage
-                ./home/vpn.nix
+                ./modules/vpn.nix
                 { });
             };
           }

@@ -9,7 +9,8 @@
     [
       # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./home/vpns.nix
+      ./modules/vpns.nix
+      ./modules/fhs-compat.nix
     ];
 
   services.nordvpn.enable = true;
