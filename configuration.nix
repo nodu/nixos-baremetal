@@ -24,7 +24,20 @@
       keep-outputs = true
       keep-derivations = true
     '';
+
+    # Automatic Cleanup
+    gc = {
+      automatic = true;
+      dates = "daily";
+      options = "--delete-older-than 30d";
+
+    };
+    # Auto ooptimise on system rebuild
+    settings = {
+      auto-optimise-store = true;
+    };
   };
+
   nixpkgs.config.permittedInsecurePackages = [
   ];
   #wayland requirments/stuff
