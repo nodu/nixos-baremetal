@@ -42,5 +42,10 @@ Host moode
     Hostname 192.168.0.102
     IdentityFile "~/.ssh/baremetalToMoode"
 
+Host fermentation-station
+    User pi
+    Hostname 192.168.0.4
+    # IdentityFile "~/.ssh/baremetal"
+
 Host *
     IdentitiesOnly=yes

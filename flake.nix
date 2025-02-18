@@ -39,7 +39,7 @@
       # Overlays is the list of overlays we want to apply from flake inputs.
       nixosConfigurations.baremetal = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit unstable; };
+        specialArgs = { inherit unstable; }; # Passes unstable input to all modules
         modules = [
           ./configuration.nix
           nixos-hardware.nixosModules.framework-13-7040-amd
@@ -59,7 +59,8 @@
             home-manager.extraSpecialArgs = { inherit unstable; };
             home-manager.users.matt = import ./home/home-manager.nix
               {
-                inputs = inputs;
+                # inputs = inputs;
+                inherit inputs; #Same as inputs - inputs;
               };
           }
 
