@@ -305,7 +305,7 @@ m.weather() {
 }
 
 m.vlcc() {
-  vlc -I ncurses
+  vlc -I ncurses "$@"
 }
 
 m.vlcc_brain() {
