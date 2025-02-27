@@ -71,7 +71,6 @@ in
     pkgs.google-chrome
     pkgs.firefox
     pkgs.obs-studio
-    pkgs.obsidian
     pkgs.vlc
     pkgs.jellyfin-media-player
     # pkgs.kodi

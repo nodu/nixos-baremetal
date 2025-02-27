@@ -359,6 +359,7 @@ function m.git-unstage-file() {
 function m.git-restore-staged() {
   git restore --staged "$1"
 }
+alias m.grs=m.git-restore-staged
 
 function m.git-show() {
   git log --graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" |
@@ -370,6 +371,7 @@ function m.git-show() {
                 {}
 FZF-EOF" --preview-window=right:60%
 }
+alias m.gs=m.git-show
 
 function m.ffmpeg-info() {
   ffmpeg -i "$1"
