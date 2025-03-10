@@ -28,3 +28,12 @@ nx-update-input() {
 nx-search() {
   nix-search
 }
+
+nx-info-size() {
+  if [ -z "$1" ]; then
+    echo "Command:"
+    echo "nix path-info --recursive --size --closure-size --human-readable nixpkgs#vlc "
+  else
+    nix path-info --recursive --size --closure-size --human-readable "$1"
+  fi
+}
