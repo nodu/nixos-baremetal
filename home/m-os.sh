@@ -11,7 +11,7 @@ v() {
 
 n() {
   cd ~/repos/notes || exit
-  nvim .
+  nvim
   cd - || exit
 }
 
@@ -32,16 +32,19 @@ t() {
   cd ~/repos/todo || exit
   git pull
 
-  nvim todo.md
+  nvim
 
   git_status=$(git status -s)
   if [ -n "$git_status" ]; then
-    git add .
-    git commit -m "Update Todo $(date)"
-    git push
+    echo "$git_status"
+
+    # git add .
+    # git commit -m "Update Todo $(date)"
+    # git push
+  else
+    cd - || exit
   fi
 
-  cd - || exit
 }
 
 tb() {

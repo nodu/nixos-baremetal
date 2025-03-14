@@ -263,7 +263,7 @@ function vault-list() {
 alias edit-zsh="v ~/repos/dotenv/.zshrc"
 alias edit-osx-alias="v ~/repos/dotenv/shortcuts/macos_aliases.sh"
 
-#TODO - Move all cheatsheets to notes repo
+#TODO: - Move all cheatsheets to notes repo
 alias edit-vimCheatSheet="nvim ~/repos/dotenv/shortcuts/vimCheatSheet"
 
 mn-help-vimCheatSheet() {

@@ -209,6 +209,16 @@
   programs.zsh.enable = true;
 
   programs.steam.enable = true;
+
+  programs.npm = {
+    enable = true;
+    npmrc =
+      ''
+        prefix = ''${HOME}/.npm/global
+      '';
+  };
+
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 

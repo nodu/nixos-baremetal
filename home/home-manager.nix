@@ -32,7 +32,7 @@ let
   #     sha256 = "14xrf5kny4k32fns9q9vfixpb8mxfdv2fi4i9kiwaq1yzcj1bnx2";
   #   })
   #   { system = builtins.trace "aarch64-linux" "aarch64-linux"; };
-  # TODO - where is system arch config var?
+  # TODO: - where is system arch config var?
   # { system = builtins.trace config._module.args config._module.args; };
   # { inherit config; };
 
@@ -84,7 +84,7 @@ in
     pkgs.uhk-agent
     pkgs.prusa-slicer
     pkgs.bitwarden-desktop
-    pkgs.godot_4
+    unstable.godot
 
     # Sound
     pkgs.helvum
@@ -193,9 +193,6 @@ in
     pkgs.markdownlint-cli2
     pkgs.nodePackages.prettier
     pkgs.shfmt
-
-    # nvim daps
-    pkgs.python311Packages.debugpy
   ];
 
   fonts.fontconfig.enable = true;
@@ -218,7 +215,12 @@ in
   # docker run -v zwift-$USER:/data --name zwift-copy-op busybox true
   # docker cp .zwift-credentials zwift-copy-op:/data
   # docker rm zwift-copy-op
-  home.sessionPath = [ "$HOME/.local/bin" "$HOME/go/bin" ];
+  home.sessionPath = [
+    "$HOME/.npm/global/bin"
+    "$HOME/.local/bin"
+    "$HOME/go/bin"
+  ];
+
   home.file = {
     "zwift.sh" = {
       source = pkgs.fetchurl {
@@ -289,7 +291,6 @@ in
   #---------------------------------------------------------------------
   # Programs
   #---------------------------------------------------------------------
-
   programs.gpg = {
     enable = true;
     settings = {
