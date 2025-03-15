@@ -159,7 +159,6 @@ in
     # pkgs.beekeeper-studio
 
     pkgs.go
-    pkgs.gopls
     pkgs.python3
     pkgs.nodejs_22
     pkgs.nodePackages.ts-node
