@@ -36,6 +36,16 @@ let
   # { system = builtins.trace config._module.args config._module.args; };
   # { inherit config; };
 
+  freerdpLauncherGPC =
+    pkgs.writeShellApplication
+      {
+        name = "freerdp3-launcher-GPC.sh";
+        runtimeInputs = [ pkgs.zenity pkgs.freerdp3 ];
+        text = ''
+          pw=$(zenity --entry --title="Domain Password" --text="Enter your _password:" --hide-text)
+          xfreerdp /v:192.168.0.3 +clipboard /dynamic-resolution /sound:sys:alsa /u:GPC /d: /p:"$pw"
+        '';
+      };
 in
 {
   imports = [
@@ -63,6 +73,7 @@ in
   #---------------------------------------------------------------------
 
   home.packages = [
+    # freerdp3GPClauncher Add the shell application here if wanted in path
     (pkgs.nerdfonts.override { fonts = [ "FiraCode" "Hack" ]; })
     # oldPkgs.chromium #example how to import specific versions
 
@@ -85,6 +96,8 @@ in
     pkgs.prusa-slicer
     pkgs.bitwarden-desktop
     unstable.godot
+    pkgs.freerdp3
+    pkgs.zenity
 
     # Sound
     pkgs.helvum
@@ -284,6 +297,14 @@ in
         name = "Zwift";
         exec = "/home/matt/.local/bin/zwift";
         categories = [ "Application" "Game" ];
+      };
+      freeRDPGPC = {
+        type = "Application";
+        name = "RDP GPC";
+        icon = "🖥️";
+        terminal = false;
+        exec = lib.getExe freerdpLauncherGPC;
+        categories = [ "Application" ];
       };
     };
 
