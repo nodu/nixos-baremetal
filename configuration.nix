@@ -20,7 +20,6 @@
   nix = {
     package = pkgs.nixVersions.latest;
     extraOptions = ''
-      experimental-features = nix-command flakes
       keep-outputs = true
       keep-derivations = true
     '';
@@ -34,6 +33,7 @@
     };
     # Auto ooptimise on system rebuild
     settings = {
+      experimental-features = [ "nix-command" "flakes" ];
       auto-optimise-store = true;
     };
   };
@@ -287,5 +287,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.05"; # Did you read the comment?
-
 }
