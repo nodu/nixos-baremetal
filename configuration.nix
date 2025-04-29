@@ -251,6 +251,8 @@
 
   # List services that you want to enable:
 
+  services.printing.enable = true;
+
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
   services.openssh.settings.PasswordAuthentication = true;

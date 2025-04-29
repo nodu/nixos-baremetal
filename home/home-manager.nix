@@ -42,7 +42,8 @@ let
         name = "freerdp3-launcher-GPC.sh";
         runtimeInputs = [ pkgs.zenity pkgs.freerdp3 ];
         text = ''
-          pw=$(zenity --entry --title="Domain Password" --text="Enter your _password:" --hide-text)
+          pw=$(gpg --decrypt "$HOME"/repos/nixos-baremetal/gpc-rdp-secret.gpg)
+          # pw=$(zenity --entry --title="Domain Password" --text="Enter your _password:" --hide-text)
           xfreerdp /v:192.168.0.3 +clipboard /dynamic-resolution /sound:sys:alsa /u:GPC /d: /p:"$pw"
         '';
       };
@@ -97,6 +98,9 @@ in
     pkgs.bitwarden-desktop
     unstable.godot
     pkgs.freerdp3
+    pkgs.remmina
+    pkgs.kdePackages.okular # PDF
+
     pkgs.zenity
 
     # Sound
@@ -131,13 +135,18 @@ in
     pkgs.killall
     pkgs.lshw
     pkgs.yt-dlp
-    pkgs.gamemode
     pkgs.tealdeer
     # Check Bios version:
     # sudo dmidecode | grep -A3 'Vendor:\|Product:' && sudo lshw -C cpu | grep -A3 'product:\|vendor:'
     pkgs.dmidecode
     pkgs.openpomodoro-cli
     pkgs.file
+
+    # GPU
+    pkgs.gamemode
+    pkgs.amdgpu_top
+    pkgs.lact
+    pkgs.corectrl
 
     # Gnome
     pkgs.gnome-tweaks
