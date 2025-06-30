@@ -120,6 +120,28 @@ vm/switch:
 		sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild switch --flake \"/nix-config#${NIXNAME}\" \
 	"
 
-# Build an ISO image
-iso/nixos.iso:
-	cd iso; ./build.sh
+# Backup secrets so that we can transer them to new machines via
+# sneakernet or other means.
+.PHONY: secrets/backup
+secrets/backup:
+	tar -czvf $(MAKEFILE_DIR)/backup.tar.gz \
+		-C $(HOME) \
+		--exclude='.gnupg/.#*' \
+		--exclude='.gnupg/S.*' \
+		--exclude='.gnupg/*.conf' \
+		--exclude='.ssh/environment' \
+		.ssh/ \
+		.gnupg
+
+.PHONY: secrets/restore
+secrets/restore:
+	if [ ! -f $(MAKEFILE_DIR)/backup.tar.gz ]; then \
+		echo "Error: backup.tar.gz not found in $(MAKEFILE_DIR)"; \
+		exit 1; \
+	fi
+	echo "Restoring SSH keys and GPG keyring from backup..."
+	mkdir -p $(HOME)/.ssh $(HOME)/.gnupg
+	tar -xzvf $(MAKEFILE_DIR)/backup.tar.gz -C $(HOME)
+	chmod 700 $(HOME)/.ssh $(HOME)/.gnupg
+	chmod 600 $(HOME)/.ssh/* || true
+	chmod 700 $(HOME)/.gnupg/* || true
