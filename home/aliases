@@ -321,3 +321,7 @@ function sleep-schedule() {
 
 
 alias mn-source-gcp='source functions_gcp'
+
+alias nord-la='nordvpn connect United_States Los_Angeles'
+alias nord-sf='nordvpn connect United_States San_Francisco'
+alias nord-d='nordvpn disconnect'

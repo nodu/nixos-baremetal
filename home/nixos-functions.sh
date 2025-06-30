@@ -20,6 +20,8 @@ nx-update-input() {
   if [ -z "$1" ]; then
     echo "Command:"
     echo "nix flake update nixos-hardware"
+    echo "nx-update-input nixos-hardware"
+    echo ""
   else
     nix flake update "$1"
   fi

@@ -82,6 +82,7 @@ in
     twentyfourofive.authy
     pkgs.google-chrome
     pkgs.firefox
+    unstable.ladybird
     pkgs.obs-studio
     pkgs.vlc
     pkgs.jellyfin-media-player
