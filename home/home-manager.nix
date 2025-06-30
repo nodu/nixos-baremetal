@@ -75,7 +75,6 @@ in
 
   home.packages = [
     # freerdp3GPClauncher Add the shell application here if wanted in path
-    (pkgs.nerdfonts.override { fonts = [ "FiraCode" "Hack" ]; })
     # oldPkgs.chromium #example how to import specific versions
 
     # GUI Apps
@@ -92,12 +91,12 @@ in
     pkgs.anki-bin
     #pkgs.baobab
     pkgs.zoom-us
-    unstable.vscode
+    # unstable.vscode
     pkgs.scrcpy
     pkgs.uhk-agent
     pkgs.prusa-slicer
     pkgs.bitwarden-desktop
-    unstable.godot
+    pkgs.godot
     pkgs.freerdp3
     pkgs.remmina
     pkgs.kdePackages.okular # PDF
@@ -159,7 +158,6 @@ in
     pkgs.gnomeExtensions.gnordvpn-local
     pkgs.gnomeExtensions.nordvpn-quick-toggle
     pkgs.dconf-editor
-    pkgs.gnomeExtensions.gamemode-indicator-in-system-settings
 
     # Network
     pkgs.inetutils
@@ -335,7 +333,7 @@ in
     # cache the keys forever so we don't get asked for a password until reboot
     defaultCacheTtl = 31536000;
     maxCacheTtl = 31536000;
-    pinentryPackage = pkgs.pinentry-gtk2;
+    pinentry.package = pkgs.pinentry-gtk2;
   };
 
   # Setup i3 exclusively in HM; remove from configiguration.nix
@@ -469,7 +467,7 @@ in
     initExtraFirst = ''
     '';
 
-    initExtra = ''
+    initContent = ''
       source $HOME/.config/nixos-functions.sh
       source $HOME/.config/apps.sh
       source $HOME/.config/aliases
