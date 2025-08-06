@@ -269,8 +269,8 @@ in
     "defaults".source = fetchFromGitHub {
       owner = "nodu";
       repo = "defaults";
-      rev = "e751fc6cc63d8fb5b0977030950504ec855e4297";
-      sha256 = "Oe5xU64hJNnzH2TQgpY1ZDIK5oDqjsVv9hh7PASu4Zk=";
+      rev = "347ce09708ef36134b6075f7a1550d1b81aa04e0";
+      sha256 = "oN6I3tZQ3cRGr62tl/GUkswbWgawmfgpyt/drMe3paw=";
     };
   };
 
@@ -472,6 +472,8 @@ in
       source $HOME/.config/apps.sh
       source $HOME/.config/aliases
       source $HOME/.config/defaults/basic.sh
+      source $HOME/.config/defaults/network.sh
+      source $HOME/.config/defaults/git.sh
       source $HOME/.config/m-os.sh
       source $HOME/.config/shellConfig
       eval "$(direnv hook zsh)"
