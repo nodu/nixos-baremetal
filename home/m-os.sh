@@ -132,82 +132,6 @@ m.function-where() {
   type -a "$1"
 }
 
-m.git-quickcommit() {
-  git status
-  git diff
-  git commit -m "Update"
-  git push
-}
-m.git-quickcommit-all() {
-  git status
-  git diff
-  #pause()
-  #read -p 'Press any key to continue...'
-  git add -A :/
-  git commit -m "Update"
-  git push
-}
-m.git-rebase-continue() {
-  git rebase --continue
-}
-m.gpg-import() {
-  echo "Provide a private.key for $1"
-  gpp --import "$1"
-}
-
-m.gpg-encrypt-sign() {
-  # Check if either --help is called or not enough arguments are provided
-  if [[ "$1" == "--help" || $# -ne 2 ]]; then
-    echo "Usage: m.gpg-encrypt-sign <recipient> <file>"
-    echo ""
-    echo "Encrypt and sign a file for a specified recipient using GPG."
-    echo ""
-    echo "Arguments:"
-    echo "  <recipient>  The GPG key ID, email, or user ID of the recipient"
-    echo "  <file>       The file you want to encrypt and sign"
-    return 1
-  fi
-
-  # Encrypt and sign the file
-  gpg --encrypt --sign -r "$1" "$2"
-}
-m.gpg-encrypt() {
-  # Check if either --help is called or if no arguments are provided
-  if [[ "$1" == "--help" || $# -ne 1 ]]; then
-    echo "Usage: m.gpg-encrypt <file>"
-    echo ""
-    echo "Encrypt a file symmetrically using GPG."
-    echo ""
-    echo "Arguments:"
-    echo "  <file>   The file you want to encrypt"
-    return 1
-  fi
-
-  # Encrypt the file symmetrically
-  gpg --symmetric "$1"
-}
-m.gpg-decrypt() {
-  # Check if a file was actually passed
-  if [[ -z "$1" ]]; then
-    echo "Usage: m.gpg-decrypt <file.gpg>"
-    return 1
-  fi
-
-  # Strip the .gpg extension from the file name if it exists
-  output_file="${1%.gpg}"
-
-  # Perform the decryption, specifying the output file
-  gpg --output "$output_file" --decrypt "$1"
-}
-
-m.base64-decode() {
-  echo -n "$1" | base64 -d
-}
-
-m.base64-encode() {
-  echo -n "$1" | base64
-}
-
 m.time-global() {
   echo 'Current:          ' "$(date)"
   echo 'UTC:              ' "$(date -u)"
@@ -335,47 +259,6 @@ m.edit_home_manager() {
   nvim ~/repos/nixos-baremetal/home/home-manager.nix
 }
 
-# Internet speed test function
-m.speedtest() {
-  speedtest-cli
-}
-
-# -a = -rlptgoD; removed -po
-# -p, --perms                 preserve permissions
-# -o, --owner                 preserve owner (super-user only)
-# -n --dry-run
-# -del --delete-excluded
-# --exclude 'file or dir'
-# --info=progress2 try if too verbose also remove -v
-
-alias m.cp-rsync='rsync --recursive --links --times --devices --specials --partial --human-readable --progress -v'
-alias m.mv-rsync='rsync --recursive --links --times --devices --specials --partial --human-readable --progress -v --remove-source-files'
-
-function m.git-uncommit-last() {
-  git reset --soft HEAD~1
-}
-
-function m.git-unstage-file() {
-  git reset HEAD
-}
-
-function m.git-restore-staged() {
-  git restore --staged "$1"
-}
-alias m.grs=m.git-restore-staged
-
-function m.git-show() {
-  git log --graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" |
-    fzf --ansi --no-sort --reverse --tiebreak=index --preview \
-      'f() { set -- $(echo -- "$@" | grep -o "[a-f0-9]\{7\}"); [ $# -eq 0 ] || git show --color=always $1 ; }; f {}' \
-      --bind "ctrl-d:preview-page-down,ctrl-u:preview-page-up,enter:execute:
-                (grep -o '[a-f0-9]\{7\}' | head -1 |
-                xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
-                {}
-FZF-EOF" --preview-window=right:60%
-}
-alias m.gs=m.git-show
-
 function m.ffmpeg-info() {
   ffmpeg -i "$1"
 }
@@ -421,44 +304,9 @@ function m.ff() {
   fi
 }
 
-ff() {
-  m.ff
-}
-
-function m.fc() {
-  local file
-  file=$(fzf --preview 'bat --style=numbers --color=always --line-range :500 {}')
-  if [[ $file ]]; then
-    cat "$file"
-    echo $file
-  else
-    echo "cancelled m.ff"
-  fi
-}
-
-function m.fd() {
-  local dir
-  dir=$(find ${1:-.} -type d 2>/dev/null | fzf +m) && cd "$dir"
-  echo "$dir"
-  ls
-}
-
-function m.kill() {
-  local pid
-  pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
-
-  if [ "x$pid" != "x" ]; then
-    echo "$pid" | xargs kill -"${1:-9}"
-  fi
-}
-function m.env() {
-  local out
-  out=$(env | fzf)
-  echo "$(echo "$out" | cut -d= -f2)"
-}
 # Custom xrandr auto-adjustment function
 m.x() {
-  xrandr-auto
+  xrandr --auto
 }
 
 # Set OPENAI_API_KEY from a decrypted file and run sgpt
@@ -544,23 +392,6 @@ m.www() {
   python3 -m http.server
 }
 
-check_git_status() {
-  local start_dir="$1"
-
-  # Check if the provided directory exists
-  if [ ! -d "$start_dir" ]; then
-    echo "The directory $start_dir does not exist."
-    return 1
-  fi
-
-  find "$start_dir" -type d -name '.git' | while read dir; do
-    sh -c "cd '$dir'/../ && git_status=\$(git status -s); if [ ! -z \"\$git_status\" ]; then echo -e \"\nGIT STATUS IN ${dir//\.git/}\"; echo \"\$git_status\"; fi"
-  done
-}
-
-check_git_status ~/repos
-check_git_status ~/.config #nvim
-
 alias nvim-new='NVIM_APPNAME="neovim-config" nvim'
 alias nvim-plugin-testing='NVIM_APPNAME="nvim-plugin-testing" nvim'
 
@@ -575,16 +406,6 @@ p() {
   python "$@"
 }
 
-m.git-stardate() {
-  echo "./stardate.sh \"last monday 8:07:23pm\" \"init\" "
-
-  stardate=$(date -d "$1" +"%a %b %d %T %Y %z")
-
-  GIT_COMMITTER_DATE="$stardate" git commit --date "$stardate" -m "$2"
-
-  # GIT_COMMITTER_DATE="date-here" git commit --amend --no-edit --date "date-here"
-}
-
 m.copy() {
   xclip -selection clipboard
 }
@@ -592,3 +413,6 @@ m.copy() {
 m.paste() {
   xclip -o -selection clipboard
 }
+
+check_git_status ~/repos
+check_git_status ~/.config #nvim
