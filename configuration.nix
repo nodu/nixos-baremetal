@@ -130,6 +130,7 @@
     epiphany # web browser
     gnome-tour
     geary
+    gnome-calendar
   ]) ++ (with pkgs.gnome; [
   ]);
   console.useXkbConfig = true;

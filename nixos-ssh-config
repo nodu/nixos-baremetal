@@ -31,7 +31,7 @@ Host bau-att
     Hostname 192.168.1.76
     IdentityFile "~/.ssh/baremetal"
 
-Host bau-mesh
+Host bau-mesh-ip
     User pi
     Hostname 100.105.37.182
     IdentityFile "~/.ssh/baremetal"
