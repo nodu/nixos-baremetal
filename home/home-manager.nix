@@ -423,6 +423,7 @@ in
 
   programs.direnv = {
     enable = true;
+    enableZshIntegration = true;
 
     config = {
       whitelist = {
@@ -476,7 +477,6 @@ in
       source $HOME/.config/defaults/git.sh
       source $HOME/.config/m-os.sh
       source $HOME/.config/shellConfig
-      eval "$(direnv hook zsh)"
     '';
   };
 
