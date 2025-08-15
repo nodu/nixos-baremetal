@@ -21,7 +21,6 @@
     nix-colors.url = "github:misterio77/nix-colors";
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
-    flox = { url = "github:flox/flox"; };
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, nixos-hardware, home-manager, ... }@inputs:
@@ -44,10 +43,7 @@
           ./configuration.nix
           {
             environment.systemPackages = [
-              inputs.flox.packages.${system}.default
             ];
-            nix.settings.trusted-substituters = [ "https://cache.flox.dev" ];
-            nix.settings.trusted-public-keys = [ "flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs=" ];
           }
           nixos-hardware.nixosModules.framework-13-7040-amd
           { nixpkgs.overlays = overlays; }
