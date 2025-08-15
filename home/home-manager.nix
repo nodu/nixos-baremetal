@@ -578,7 +578,7 @@ in
           { key = "NumpadAdd"; mods = "Alt"; action = "IncreaseFontSize"; }
           { key = "Minus"; mods = "Alt"; action = "DecreaseFontSize"; }
           { key = "NumpadSubtract"; mods = "Alt"; action = "DecreaseFontSize"; }
-          { key = "F"; mods = "Alt"; action = "SearchBackward"; }
+          { key = "F"; mods = "Shift|Alt"; action = "SearchBackward"; }
           { key = "V"; mods = "Alt"; action = "ToggleViMode"; }
           { key = "N"; mods = "Shift|Control"; action = "CreateNewWindow"; }
         ];
