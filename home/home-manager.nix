@@ -100,6 +100,7 @@ in
     pkgs.freerdp3
     pkgs.remmina
     pkgs.kdePackages.okular # PDF
+    # pkgs.blender
 
     pkgs.zenity
 
