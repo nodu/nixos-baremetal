@@ -16,7 +16,7 @@ let
   #   nix-prefetch-url --unpack https://github.com/NixOS/nixpkgs/archive/e49c28b3baa3a93bdadb8966dd128f9985ea0a09.tar.gz
   #   or use an empty sha256 = ""; string, it'll show the hash; prefetch is safer
 
-  twentyfourofive = import
+  oldauthy = import
     (builtins.fetchTarball {
       url = "https://github.com/NixOS/nixpkgs/archive/eb090f7b923b1226e8beb954ce7c8da99030f4a8.tar.gz";
       sha256 = "15iglsr7h3s435a04313xddah8vds815i9lajcc923s4yl54aj4j";
@@ -78,7 +78,7 @@ in
     # oldPkgs.chromium #example how to import specific versions
 
     # GUI Apps
-    twentyfourofive.authy
+    oldauthy.authy
     pkgs.google-chrome
     pkgs.firefox
     unstable.ladybird
@@ -96,11 +96,12 @@ in
     pkgs.uhk-agent
     pkgs.prusa-slicer
     pkgs.bitwarden-desktop
-    pkgs.godot
+    unstable.godot
     pkgs.freerdp3
     pkgs.remmina
     pkgs.kdePackages.okular # PDF
     # pkgs.blender
+    unstable.rpi-imager
 
     pkgs.zenity
 
@@ -122,6 +123,7 @@ in
     pkgs.glow
     pkgs.fzf
     pkgs.gotop
+    pkgs.btop
     pkgs.jq
     pkgs.jqp #jq playground tui
     pkgs.ripgrep
@@ -180,6 +182,8 @@ in
     # pkgs.krew
     # pkgs.beekeeper-studio
 
+    unstable.claude-code
+
     pkgs.go
     pkgs.python3
     pkgs.nodejs_22
@@ -187,6 +191,8 @@ in
     pkgs.yarn
     pkgs.cargo
 
+    # neovim
+    pkgs.tree-sitter
     # nvim LSPs
     ## Mason cannot setup because NixOS cannot run binarys
     pkgs.nil
@@ -277,6 +283,14 @@ in
 
   xdg.desktopEntries =
     {
+      btop = {
+        type = "Application";
+        name = "Activity Monitor (btop)";
+        exec = "btop";
+        terminal = true;
+        categories = [ "Application" "Network" "WebBrowser" ];
+        mimeType = [ "text/html" "text/xml" ];
+      };
       gotop = {
         type = "Application";
         name = "Activity Monitor (goTop)";
