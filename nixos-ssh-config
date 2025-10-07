@@ -37,10 +37,8 @@ Host bau-mesh-ip
     IdentityFile "~/.ssh/baremetal"
 
 Host moode
-    User moode
-    # Hostname moode.local
+    User pi
     Hostname 192.168.0.102
-    IdentityFile "~/.ssh/baremetalToMoode"
 
 Host fermentation-station
     User pi
