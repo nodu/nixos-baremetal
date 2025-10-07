@@ -39,3 +39,22 @@ nx-info-size() {
     nix path-info --recursive --size --closure-size --human-readable "$1"
   fi
 }
+
+nx-shell() {
+  if [ -z "$1" ]; then
+    echo "Command:"
+    echo "nx-shell package_name,package_name2"
+  else
+    nix shell nixpkgs#{"$1",hello} "${@:2}"
+  fi
+}
+
+nx-shell-unfree() {
+  if [ -z "$1" ]; then
+    echo "Command:"
+    echo
+  else
+    export NIXPKGS_ALLOW_UNFREE=1
+    nix shell --impure nixpkgs#{"$1",hello} "${@:2}"
+  fi
+}
