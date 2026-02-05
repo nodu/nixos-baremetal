@@ -127,6 +127,9 @@
     enable = true;
     shadow = true;
     shadowOpacity = 0.75;
+    shadowExclude = [
+      "class_g = 'Handy' && name = 'Recording'"
+    ];
     fade = true;
     vSync = true;
     fadeDelta = 5;

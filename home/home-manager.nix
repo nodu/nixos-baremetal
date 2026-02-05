@@ -102,6 +102,7 @@ in
     pkgs.kdePackages.okular # PDF
     # pkgs.blender
     unstable.rpi-imager
+    pkgs.handy
 
     pkgs.zenity
 

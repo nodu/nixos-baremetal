@@ -54,6 +54,13 @@
                 { });
             };
           }
+          {
+            nixpkgs.config.packageOverrides = pkgs: {
+              handy = (pkgs.callPackage
+                ./modules/handy.nix
+                { });
+            };
+          }
 
           home-manager.home-manager
           {
