@@ -100,8 +100,9 @@ in
     pkgs.freerdp3
     pkgs.remmina
     pkgs.kdePackages.okular # PDF
-    # pkgs.blender
+    pkgs.blender
     unstable.rpi-imager
+    pkgs.arandr
     pkgs.handy
 
     pkgs.zenity
