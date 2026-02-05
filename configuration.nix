@@ -15,6 +15,20 @@
 
   services.nordvpn.enable = true;
   services.fwupd.enable = true;
+
+  services.avahi = {
+    enable = true;
+    nssmdns = true;
+    publish = {
+      enable = true;
+      addresses = true;
+      domain = true;
+      hinfo = true;
+      userServices = true;
+      workstation = true;
+    };
+  };
+
   virtualisation.docker.enable = true;
 
   nix = {
@@ -47,6 +61,13 @@
   #xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
   security.pam.services.login.fprintAuth = false;
+
+  # Set a shorter timeout for fprintd on i3lock so password auth doesn't wait 60s
+  # The PAM stack is serialized, so fprintd must timeout before password auth is tried
+  # See: pam_fprintd(8) - timeout option
+  security.pam.services.i3lock.rules.auth.fprintd.settings.timeout = 5;
+  security.pam.services.i3lock-color.rules.auth.fprintd.settings.timeout = 5;
+
   # https://github.com/NixOS/nixpkgs/issues/171136#issuecomment-1627779037
   # similarly to how other distributions handle the fingerprinting login
   security.pam.services.gdm-fingerprint = lib.mkIf (config.services.fprintd.enable) {
@@ -199,7 +220,7 @@
     isNormalUser = true;
     home = "/home/matt";
     description = "Matt N";
-    extraGroups = [ "nordvpn" "docker" "networkmanager" "wheel" "adbusers" ];
+    extraGroups = [ "nordvpn" "docker" "networkmanager" "wheel" "adbusers" "dialout" ];
     openssh.authorizedKeys.keys = [ "ssh blah blah" ];
     shell = pkgs.zsh;
 

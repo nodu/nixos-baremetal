@@ -15,11 +15,12 @@
 , wireguard-tools
 , libnl
 , libcap_ng
+, sqlite
 }:
 
 let
   pname = "nordvpn";
-  version = "3.20.3";
+  version = "4.3.1";
 
   nordVPNBase = stdenv.mkDerivation {
     inherit pname version;
@@ -27,11 +28,11 @@ let
     src = fetchurl {
       url =
         "https://repo.nordvpn.com/deb/nordvpn/debian/pool/main/n/nordvpn/nordvpn_${version}_amd64.deb";
-      hash = "sha256-5cmCNuHaHPHjDqOnLC/8wxo4+3O4uBRBLytbIRP8dWE=";
+      hash = "sha256-oFf4uxZsucAh2yW++SQRxFx8+JdL8ZsNzWqzjJ2JqUs=";
     };
 
-    buildInputs = [ libxml2 libidn2 ];
-    nativeBuildInputs = [ dpkg autoPatchelfHook stdenv.cc.cc.lib libcap_ng libnl ];
+    buildInputs = [ libxml2 libidn2 sqlite stdenv.cc.cc.lib libcap_ng libnl ];
+    nativeBuildInputs = [ dpkg autoPatchelfHook ];
 
     dontConfigure = true;
     dontBuild = true;

@@ -146,6 +146,7 @@ in
     pkgs.dmidecode
     pkgs.openpomodoro-cli
     pkgs.file
+    pkgs.dig
 
     # GPU
     pkgs.gamemode
@@ -185,6 +186,7 @@ in
     # pkgs.beekeeper-studio
 
     unstable.claude-code
+    unstable.opencode
 
     pkgs.go
     pkgs.python3
@@ -722,5 +724,26 @@ in
     size = 32;
     x11.enable = true;
     gtk.enable = true;
+  };
+
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Adwaita-dark";
+      package = pkgs.gnome-themes-extra;
+    };
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+  };
+
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+      gtk-theme = "Adwaita-dark";
+    };
   };
 }
