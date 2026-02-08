@@ -11,18 +11,7 @@
       text = builtins.readFile ./notify-sleep.sh;
       executable = true;
     };
-    "i3/monitor.sh" = {
-      text = builtins.readFile ./monitor.sh;
-      executable = true;
-    };
-    "i3/monitor-disable.sh" = {
-      text = builtins.readFile ./monitor-disable.sh;
-      executable = true;
-    };
-    "i3/toggle-screensaver.sh" = {
-      text = builtins.readFile ./toggle-screensaver.sh;
-      executable = true;
-    };
+
   };
 
   #Packages

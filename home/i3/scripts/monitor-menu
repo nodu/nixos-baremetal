@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+#
+# Rofi-based display/monitor configuration menu.
+#
+
+SCRIPT_DIR="$HOME/.config/i3/scripts/monitor"
+
+#######################################################################
+#                            BEGIN CONFIG                             #
+#######################################################################
+
+FG_COLOR="#bbbbbb"
+BG_COLOR="#111111"
+HLFG_COLOR="#111111"
+HLBG_COLOR="#bbbbbb"
+BORDER_COLOR="#222222"
+
+ROFI_OPTIONS=(-theme ~/.config/rofi/monitor-menu.rasi)
+
+#######################################################################
+#                             END CONFIG                              #
+#######################################################################
+
+typeset -A menu
+
+menu=(
+  ["   External Only"]="$SCRIPT_DIR/external-only.sh"
+  ["   Extend Above"]="$SCRIPT_DIR/extend-above.sh"
+  ["   Extend Left"]="$SCRIPT_DIR/extend-left.sh"
+  ["   Extend Right"]="$SCRIPT_DIR/extend-right.sh"
+  ["   Mirror"]="$SCRIPT_DIR/mirror.sh"
+  ["   Disable"]="$SCRIPT_DIR/default.sh"
+  ["   Toggle Screensaver"]="$SCRIPT_DIR/toggle-screensaver.sh"
+  ["   Arandr"]="arandr"
+  ["   Cancel"]=""
+)
+
+menu_nrows=${#menu[@]}
+
+rofi_colors=(-bc "${BORDER_COLOR}" -bg "${BG_COLOR}" -fg "${FG_COLOR}"
+  -hlfg "${HLFG_COLOR}" -hlbg "${HLBG_COLOR}")
+
+launcher=(rofi -dmenu -i -lines "${menu_nrows}" -p "Display"
+  "${rofi_colors[@]}" "${ROFI_OPTIONS[@]}")
+
+selection="$(printf '%s\n' "${!menu[@]}" | sort | "${launcher[@]}")"
+
+if [[ $? -eq 0 && -n "${selection}" ]]; then
+  cmd="${menu[${selection}]}"
+  if [[ -n "${cmd}" ]]; then
+    i3-msg -q "exec ${cmd}"
+  fi
+fi
