@@ -30,14 +30,10 @@
 #LOCKSCRIPT="i3lock-extra -m pixelize"
 
 # Colors: FG (foreground), BG (background), HL (highlighted)
-FG_COLOR="#bbbbbb"
-BG_COLOR="#111111"
-HLFG_COLOR="#111111"
-HLBG_COLOR="#bbbbbb"
-BORDER_COLOR="#222222"
+# NOTE: Colors are handled by the .rasi theme file below.
 
 # Options not related to colors
-#ROFI_TEXT=":"
+ROFI_TEXT="Set Power Profile:"
 #ROFI_OPTIONS=(-width -11 -location 0 -hide-scrollbar -bw 30 -color-window "#dd310027,#dd0310027,#dd310027" -padding 5)
 #ROFI_OPTIONS=(-width -18 -location 4 -hide-scrollbar -color-window "#cc310027,#00a0009a,#cc310027" -padding 5 -font "Sourcecode Pro Regular 10, FontAwesome 9")
 ROFI_OPTIONS=(-theme ~/.config/rofi/power-profiles.rasi)
@@ -115,28 +111,42 @@ typeset -A menu
 # Menu with keys/commands
 
 menu=(
-  [ Performance]="powerprofilesctl set performance"
-  [ Balanced]="powerprofilesctl set balanced"
-  [ Power Saver]="powerprofilesctl set power-saver"
-  [ Cancel]=""
+  [ Performance]="powerprofilesctl set performance"
+  [ Balanced]="powerprofilesctl set balanced"
+  [ Power Saver]="powerprofilesctl set power-saver"
 )
 
 menu_nrows=${#menu[@]}
+
+# Detect currently active power profile and find its row index in the sorted menu
+active_profile=$(powerprofilesctl get 2>/dev/null)
+active_index=""
+if [[ -n "$active_profile" ]]; then
+  i=0
+  while IFS= read -r line; do
+    cmd="${menu[$line]}"
+    if [[ "$cmd" == *"set $active_profile" ]]; then
+      active_index="$i"
+      break
+    fi
+    ((i++))
+  done < <(printf '%s\n' "${!menu[@]}" | sort)
+fi
 
 # Menu entries that may trigger a confirmation message
 menu_confirm="Shutdown Reboot Hibernate Suspend Halt Logout"
 
 launcher_exe=""
 launcher_options=""
-rofi_colors=""
 
 function prepare_launcher() {
   if [[ "$1" == "rofi" ]]; then
-    rofi_colors=(-bc "${BORDER_COLOR}" -bg "${BG_COLOR}" -fg "${FG_COLOR}" \
-        -hlfg "${HLFG_COLOR}" -hlbg "${HLBG_COLOR}")
     launcher_exe="rofi"
     launcher_options=(-dmenu -i -lines "${menu_nrows}" -p "${ROFI_TEXT}" \
-        "${rofi_colors}" "${ROFI_OPTIONS[@]}")
+        "${ROFI_OPTIONS[@]}")
+    if [[ -n "$active_index" ]]; then
+      launcher_options+=(-a "$active_index")
+    fi
   elif [[ "$1" == "zenity" ]]; then
     launcher_exe="zenity"
     launcher_options=(--list --title="${ZENITY_TITLE}" --text="${ZENITY_TEXT}" \
@@ -162,7 +172,7 @@ selection="$(printf '%s\n' "${!menu[@]}" | sort | "${launcher[@]}")"
 function ask_confirmation() {
   if [ "${launcher_exe}" == "rofi" ]; then
     confirmed=$(echo -e "Yes\nNo" | rofi -dmenu -i -lines 2 -p "${selection}?" \
-      "${rofi_colors}" "${ROFI_OPTIONS[@]}")
+      "${ROFI_OPTIONS[@]}")
     [ "${confirmed}" == "Yes" ] && confirmed=0
   elif [ "${launcher_exe}" == "zenity" ]; then
     zenity --question --text "Are you sure you want to ${selection,,}?"
