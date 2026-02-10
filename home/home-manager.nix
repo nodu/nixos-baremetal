@@ -1,6 +1,6 @@
 # Order 5
 { inputs, ... }:
-{ config, lib, pkgs, unstable, ... }:
+{ config, lib, pkgs, unstable, handy, ... }:
 # https://mipmip.github.io/home-manager-option-search
 
 let
@@ -103,7 +103,7 @@ in
     pkgs.blender
     unstable.rpi-imager
     pkgs.arandr
-    pkgs.handy
+    handy
 
     pkgs.zenity
 
@@ -334,6 +334,14 @@ in
         terminal = false;
         exec = lib.getExe freerdpLauncherGPC;
         categories = [ "Application" ];
+      };
+      handy = {
+        type = "Application";
+        name = "Handy";
+        comment = "Offline speech-to-text";
+        exec = "handy";
+        terminal = false;
+        categories = [ "Application" "Utility" "Audio" ];
       };
     };
 

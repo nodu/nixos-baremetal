@@ -21,6 +21,11 @@
     nix-colors.url = "github:misterio77/nix-colors";
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+
+    handy = {
+      url = "github:cjpais/Handy";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, nixos-hardware, home-manager, ... }@inputs:
@@ -29,6 +34,27 @@
       home-manager = inputs.home-manager.nixosModules;
       pkgs = import nixpkgs { inherit system; };
       unstable = import nixpkgs-unstable { inherit system; config.allowUnfree = true; };
+      # TODO: Remove this override once upstream fixes the hash in their flake.nix
+      # Upstream issue: AppImage hash mismatch for v0.7.3
+      # handy = inputs.handy.packages.${system}.default;
+      handy =
+        let
+          upkgs = import nixpkgs-unstable { inherit system; };
+          version = "0.7.3";
+          appimage = upkgs.appimageTools.wrapType2 {
+            pname = "handy-appimage-unwrapped";
+            inherit version;
+            src = upkgs.fetchurl {
+              url = "https://github.com/cjpais/Handy/releases/download/v${version}/Handy_${version}_amd64.AppImage";
+              hash = "sha256-3ZYXJUiKU1C8JQCRPtzv6zJPZndIC8wfPAxQafBGPpQ=";
+            };
+            extraPkgs = p: with p; [ alsa-lib ];
+          };
+        in
+        upkgs.writeShellScriptBin "handy" ''
+          export WEBKIT_DISABLE_DMABUF_RENDERER=1
+          exec ${appimage}/bin/handy-appimage-unwrapped "$@"
+        '';
 
       overlays = [
         #(import ./overlays/sddm.nix)
@@ -38,7 +64,7 @@
       # Overlays is the list of overlays we want to apply from flake inputs.
       nixosConfigurations.baremetal = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit unstable; }; # Passes unstable input to all modules
+        specialArgs = { inherit unstable handy; }; # Passes unstable and handy inputs to all modules
         modules = [
           ./configuration.nix
           {
@@ -54,19 +80,12 @@
                 { });
             };
           }
-          {
-            nixpkgs.config.packageOverrides = pkgs: {
-              handy = (pkgs.callPackage
-                ./modules/handy.nix
-                { });
-            };
-          }
 
           home-manager.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { inherit unstable; };
+            home-manager.extraSpecialArgs = { inherit unstable handy; };
             home-manager.users.matt = import ./home/home-manager.nix
               {
                 # inputs = inputs;
