@@ -8,7 +8,7 @@
 
   xdg.configFile."sway/screenshot.sh".source = ./sway-screenshot.sh;
   xdg.configFile."sway/wallpaper.jpg".source = ./sway-wallpaper.jpg;
-  xdg.configFile."waybar/config".source = ./waybar-config.json;
+  xdg.configFile."i3status/config".source = ./i3status-sway.config;
 
   wayland.windowManager.sway = {
     enable = true;
@@ -27,16 +27,28 @@
   };
 
   home.sessionVariables = {
-    NIXOS_OZONE_WL = 1;
+    # NIXOS_OZONE_WL = 1;  # Disabled - Chrome native Wayland steals keyboard shortcuts
     WLR_NO_HARDWARE_CURSORS = 1;
   };
   #Packages
   home.packages = with pkgs; [
+    # Wayland tools
     wl-clipboard
     xorg.xeyes #use to check if running wayland on app
     wlr-randr
     grim
-    waybar
+    slurp
+    i3status
+    swayidle
+    swaylock
+
+    # Equivalent i3 packages for Sway
+    pkgs.playerctl
+    pkgs.light  # brightness control
+    pkgs.libnotify
+
+    # Mouse control for Wayland (replaces xdotool)
+    pkgs.ydotool
   ];
 
   programs.waybar = {
