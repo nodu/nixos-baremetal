@@ -13,20 +13,29 @@
       ./modules/fhs-compat.nix
     ];
 
-  services.nordvpn.enable = true;
-  services.fwupd.enable = true;
+  services = {
+    nordvpn.enable = true;
 
-  services.avahi = {
-    enable = true;
-    nssmdns = true;
-    publish = {
+    fwupd.enable = true;
+
+    avahi = {
       enable = true;
-      addresses = true;
-      domain = true;
-      hinfo = true;
-      userServices = true;
-      workstation = true;
+      nssmdns4 = true;
+      publish = {
+        enable = true;
+        addresses = true;
+        domain = true;
+        hinfo = true;
+        userServices = true;
+        workstation = true;
+      };
     };
+
+    tailscale.enable = true;
+    logind.extraConfig = ''
+      HandlePowerKey=suspend
+    '';
+    upower.criticalPowerAction = "Hibernate";
   };
 
   virtualisation.docker.enable = true;
@@ -57,16 +66,17 @@
   #wayland requirments/stuff
   security.polkit.enable = true;
   hardware.graphics.enable = true;
-  #xdg.portal.enable = true;
-  #xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  xdg.portal.enable = true;
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  xdg.portal.wlr.enable = true;
 
   security.pam.services.login.fprintAuth = false;
 
   # Set a shorter timeout for fprintd on i3lock so password auth doesn't wait 60s
   # The PAM stack is serialized, so fprintd must timeout before password auth is tried
   # See: pam_fprintd(8) - timeout option
-  security.pam.services.i3lock.rules.auth.fprintd.settings.timeout = 5;
-  security.pam.services.i3lock-color.rules.auth.fprintd.settings.timeout = 5;
+  security.pam.services.i3lock.rules.auth.fprintd.settings.timeout = 3;
+  security.pam.services.i3lock-color.rules.auth.fprintd.settings.timeout = 3;
 
   # https://github.com/NixOS/nixpkgs/issues/171136#issuecomment-1627779037
   # similarly to how other distributions handle the fingerprinting login
@@ -90,11 +100,6 @@
       session    optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start
     '';
   };
-
-  services.logind.extraConfig = ''
-    HandlePowerKey=suspend
-  '';
-  services.upower.criticalPowerAction = "Hibernate";
 
 
   environment.pathsToLink = [ "/libexec" "/share/zsh" ];
@@ -166,6 +171,7 @@
 
     # Enable the GNOME Desktop Environment.
     displayManager.gdm.enable = true;
+    displayManager.gdm.wayland = true;
     desktopManager.gnome.enable = true;
 
     windowManager.i3.enable = true;
@@ -184,7 +190,7 @@
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
-    package = null;
+    # package = null;
   };
 
   # Enable CUPS to print documents.
@@ -220,7 +226,7 @@
     isNormalUser = true;
     home = "/home/matt";
     description = "Matt N";
-    extraGroups = [ "nordvpn" "docker" "networkmanager" "wheel" "adbusers" "dialout" ];
+    extraGroups = [ "nordvpn" "docker" "networkmanager" "wheel" "adbusers" "dialout" "input" ];
     openssh.authorizedKeys.keys = [ "ssh blah blah" ];
     shell = pkgs.zsh;
 
