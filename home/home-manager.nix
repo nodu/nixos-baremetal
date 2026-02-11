@@ -93,7 +93,7 @@ in
     pkgs.zoom-us
     # unstable.vscode
     pkgs.scrcpy
-    pkgs.uhk-agent
+    unstable.uhk-agent
     pkgs.prusa-slicer
     pkgs.bitwarden-desktop
     unstable.godot
@@ -101,7 +101,7 @@ in
     pkgs.remmina
     pkgs.kdePackages.okular # PDF
     pkgs.blender
-    unstable.rpi-imager
+    # unstable.rpi-imager
     pkgs.arandr
     handy
 
@@ -195,12 +195,16 @@ in
     pkgs.yarn
     pkgs.cargo
 
+    pkgs.pass
+    pkgs.docker-credential-helpers
+
     # neovim
     pkgs.tree-sitter
     # nvim LSPs
     ## Mason cannot setup because NixOS cannot run binarys
     pkgs.nil
-    pkgs.marksman
+    pkgs.statix
+    # pkgs.marksman  # TODO: Re-enable when dotnet build issue is fixed (nixpkgs#XXXXX)
 
     pkgs.lua-language-server
     pkgs.vtsls
@@ -273,7 +277,7 @@ in
     "rofi/rofi-theme-deathemonic.rasi".text = builtins.readFile ./rofi/rofi-theme-deathemonic.rasi;
     "rofi/catppuccin-mocha.rasi".text = builtins.readFile ./rofi/catppuccin-mocha.rasi;
     "rofi/power-profiles.rasi".text = builtins.readFile ./rofi/power-profiles.rasi;
-    "rofi/arc-dark-colors.rasi".text = builtins.readFile ./rofi/arc-dark-colors.rasi;
+    "rofi/monitor-menu.rasi".text = builtins.readFile ./rofi/monitor-menu.rasi;
 
     # After defaults repo is pushed; change the rev to commit hash; make sha254 empty string
     # Then nx-update; Then update sha256 from the failed build
@@ -348,6 +352,11 @@ in
   #---------------------------------------------------------------------
   # Programs
   #---------------------------------------------------------------------
+
+  programs = {
+    ghostty.enable = true;
+  };
+
   programs.gpg = {
     enable = true;
     settings = {
@@ -451,6 +460,7 @@ in
   programs.direnv = {
     enable = true;
     enableZshIntegration = true;
+    nix-direnv.enable = true;
 
     config = {
       whitelist = {
@@ -459,6 +469,7 @@ in
 
         exact = [
           "~/repos/job-scraper/"
+          "~/repos/10four-ai/"
           "~/repos/www/"
         ];
       };
