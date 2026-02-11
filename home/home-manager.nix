@@ -187,6 +187,7 @@ in
 
     unstable.claude-code
     unstable.opencode
+    unstable.opencode-desktop
 
     pkgs.go
     pkgs.python3
