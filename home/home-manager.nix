@@ -40,7 +40,7 @@ let
     pkgs.writeShellApplication
       {
         name = "freerdp3-launcher-GPC.sh";
-        runtimeInputs = [ pkgs.zenity pkgs.freerdp3 ];
+        runtimeInputs = [ pkgs.zenity pkgs.freerdp ];
         text = ''
           pw=$(gpg --decrypt "$HOME"/repos/nixos-baremetal/gpc-rdp-secret.gpg)
           # pw=$(zenity --entry --title="Domain Password" --text="Enter your _password:" --hide-text)
@@ -97,7 +97,7 @@ in
     pkgs.prusa-slicer
     pkgs.bitwarden-desktop
     unstable.godot
-    pkgs.freerdp3
+    pkgs.freerdp
     pkgs.remmina
     pkgs.kdePackages.okular # PDF
     pkgs.blender
@@ -116,7 +116,7 @@ in
 
     # Utilities
     pkgs.nix-search-cli
-    pkgs.libsForQt5.kdeconnect-kde
+    pkgs.kdePackages.kdeconnect-kde
     pkgs.neofetch
     pkgs.rclone
     pkgs.fd
@@ -191,7 +191,6 @@ in
     pkgs.go
     pkgs.python3
     pkgs.nodejs_22
-    pkgs.nodePackages.ts-node
     pkgs.yarn
     pkgs.cargo
 
@@ -212,8 +211,7 @@ in
     pkgs.nodePackages.typescript-language-server
     pkgs.pyright
     pkgs.nodePackages.bash-language-server
-    pkgs.nodePackages.vscode-json-languageserver
-    pkgs.nodePackages.dockerfile-language-server-nodejs
+    pkgs.dockerfile-language-server
     pkgs.tailwindcss-language-server
     pkgs.shellcheck
     # TODO: Update to stable
@@ -521,15 +519,9 @@ in
   programs.git = {
     # located here: ~/.config/git/config
     enable = true;
-    userName = "Matt Nodurfth";
-    userEmail = "mnodurft@gmail.com";
     signing = {
       key = "";
       signByDefault = false;
-    };
-    aliases = {
-      prettylog = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
-      root = "rev-parse --show-toplevel";
     };
     includes = [
       {
@@ -542,11 +534,19 @@ in
         condition = "gitdir:~/repos/work/";
       }
     ];
-    extraConfig = {
+    settings = {
+      user = {
+        name = "Matt Nodurfth";
+        email = "mnodurft@gmail.com";
+      };
+      alias = {
+        prettylog = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
+        root = "rev-parse --show-toplevel";
+      };
       core = {
         editor = "nvim";
+        askPass = ""; # needs to be empty to use terminal for ask pass
       };
-      core.askPass = ""; # needs to be empty to use terminal for ask pass
       credential.helper = "store"; # want to make this more secure
       branch.autosetuprebase = "always";
       color.ui = true;
@@ -720,7 +720,7 @@ in
   programs.neovim = {
     # https://github.com/nix-community/neovim-nightly-overlay/issues/525
     enable = true;
-    package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+    package = inputs.neovim-nightly-overlay.packages.${pkgs.stdenv.hostPlatform.system}.default;
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;

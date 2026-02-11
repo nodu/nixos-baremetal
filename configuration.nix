@@ -32,9 +32,7 @@
     };
 
     tailscale.enable = true;
-    logind.extraConfig = ''
-      HandlePowerKey=suspend
-    '';
+    logind.settings.Login.HandlePowerKey = "suspend";
     upower.criticalPowerAction = "Hibernate";
   };
 
@@ -169,14 +167,14 @@
     # Enable the X11 windowing system.
     enable = true;
 
-    # Enable the GNOME Desktop Environment.
-    displayManager.gdm.enable = true;
-    displayManager.gdm.wayland = true;
-    desktopManager.gnome.enable = true;
-
     windowManager.i3.enable = true;
 
   };
+
+  # Enable the GNOME Desktop Environment.
+  services.displayManager.gdm.enable = true;
+  services.displayManager.gdm.wayland = true;
+  services.desktopManager.gnome.enable = true;
 
   # services.displayManager.defaultSession = "sway";
   services.displayManager.defaultSession = "none+i3";

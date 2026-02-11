@@ -2,9 +2,17 @@ Host bitbucket.org
  HostName bitbucket.org
  IdentityFile ~/.ssh/baremetal
 
-Host github.com
+Host github-personal.com
  HostName github.com
  IdentityFile ~/.ssh/baremetal
+ IdentitiesOnly yes
+
+# Work GitHub account
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/mnodu@github
+    IdentitiesOnly yes
 
 Host bau-slate-wifi
     User pi
