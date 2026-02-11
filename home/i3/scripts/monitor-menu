@@ -24,7 +24,7 @@ menu=(
   [" Extend Right"]="$SCRIPT_DIR/extend-right.sh"
   [" Mirror"]="$SCRIPT_DIR/mirror.sh"
   [" Disable"]="$SCRIPT_DIR/default.sh"
-  [" Toggle Screensaver"]="$SCRIPT_DIR/toggle-screensaver.sh"
+  [" Toggle Screensaver"]="$SCRIPT_DIR/toggle-screensaver.sh --toggle"
   [" Arandr"]="arandr"
 )
 
