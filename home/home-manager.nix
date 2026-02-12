@@ -36,6 +36,11 @@ let
   # { system = builtins.trace config._module.args config._module.args; };
   # { inherit config; };
 
+  # Disable GPU hardware acceleration to fix grey screen/freeze on amdgpu
+  openCodeDesktop = pkgs.writeShellScriptBin "opencode-desktop" ''
+    exec ${unstable.opencode-desktop}/bin/OpenCode --disable-gpu "$@"
+  '';
+
   freerdpLauncherGPC =
     pkgs.writeShellApplication
       {
@@ -187,7 +192,7 @@ in
 
     unstable.claude-code
     unstable.opencode
-    unstable.opencode-desktop
+    openCodeDesktop
 
     pkgs.go
     pkgs.python3
@@ -338,13 +343,15 @@ in
         exec = lib.getExe freerdpLauncherGPC;
         categories = [ "Application" ];
       };
-      handy = {
+      opencode-desktop = {
         type = "Application";
-        name = "Handy";
-        comment = "Offline speech-to-text";
-        exec = "handy";
+        name = "OpenCode";
+        comment = "The open source AI coding agent";
+        exec = "opencode-desktop";
+        icon = "${unstable.opencode-desktop}/share/icons/hicolor/128x128/apps/OpenCode.png";
         terminal = false;
-        categories = [ "Application" "Utility" "Audio" ];
+        categories = [ "Application" "Development" ];
+        mimeType = [ "x-scheme-handler/opencode" ];
       };
     };
 

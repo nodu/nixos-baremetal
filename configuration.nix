@@ -291,7 +291,7 @@
   networking.firewall =
     {
       enable = true;
-      allowedTCPPorts = [ 443 1701 9001 ]; #443 nordvpn, 1701/9001 weylus
+      allowedTCPPorts = [ 443 1701 9001 56150 ]; #443 nordvpn, 1701/9001 weylus, 56150 m365agentsplayground
       allowedUDPPorts = [ 1194 ]; #nordvpn
 
       allowedUDPPortRanges = [
