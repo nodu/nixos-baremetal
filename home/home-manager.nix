@@ -296,8 +296,8 @@ in
     "defaults".source = fetchFromGitHub {
       owner = "nodu";
       repo = "defaults";
-      rev = "347ce09708ef36134b6075f7a1550d1b81aa04e0";
-      sha256 = "oN6I3tZQ3cRGr62tl/GUkswbWgawmfgpyt/drMe3paw=";
+      rev = "afe1cc827956c3b707acc60527ba530df035d4d8";
+      sha256 = "N8YQ86TJ70MCPXu5vXBEA42/W5Bn1HQ/gm/nIWT9O28=";
     };
   };
 
@@ -514,23 +514,25 @@ in
       theme = "robbyrussell";
     };
 
-    initExtraBeforeCompInit = ''
-      source "${gcloud}/google-cloud-sdk/completion.zsh.inc" 2>/dev/null || true
-    '';
-
-    initExtraFirst = ''
-    '';
-
-    initContent = ''
-      source $HOME/.config/nixos-functions.sh
-      source $HOME/.config/apps.sh
-      source $HOME/.config/aliases
-      source $HOME/.config/defaults/basic.sh
-      source $HOME/.config/defaults/network.sh
-      source $HOME/.config/defaults/git.sh
-      source $HOME/.config/m-os.sh
-      source $HOME/.config/shellConfig
-    '';
+    #https://mynixos.com/home-manager/option/programs.zsh.initContent
+    initContent =
+      let
+        zshConfigEarlyInit = lib.mkOrder 550 ''
+          source "${gcloud}/google-cloud-sdk/completion.zsh.inc" 2 > /dev/null || true
+        '';
+        zshConfig = lib.mkOrder 1000
+          ''
+            source $HOME/.config/nixos-functions.sh
+            source $HOME/.config/apps.sh
+            source $HOME/.config/aliases
+            source $HOME/.config/defaults/basic.sh
+            source $HOME/.config/defaults/network.sh
+            source $HOME/.config/defaults/git.sh
+            source $HOME/.config/m-os.sh
+            source $HOME/.config/shellConfig
+          '';
+      in
+      lib.mkMerge [ zshConfigEarlyInit zshConfig ];
   };
 
   programs.git = {
