@@ -38,7 +38,8 @@ let
 
   # Disable GPU hardware acceleration to fix grey screen/freeze on amdgpu
   openCodeDesktop = pkgs.writeShellScriptBin "opencode-desktop" ''
-    exec ${unstable.opencode-desktop}/bin/OpenCode --disable-gpu "$@"
+    export GST_PLUGIN_SYSTEM_PATH_1_0="${unstable.gst_all_1.gst-plugins-good}/lib/gstreamer-1.0:${unstable.gst_all_1.gst-plugins-base}/lib/gstreamer-1.0''${GST_PLUGIN_SYSTEM_PATH_1_0:+:$GST_PLUGIN_SYSTEM_PATH_1_0}"
+    exec ${unstable.opencode-desktop}/bin/OpenCode --disable-gpu --use-gl=angle --use-angle=swiftshader "$@"
   '';
 
   freerdpLauncherGPC =
