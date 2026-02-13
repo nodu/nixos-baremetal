@@ -35,7 +35,9 @@ let
   # TODO: - where is system arch config var?
   # { system = builtins.trace config._module.args config._module.args; };
   # { inherit config; };
-
+  gcloud = pkgs.google-cloud-sdk.withExtraComponents [
+    pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin
+  ];
   # Disable GPU hardware acceleration to fix grey screen/freeze on amdgpu
   # Supply gst-plugins-good so WebKit's GStreamer backend can create an audio
   # sink (autoaudiosink/pulsesink). Without it, WebKitWebProcess crashes with
@@ -190,21 +192,23 @@ in
     # pkgs.vault
     # pkgs.awscli2
     # pkgs.azure-cli
-    (pkgs.google-cloud-sdk.withExtraComponents [ pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin ])
     # pkgs.krew
     # pkgs.beekeeper-studio
 
     unstable.claude-code
     unstable.opencode
     openCodeDesktop
-
+    gcloud
     pkgs.go
     pkgs.python3
     pkgs.nodejs_22
     pkgs.yarn
     pkgs.cargo
 
-    pkgs.pass
+    # Note: need to set credsStore
+    # ".docker/config.json".text = builtins.toJSON {
+    #   credsStore = "secretservice";
+    # };
     pkgs.docker-credential-helpers
 
     # neovim
