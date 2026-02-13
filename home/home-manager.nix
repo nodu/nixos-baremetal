@@ -186,7 +186,7 @@ in
     # pkgs.vault
     # pkgs.awscli2
     # pkgs.azure-cli
-    # (pkgs.google-cloud-sdk.withExtraComponents [pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin])
+    (pkgs.google-cloud-sdk.withExtraComponents [ pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin ])
     # pkgs.krew
     # pkgs.beekeeper-studio
 
@@ -507,6 +507,7 @@ in
     };
 
     initExtraBeforeCompInit = ''
+      source "${gcloud}/google-cloud-sdk/completion.zsh.inc" 2>/dev/null || true
     '';
 
     initExtraFirst = ''
