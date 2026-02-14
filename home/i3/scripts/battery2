@@ -5,11 +5,17 @@
 #
 # A battery indicator blocklet script for i3blocks
 
-from subprocess import check_output
+from subprocess import check_output, Popen
 import os
 import re
 
 config = dict(os.environ)
+
+# If the block was left-clicked, launch the power-profiles menu in the background
+if os.environ.get("BLOCK_BUTTON") == "1":
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    Popen([os.path.join(script_dir, "power-profiles")])
+
 status = check_output(["acpi"], universal_newlines=True)
 
 if not status:

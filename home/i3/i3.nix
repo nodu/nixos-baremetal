@@ -106,7 +106,7 @@
         origin = "top-right";
         transparency = 10;
         frame_color = "#eceff1";
-        font = "FiraCode Nerd Font 14";
+        font = "Hack Nerd Font Mono 14";
 
       };
       urgency_normal = { background = "#37474f"; foreground = "#eceff1"; timeout = 10; };
