@@ -286,10 +286,10 @@ in
     "m-os.sh".text = builtins.readFile ./m-os.sh;
     "shellConfig".text = builtins.readFile ./shellConfig;
     "fzf-m-os-preview-function.sh".source = config.lib.file.mkOutOfStoreSymlink ./fzf-m-os-preview-function.sh;
-    "rofi/rofi-theme-deathemonic.rasi".text = builtins.readFile ./rofi/rofi-theme-deathemonic.rasi;
-    "rofi/catppuccin-mocha.rasi".text = builtins.readFile ./rofi/catppuccin-mocha.rasi;
-    "rofi/power-profiles.rasi".text = builtins.readFile ./rofi/power-profiles.rasi;
-    "rofi/monitor-menu.rasi".text = builtins.readFile ./rofi/monitor-menu.rasi;
+    "rofi" = {
+      source = ./rofi;
+      recursive = true;
+    };
 
     # After defaults repo is pushed; change the rev to commit hash; make sha254 empty string
     # Then nx-update; Then update sha256 from the failed build
