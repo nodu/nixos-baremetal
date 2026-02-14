@@ -8,20 +8,9 @@ let
   # Note: Nix Search for package, click on platform to find binary build status
   # Get specific versions of packages here:
   #   https://lazamar.co.uk/nix-versions/
-  #   ex) https://lazamar.co.uk/nix-versions/?channel=nixos-23.11&package=authy
   # To get the sha256 hash:
-  #   nix-prefetch-url --unpack https://github.com/NixOS/nixpkgs/archive/e49c28b3baa3a93bdadb8966dd128f9985ea0a09.tar.gz
+  #   nix-prefetch-url --unpack https://github.com/NixOS/nixpkgs/archive/<commit>.tar.gz
   #   or use an empty sha256 = ""; string, it'll show the hash; prefetch is safer
-
-  oldauthy = import
-    (builtins.fetchTarball {
-      url = "https://github.com/NixOS/nixpkgs/archive/eb090f7b923b1226e8beb954ce7c8da99030f4a8.tar.gz";
-      sha256 = "15iglsr7h3s435a04313xddah8vds815i9lajcc923s4yl54aj4j";
-    })
-    {
-      system = "x86_64-linux";
-      config.allowUnfree = true;
-    };
   # { inherit config; };
   # oldPkgs = import
   #   (builtins.fetchTarball {
@@ -87,7 +76,6 @@ in
     # oldPkgs.chromium #example how to import specific versions
 
     # GUI Apps
-    oldauthy.authy
     pkgs.google-chrome
     pkgs.firefox
     unstable.ladybird

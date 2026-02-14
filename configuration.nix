@@ -56,6 +56,16 @@
     settings = {
       experimental-features = [ "nix-command" "flakes" ];
       auto-optimise-store = true;
+      # Use all available CPU resources for builds
+      max-jobs = "auto";
+      cores = 0;
+      # Pre-built binaries for nix-community packages (neovim-nightly, etc.)
+      substituters = [
+        "https://nix-community.cachix.org"
+      ];
+      trusted-public-keys = [
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
     };
   };
 
@@ -110,6 +120,7 @@
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 15;
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "baremetal"; # Define your hostname.
@@ -175,6 +186,8 @@
   services.displayManager.gdm.enable = true;
   services.displayManager.gdm.wayland = true;
   services.desktopManager.gnome.enable = true;
+  # Disable heavy GNOME background services not needed for i3 workflow
+  services.gnome.gnome-online-accounts.enable = false;
 
   # services.displayManager.defaultSession = "sway";
   services.displayManager.defaultSession = "none+i3";
