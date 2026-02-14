@@ -26,6 +26,11 @@
       url = "github:cjpais/Handy";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+
+    defaults = {
+      url = "github:nodu/defaults";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, nixos-hardware, home-manager, ... }@inputs:

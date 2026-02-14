@@ -4,9 +4,6 @@
 # https://mipmip.github.io/home-manager-option-search
 
 let
-  inherit (pkgs)
-    fetchFromGitHub
-    ;
 
   # Note: Nix Search for package, click on platform to find binary build status
   # Get specific versions of packages here:
@@ -62,6 +59,7 @@ in
 {
   imports = [
     inputs.nix-colors.homeManagerModules.default
+    inputs.defaults.homeManagerModules.default
     ./sway/sway.nix
     ./i3/i3.nix
     # ./hyprland/hyprland.nix
@@ -157,7 +155,7 @@ in
     pkgs.dmidecode
     pkgs.openpomodoro-cli
     pkgs.file
-    pkgs.dig
+    pkgs.dnsutils
 
     # GPU
     pkgs.gamemode
@@ -290,15 +288,6 @@ in
     "rofi/catppuccin-mocha.rasi".text = builtins.readFile ./rofi/catppuccin-mocha.rasi;
     "rofi/power-profiles.rasi".text = builtins.readFile ./rofi/power-profiles.rasi;
     "rofi/monitor-menu.rasi".text = builtins.readFile ./rofi/monitor-menu.rasi;
-
-    # After defaults repo is pushed; change the rev to commit hash; make sha254 empty string
-    # Then nx-update; Then update sha256 from the failed build
-    "defaults".source = fetchFromGitHub {
-      owner = "nodu";
-      repo = "defaults";
-      rev = "afe1cc827956c3b707acc60527ba530df035d4d8";
-      sha256 = "N8YQ86TJ70MCPXu5vXBEA42/W5Bn1HQ/gm/nIWT9O28=";
-    };
   };
 
   xdg.desktopEntries =
@@ -369,6 +358,13 @@ in
 
   programs = {
     ghostty.enable = true;
+  };
+
+  programs.defaults = {
+    enable = true;
+    basic.enable = true;
+    git.enable = true;
+    network.enable = true;
   };
 
   programs.gpg = {
@@ -525,9 +521,6 @@ in
             source $HOME/.config/nixos-functions.sh
             source $HOME/.config/apps.sh
             source $HOME/.config/aliases
-            source $HOME/.config/defaults/basic.sh
-            source $HOME/.config/defaults/network.sh
-            source $HOME/.config/defaults/git.sh
             source $HOME/.config/m-os.sh
             source $HOME/.config/shellConfig
           '';
