@@ -1,10 +1,6 @@
 /*******************************************************
- * ROFI configs i3 power profiles menu
- * Inherits from menu-base.rasi, overrides lines count.
+ * ROFI configs i3 audio device selection menu
+ * Inherits from menu-base.rasi.
  *******************************************************/
 
 @import "menu-base.rasi"
-
-listview {
-    lines: 3;
-}
