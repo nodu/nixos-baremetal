@@ -500,21 +500,14 @@ in
     };
 
     #https://mynixos.com/home-manager/option/programs.zsh.initContent
-    initContent =
-      let
-        zshConfigEarlyInit = lib.mkOrder 550 ''
-          source "${gcloud}/google-cloud-sdk/completion.zsh.inc" 2 > /dev/null || true
-        '';
-        zshConfig = lib.mkOrder 1000
-          ''
-            source $HOME/.config/nixos-functions.sh
-            source $HOME/.config/apps.sh
-            source $HOME/.config/aliases
-            source $HOME/.config/m-os.sh
-            source $HOME/.config/shellConfig
-          '';
-      in
-      lib.mkMerge [ zshConfigEarlyInit zshConfig ];
+    initContent = lib.mkOrder 1000
+      ''
+        source $HOME/.config/nixos-functions.sh
+        source $HOME/.config/apps.sh
+        source $HOME/.config/aliases
+        source $HOME/.config/m-os.sh
+        source $HOME/.config/shellConfig
+      '';
   };
 
   programs.git = {
