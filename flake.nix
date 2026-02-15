@@ -35,28 +35,46 @@
 
   outputs = { self, nixpkgs, nixpkgs-unstable, nixos-hardware, home-manager, ... }@inputs:
     let
-      system = "x86_64-linux";
-      home-manager = inputs.home-manager.nixosModules;
-      unstable = import nixpkgs-unstable { inherit system; config.allowUnfree = true; };
-      # TODO: Remove this override once upstream fixes the hash in their flake.nix
-      # Upstream issue: AppImage hash mismatch for v0.7.3
-      handy = inputs.handy.packages.${system}.default;
+      home-manager-modules = inputs.home-manager.nixosModules;
+
+      # Helper to create a NixOS system configuration
+      mkSystem = { system, config, homeConfig, hardwareModules ? [], extraModules ? [], extraSpecialArgs ? {} }:
+        let
+          unstable = import nixpkgs-unstable { inherit system; config.allowUnfree = true; };
+        in
+        nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit unstable; } // extraSpecialArgs;
+          modules = [
+            { nixpkgs.hostPlatform = system; }
+            config
+          ] ++ hardwareModules ++ extraModules ++ [
+            home-manager-modules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.extraSpecialArgs = { inherit unstable; } // extraSpecialArgs;
+              home-manager.users.matt = import homeConfig { inherit inputs; };
+            }
+          ];
+        };
+
+      # handy is x86_64-only
+      handy = inputs.handy.packages."x86_64-linux".default;
+
       overlays = [
         #(import ./overlays/sddm.nix)
       ];
     in
     {
-      # Overlays is the list of overlays we want to apply from flake inputs.
-      nixosConfigurations.baremetal = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit unstable handy; }; # Passes unstable and handy inputs to all modules
-        modules = [
-          { nixpkgs.hostPlatform = "x86_64-linux"; }
-          ./configuration.nix
-          {
-            environment.systemPackages = [
-            ];
-          }
+      nixosConfigurations.baremetal = mkSystem {
+        system = "x86_64-linux";
+        config = ./hosts/baremetal/configuration.nix;
+        homeConfig = ./home/home-manager.nix;
+        hardwareModules = [
           nixos-hardware.nixosModules.framework-13-7040-amd
+        ];
+        extraSpecialArgs = { inherit handy; };
+        extraModules = [
           { nixpkgs.overlays = overlays; }
           {
             nixpkgs.config.packageOverrides = pkgs: {
@@ -65,19 +83,15 @@
                 { });
             };
           }
+        ];
+      };
 
-          home-manager.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { inherit unstable handy; };
-            home-manager.users.matt = import ./home/home-manager.nix
-              {
-                # inputs = inputs;
-                inherit inputs; #Same as inputs = inputs;
-              };
-          }
-
+      nixosConfigurations.rpi3 = mkSystem {
+        system = "aarch64-linux";
+        config = ./hosts/rpi3/configuration.nix;
+        homeConfig = ./home/rpi3.nix;
+        hardwareModules = [
+          nixos-hardware.nixosModules.raspberry-pi-3
         ];
       };
     };

@@ -44,6 +44,11 @@ Host bau-mesh-ip
     Hostname 100.105.37.182
     IdentityFile "~/.ssh/baremetal"
 
+Host rpi3
+    User matt
+    HostName rpi3
+    IdentityFile "~/.ssh/baremetal"
+
 Host moode
     User pi
     Hostname 192.168.0.102

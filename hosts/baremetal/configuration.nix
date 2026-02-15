@@ -9,8 +9,8 @@
     [
       # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./modules/vpns.nix
-      ./modules/fhs-compat.nix
+      ../../modules/vpns.nix
+      ../../modules/fhs-compat.nix
     ];
 
   services = {
@@ -122,6 +122,9 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 20;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  # Enable cross-compilation for aarch64 (Raspberry Pi)
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
   networking.hostName = "baremetal"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.

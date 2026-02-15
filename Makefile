@@ -1,9 +1,47 @@
+.DEFAULT_GOAL := help
+
+help:
+	@echo "NixOS Configuration Management"
+	@echo ""
+	@echo "Baremetal (Framework 13):"
+	@echo "  make switch              - Apply configuration"
+	@echo "  make switch-logs         - Apply with detailed build logs"
+	@echo "  make test                - Test configuration without switching"
+	@echo "  make list                - List system generations"
+	@echo "  make clean               - Run garbage collection"
+	@echo "  make clean-generations   - Delete generations older than 10 days"
+	@echo "  make clean-boot-partition - Clean up old boot entries"
+	@echo "  make optimise            - Deduplicate nix store"
+	@echo "  make set-current gen=N   - Switch to generation N"
+	@echo ""
+	@echo "Raspberry Pi 3:"
+	@echo "  make rpi3/deploy         - Build on Framework, push and activate on Pi"
+	@echo "  make rpi3/copy           - Copy config to Pi"
+	@echo "  make rpi3/switch         - Rebuild and switch (run on the Pi)"
+	@echo "  make rpi3/switch-remote  - Rebuild and switch via SSH"
+	@echo "  make rpi3/build          - Build rpi3 config (cross-compile)"
+	@echo "  make rpi3/secrets        - Copy SSH keys to Pi"
+	@echo ""
+	@echo "VM:"
+	@echo "  make vm/bootstrap0       - Bootstrap new VM from ISO"
+	@echo "  make vm/bootstrap        - Complete VM setup"
+	@echo "  make vm/copy             - Copy config to VM"
+	@echo "  make vm/switch           - Apply config on VM"
+	@echo "  make vm/secrets          - Copy secrets to VM"
+	@echo ""
+	@echo "Secrets:"
+	@echo "  make secrets/backup      - Backup SSH keys and GPG keyring"
+	@echo "  make secrets/restore     - Restore from backup"
+
 # Connectivity info for Linux VM
 #export NIXADDR=192.168.0.175
 # NIXADDR ?= unset
 NIXADDR ?= unset
 NIXPORT ?= 22
 NIXUSER ?= matt
+
+# Raspberry Pi 3 connectivity
+RPIADDR ?= rpi3
 
 # Get the path to this Makefile and directory
 MAKEFILE_DIR := $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
@@ -119,6 +157,57 @@ vm/switch:
 	ssh $(SSH_OPTIONS) -p$(NIXPORT) $(NIXUSER)@$(NIXADDR) " \
 		sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild switch --flake \"/nix-config#${NIXNAME}\" \
 	"
+
+#---------------------------------------------------------------------
+# Raspberry Pi 3 targets
+#---------------------------------------------------------------------
+
+# Build rpi3 configuration (cross-compile via binfmt on x86_64 host)
+rpi3/build:
+	nix build ".#nixosConfigurations.rpi3.config.system.build.toplevel"
+
+# Copy configuration to RPi3
+# Note: git init + git add is required because Nix flakes only sees git-tracked
+# files. Since we rsync without .git, we create a standalone repo on the Pi so
+# flake evaluation works. --force ignores .gitignore rules that could hide files.
+rpi3/copy:
+	rsync -av -e 'ssh -p22' \
+		--exclude='vendor/' \
+		--exclude='.git' \
+		$(MAKEFILE_DIR)/ $(NIXUSER)@$(RPIADDR):/home/matt/repos/nixos
+	ssh -p22 $(NIXUSER)@$(RPIADDR) "cd /home/matt/repos/nixos && git init -q && git add --force ."
+
+# Apply configuration on RPi3 remotely (requires passwordless sudo on rpi3)
+rpi3/switch-remote:
+	ssh -p22 $(NIXUSER)@$(RPIADDR) " \
+		sudo nixos-rebuild switch --flake \"/home/matt/repos/nixos#rpi3\" \
+	"
+
+# Copy secrets to RPi3
+rpi3/secrets:
+	rsync -av -e 'ssh -p22' \
+		--exclude='environment' \
+		$(HOME)/.ssh/ $(NIXUSER)@$(RPIADDR):~/.ssh
+
+# Build SD card image for initial RPi3 install
+# To re-enable, uncomment the sd-image-aarch64.nix import in hosts/rpi3/hardware-configuration.nix
+# rpi3/sd-image:
+# 	nix build ".#nixosConfigurations.rpi3.config.system.build.sdImage"
+
+# Build rpi3 on x86_64 host (via binfmt), push closure, and activate on the Pi
+rpi3/deploy:
+	nix build ".#nixosConfigurations.rpi3.config.system.build.toplevel"
+	nix copy --to ssh://$(NIXUSER)@$(RPIADDR) ./result
+	# readlink runs locally to resolve the store path; this is intentional
+	# because nix copy already pushed this exact path to the Pi
+	ssh -p22 $(NIXUSER)@$(RPIADDR) " \
+		sudo nix-env -p /nix/var/nix/profiles/system --set $$(readlink -f ./result) && \
+		sudo /nix/var/nix/profiles/system/bin/switch-to-configuration switch \
+	"
+
+# Run directly on the Pi (from ~/repos/nixos) to rebuild and switch
+rpi3/switch:
+	sudo nixos-rebuild switch --flake "/home/matt/repos/nixos#rpi3"
 
 # Backup secrets so that we can transer them to new machines via
 # sneakernet or other means.

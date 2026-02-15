@@ -11,16 +11,6 @@ let
   # To get the sha256 hash:
   #   nix-prefetch-url --unpack https://github.com/NixOS/nixpkgs/archive/<commit>.tar.gz
   #   or use an empty sha256 = ""; string, it'll show the hash; prefetch is safer
-  # { inherit config; };
-  # oldPkgs = import
-  #   (builtins.fetchTarball {
-  #     url = "https://github.com/NixOS/nixpkgs/archive/e49c28b3baa3a93bdadb8966dd128f9985ea0a09.tar.gz";
-  #     sha256 = "14xrf5kny4k32fns9q9vfixpb8mxfdv2fi4i9kiwaq1yzcj1bnx2";
-  #   })
-  #   { system = builtins.trace "aarch64-linux" "aarch64-linux"; };
-  # TODO: - where is system arch config var?
-  # { system = builtins.trace config._module.args config._module.args; };
-  # { inherit config; };
   gcloud = pkgs.google-cloud-sdk.withExtraComponents [
     pkgs.google-cloud-sdk.components.gke-gcloud-auth-plugin
   ];
@@ -49,6 +39,12 @@ in
   imports = [
     inputs.nix-colors.homeManagerModules.default
     inputs.defaults.homeManagerModules.default
+    (import ./shared/neovim.nix { inherit inputs; })
+    ./shared/shell.nix
+    ./shared/git.nix
+    ./shared/cli.nix
+    ./shared/gpg.nix
+    ./shared/ssh.nix
     ./sway/sway.nix
     ./i3/i3.nix
     # ./hyprland/hyprland.nix
@@ -60,9 +56,9 @@ in
 
 
   #cat "$1" | col -bx | bat --language man --style plain
+
   # Home-manager 22.11 requires this be set. We never set it so we have
   # to use the old state version.
-  #home.stateVersion = "18.09";
   home.stateVersion = "23.05";
 
   xdg.enable = true;
@@ -73,7 +69,13 @@ in
 
   home.packages = [
     # freerdp3GPClauncher Add the shell application here if wanted in path
-    # oldPkgs.chromium #example how to import specific versions
+    # To pin a specific package version, import a specific nixpkgs commit:
+    # let oldPkgs = import (builtins.fetchTarball {
+    #   url = "https://github.com/NixOS/nixpkgs/archive/<commit-hash>.tar.gz";
+    #   sha256 = "<hash>";
+    # }) { inherit (pkgs) system; config.allowUnfree = true; };
+    # in [ oldPkgs.chromium ]
+    # See https://www.nixhub.io to find commits for specific versions
 
     # GUI Apps
     pkgs.google-chrome
@@ -111,39 +113,14 @@ in
     pkgs.coppwr
     pkgs.audacity
 
-    # Utilities
-    pkgs.nix-search-cli
+    # Baremetal-specific utilities
     pkgs.kdePackages.kdeconnect-kde
-    pkgs.neofetch
-    pkgs.rclone
-    pkgs.fd
-    pkgs.bat
-    pkgs.gum
-    pkgs.glow
-    pkgs.fzf
-    pkgs.gotop
-    pkgs.btop
-    pkgs.jq
-    pkgs.jqp #jq playground tui
-    pkgs.ripgrep
-    pkgs.tree
-    pkgs.zip
-    pkgs.unzip
-    pkgs.gcc
     pkgs.normcap
     pkgs.xdotool
-    pkgs.entr
-    pkgs.ffmpeg
-    pkgs.killall
-    pkgs.lshw
     pkgs.yt-dlp
-    pkgs.tealdeer
     # Check Bios version:
     # sudo dmidecode | grep -A3 'Vendor:\|Product:' && sudo lshw -C cpu | grep -A3 'product:\|vendor:'
     pkgs.dmidecode
-    pkgs.openpomodoro-cli
-    pkgs.file
-    pkgs.dnsutils
 
     # GPU
     pkgs.gamemode
@@ -197,63 +174,39 @@ in
     # };
     pkgs.docker-credential-helpers
 
-    # neovim
-    pkgs.tree-sitter
-    # nvim LSPs
-    ## Mason cannot setup because NixOS cannot run binarys
-    pkgs.nil
+    # Baremetal-only CLI tools
+    pkgs.gcc
+    pkgs.ffmpeg
+
+    # Baremetal-only LSPs and linters
     pkgs.statix
     # pkgs.marksman  # TODO: Re-enable when dotnet build issue is fixed (nixpkgs#XXXXX)
-
     pkgs.lua-language-server
     pkgs.vtsls
     pkgs.nodePackages.vscode-langservers-extracted
     pkgs.nodePackages.typescript-language-server
     pkgs.pyright
-    pkgs.nodePackages.bash-language-server
     pkgs.dockerfile-language-server
     pkgs.tailwindcss-language-server
-    pkgs.shellcheck
     # TODO: Update to stable
-    # pkgs.ruff-lsp
     unstable.ruff
     # TODO: not quite working:
     pkgs.docker-compose-language-service
-
-    # nvim Linters
     pkgs.stylua
-    pkgs.nixpkgs-fmt
     pkgs.markdownlint-cli2
     pkgs.nodePackages.prettier
-    pkgs.shfmt
   ];
 
   fonts.fontconfig.enable = true;
   #---------------------------------------------------------------------
   # Env vars and dotfiles
   #---------------------------------------------------------------------
-  home.sessionVariables = {
-    LANG = "en_US.UTF-8";
-    LC_CTYPE = "en_US.UTF-8";
-    LC_ALL = "en_US.UTF-8";
-    EDITOR = "nvim";
-    PAGER = "less -FirSwX";
-    MANPAGER = "sh -c 'col -bx | ${pkgs.bat}/bin/bat -l man -p'";
-    MANROFFOPT = "-c";
-  };
-
   #home.file.".inputrc".source = ./inputrc;
 
   # https://github.com/netbrain/zwift
   # docker run -v zwift-$USER:/data --name zwift-copy-op busybox true
   # docker cp .zwift-credentials zwift-copy-op:/data
   # docker rm zwift-copy-op
-  home.sessionPath = [
-    "$HOME/.npm/global/bin"
-    "$HOME/.local/bin"
-    "$HOME/go/bin"
-  ];
-
   home.file = {
     "zwift.sh" = {
       source = pkgs.fetchurl {
@@ -266,17 +219,10 @@ in
   };
 
   xdg.configFile = {
-    "nixos-functions.sh".text = builtins.readFile ./nixos-functions.sh;
-    "apps.sh".text = builtins.readFile ./apps.sh;
-    "aliases".text = builtins.readFile ./aliases;
-    "m-os.sh".text = builtins.readFile ./m-os.sh;
-    "shellConfig".text = builtins.readFile ./shellConfig;
-    "fzf-m-os-preview-function.sh".source = config.lib.file.mkOutOfStoreSymlink ./fzf-m-os-preview-function.sh;
     "rofi" = {
       source = ./rofi;
       recursive = true;
     };
-
   };
 
   xdg.desktopEntries =
@@ -356,19 +302,21 @@ in
     network.enable = true;
   };
 
-  programs.gpg = {
-    enable = true;
-    settings = {
-      no-symkey-cache = false; # Allow caching of Symmetric Passphrases
-    };
-  };
+  # Override pinentry to GTK for desktop environment
+  services.gpg-agent.pinentry.package = lib.mkForce pkgs.pinentry-gtk2;
 
-  services.gpg-agent = {
-    enable = true;
-    # cache the keys forever so we don't get asked for a password until reboot
-    defaultCacheTtl = 31536000;
-    maxCacheTtl = 31536000;
-    pinentry.package = pkgs.pinentry-gtk2;
+  # Baremetal-specific direnv whitelisted directories
+  programs.direnv.config = {
+    whitelist = {
+      prefix = [
+      ];
+
+      exact = [
+        "~/repos/job-scraper/"
+        "~/repos/10four-ai/"
+        "~/repos/www/"
+      ];
+    };
   };
 
   # Setup i3 exclusively in HM; remove from configiguration.nix
@@ -404,7 +352,7 @@ in
       display-combi = "🔎";
       display-emoji = "😀";
       display-calc = "🧮";
-      display-drun = "   Apps ";
+      display-drun = "   Apps ";
       display-run = "🚀";
       display-window = "🪟";
       display-Network = " 󰤨  Network";
@@ -435,127 +383,6 @@ in
     };
     # "theme" = "./rofi-theme-deathemonic.rasi";
     "theme" = "./catppuccin-mocha.rasi";
-  };
-
-  programs.bash = {
-    enable = true;
-    shellOptions = [ ];
-    historyControl = [ "ignoredups" "ignorespace" ];
-    initExtra = builtins.readFile ./bashrc;
-
-    shellAliases = {
-      ga = "git add";
-      gc = "git commit";
-      gco = "git checkout";
-      gcp = "git cherry-pick";
-      gdiff = "git diff";
-      gl = "git prettylog";
-      gp = "git push";
-      gs = "git status";
-      gt = "git tag";
-    };
-  };
-
-  programs.direnv = {
-    enable = true;
-    enableZshIntegration = true;
-    nix-direnv.enable = true;
-
-    config = {
-      whitelist = {
-        prefix = [
-        ];
-
-        exact = [
-          "~/repos/job-scraper/"
-          "~/repos/10four-ai/"
-          "~/repos/www/"
-        ];
-      };
-    };
-  };
-
-  programs.zsh = {
-    enable = true;
-    enableCompletion = true;
-    autosuggestion.enable = true;
-    syntaxHighlighting.enable = true;
-    autocd = true;
-    #completionInit
-
-    shellAliases = { };
-
-    history = {
-      size = 1000000;
-      save = 1000000;
-      expireDuplicatesFirst = true;
-      extended = true;
-      share = true;
-    };
-
-    oh-my-zsh = {
-      enable = true;
-      plugins = [ "git" "z" "fzf" "kubectl" "kube-ps1" "web-search" ];
-      theme = "robbyrussell";
-    };
-
-    #https://mynixos.com/home-manager/option/programs.zsh.initContent
-    initContent = lib.mkOrder 1000
-      ''
-        source $HOME/.config/nixos-functions.sh
-        source $HOME/.config/apps.sh
-        source $HOME/.config/aliases
-        source $HOME/.config/m-os.sh
-        source $HOME/.config/shellConfig
-      '';
-  };
-
-  programs.git = {
-    # located here: ~/.config/git/config
-    enable = true;
-    signing = {
-      key = "";
-      signByDefault = false;
-    };
-    includes = [
-      {
-        contents = {
-          user = {
-            email = "matt@work.com";
-            name = "Matt Nodurfth";
-          };
-        };
-        condition = "gitdir:~/repos/work/";
-      }
-    ];
-    settings = {
-      user = {
-        name = "Matt Nodurfth";
-        email = "mnodurft@gmail.com";
-      };
-      alias = {
-        prettylog = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
-        root = "rev-parse --show-toplevel";
-      };
-      core = {
-        editor = "nvim";
-        askPass = ""; # needs to be empty to use terminal for ask pass
-      };
-      credential.helper = "store"; # want to make this more secure
-      branch.autosetuprebase = "always";
-      color.ui = true;
-      github.user = "nodu";
-      push.default = "tracking";
-      init.defaultBranch = "main";
-      url = {
-        "git@bitbucket.com:" = {
-          insteadOf = "https://bitbucket.com/";
-        };
-        "git@github.com:" = {
-          insteadOf = "https://github.com/";
-        };
-      };
-    };
   };
 
   programs.alacritty = {
@@ -709,26 +536,6 @@ in
         };
 
       };
-  };
-
-  programs.neovim = {
-    # https://github.com/nix-community/neovim-nightly-overlay/issues/525
-    enable = true;
-    package = inputs.neovim-nightly-overlay.packages.${pkgs.stdenv.hostPlatform.system}.default;
-    defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
-    vimdiffAlias = true;
-
-    plugins = [
-    ];
-
-    extraConfig = ''
-      source ~/.config/nvim/bootstrap.init.lua
-    '';
-
-    extraPackages = [
-    ];
   };
 
   home.pointerCursor = {
