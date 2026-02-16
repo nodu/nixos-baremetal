@@ -33,5 +33,9 @@
 
   home.packages = [
     # Add rpi3-specific packages here
+
+    # Gaggimate
+    pkgs.esptool
+    pkgs.picocom
   ];
 }
