@@ -69,7 +69,7 @@
       nixosConfigurations.baremetal = mkSystem {
         system = "x86_64-linux";
         config = ./hosts/baremetal/configuration.nix;
-        homeConfig = ./home/home-manager.nix;
+        homeConfig = ./home/home-baremetal.nix;
         hardwareModules = [
           nixos-hardware.nixosModules.framework-13-7040-amd
         ];
@@ -89,7 +89,7 @@
       nixosConfigurations.rpi3 = mkSystem {
         system = "aarch64-linux";
         config = ./hosts/rpi3/configuration.nix;
-        homeConfig = ./home/rpi3.nix;
+        homeConfig = ./home/home-rpi3.nix;
         hardwareModules = [
           nixos-hardware.nixosModules.raspberry-pi-3
         ];

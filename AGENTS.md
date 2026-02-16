@@ -46,7 +46,7 @@ There is no unit test suite, linter, or CI pipeline. The primary validation meth
 | `flake.nix` | Flake definition: inputs, outputs, nixpkgs/unstable channels, overlays |
 | `configuration.nix` | System-level config: boot, networking, services, system packages |
 | `hardware-configuration.nix` | Auto-generated hardware config (**do not edit**) |
-| `home/home-manager.nix` | User-level config: user packages, dotfiles, programs, shell |
+| `home/home-baremetal.nix` | User-level config: user packages, dotfiles, programs, shell |
 | `home/i3/`, `home/sway/` | Window manager configs (nix modules + external config files) |
 | `modules/` | Custom NixOS modules (`vpns.nix`, `fhs-compat.nix`) and package derivations (`vpn.nix`, `handy.nix`) |
 | `Makefile` | Build/deploy commands |
@@ -54,7 +54,7 @@ There is no unit test suite, linter, or CI pipeline. The primary validation meth
 ### Where to Add Things
 
 - **System packages**: `configuration.nix` in `environment.systemPackages`
-- **User packages**: `home/home-manager.nix` in `home.packages`
+- **User packages**: `home/home-baremetal.nix` in `home.packages`
 - **NixOS services/modules**: `modules/` directory, imported in `configuration.nix`
 - **WM-specific packages/config**: `home/i3/i3.nix` or `home/sway/sway.nix`
 
@@ -98,7 +98,7 @@ There is no unit test suite, linter, or CI pipeline. The primary validation meth
 
 ### Naming Conventions
 
-- **Files**: lowercase kebab-case (`home-manager.nix`, `fhs-compat.nix`)
+- **Files**: lowercase kebab-case (`home-baremetal.nix`, `fhs-compat.nix`)
 - **Local variables** in `let` blocks: camelCase (`nordVPNBase`, `handyFHS`)
 - **Package names** (`pname`): lowercase with hyphens (`"nordvpn"`)
 - **Module options**: standard NixOS dot paths (`services.nordvpn.enable`)

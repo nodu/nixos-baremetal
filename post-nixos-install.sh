@@ -1,8 +1,8 @@
-ln -s ~/repos/nixos-baremetal/nixos-ssh-config ~/.ssh/config
+ln -s ~/repos/nixos/nixos-ssh-config ~/.ssh/config
 
 mkdir ~/repos
 
-git clone git@github.com:nodu/nixos-baremetal.git ~/repos/nixos-baremetal
+git clone git@github.com:nodu/nixos.git ~/repos/nixos
 git clone git@github.com:nodu/defaults.git ~/repos/defaults/
 git clone git@github.com:nodu/dotenv.git ~/repos/dotenv/
 git clone git@github.com:nodu/notes.git ~/repos/notes
@@ -16,4 +16,3 @@ git clone git@github.com:nodu/lazystuff.git ~/.config/nvim/
 nvim
 
 # ln -s /host/matt/Downloads ~/Downloads
-

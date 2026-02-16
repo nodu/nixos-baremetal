@@ -16,7 +16,7 @@ n() {
 }
 
 vn() {
-  cd ~/repos/nixos-baremetal || exit
+  cd ~/repos/nixos || exit
   nvim
   cd - || exit
 }
@@ -240,7 +240,7 @@ m.vlcc_brain() {
 }
 
 m.source_alias() {
-  source /home/matt/repos/nixos-baremetal/home/aliases
+  source /home/matt/repos/nixos/home/aliases
 }
 
 m.edit_vim() {
@@ -248,15 +248,15 @@ m.edit_vim() {
 }
 
 m.edit_alias() {
-  nvim ~/repos/nixos-baremetal/home/aliases
+  nvim ~/repos/nixos/home/aliases
 }
 
 m.edit_i3() {
-  nvim ~/repos/nixos-baremetal/home/i3/i3.config
+  nvim ~/repos/nixos/home/i3/i3.config
 }
 
 m.edit_home_manager() {
-  nvim ~/repos/nixos-baremetal/home/home-manager.nix
+  nvim ~/repos/nixos/home/home-baremetal.nix
 }
 
 function m.ffmpeg-info() {
