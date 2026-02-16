@@ -413,6 +413,3 @@ m.copy() {
 m.paste() {
   xclip -o -selection clipboard
 }
-
-check_git_status ~/repos
-check_git_status ~/.config #nvim

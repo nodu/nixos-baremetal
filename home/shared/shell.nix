@@ -76,16 +76,27 @@
     };
 
     #https://mynixos.com/home-manager/option/programs.zsh.initContent
-    initContent = lib.mkOrder 1000
-      ''
-        # Add hostname to prompt for distinguishing between hosts
-        PROMPT="%{$fg[magenta]%}%m%{$reset_color%} $PROMPT"
+    initContent = lib.mkMerge [
+      (lib.mkOrder 1000
+        ''
+          # Add hostname to prompt for distinguishing between hosts
+          PROMPT="%{$fg[magenta]%}%m%{$reset_color%} $PROMPT"
 
-        source $HOME/.config/nixos-functions.sh
-        source $HOME/.config/apps.sh
-        source $HOME/.config/aliases
-        source $HOME/.config/m-os.sh
-        source $HOME/.config/shellConfig
-      '';
+          source $HOME/.config/nixos-functions.sh
+          source $HOME/.config/apps.sh
+          source $HOME/.config/aliases
+          source $HOME/.config/m-os.sh
+          source $HOME/.config/shellConfig
+        '')
+      (lib.mkOrder 1500
+        ''
+          # Run git status checks asynchronously -- results print below prompt when ready
+          {
+            check_git_status ~/repos
+            check_git_status ~/.config #nvim
+          } &
+          disown
+        '')
+    ];
   };
 }
