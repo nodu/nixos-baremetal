@@ -285,6 +285,27 @@ in
         categories = [ "Application" "Development" ];
         mimeType = [ "x-scheme-handler/opencode" ];
       };
+      audio-output = {
+        type = "Application";
+        name = "Audio Output";
+        exec = "/home/matt/.config/i3/scripts/audio-output-menu";
+        icon = "audio-speakers-symbolic";
+        categories = [ "Settings" ];
+      };
+      audio-input = {
+        type = "Application";
+        name = "Audio Input";
+        exec = "/home/matt/.config/i3/scripts/audio-input-menu";
+        icon = "audio-input-microphone-symbolic";
+        categories = [ "Settings" ];
+      };
+      power-profile = {
+        type = "Application";
+        name = "Power Profile";
+        exec = "/home/matt/.config/i3/scripts/power-profiles";
+        icon = "power-profile-balanced-symbolic";
+        categories = [ "Settings" ];
+      };
     };
 
   #---------------------------------------------------------------------
@@ -337,6 +358,7 @@ in
       show-icons = true;
       sort = true;
       matching = "fuzzy";
+      case-sensitive = false;
       dpi = 220;
       font = "Hack Nerd Font Mono 10";
       terminal = "alacritty";
@@ -345,7 +367,7 @@ in
       drun-display-format = "{icon} {name}";
       disable-history = true;
       click-to-exit = true;
-      icon-theme = "Oranchelo";
+      icon-theme = "Adwaita";
       hide-scrollbar = true;
       sidebar-mode = true;
       display-filebrowser = "📁";
