@@ -23,11 +23,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1771036515,
-        "narHash": "sha256-HZKlE0fzUqLecbVJeE1ld2eS1+sMwpC+Njloqjff2rM=",
+        "lastModified": 1771200681,
+        "narHash": "sha256-XH0zhfcpBxZxAKMlpMk+DhqILhyHTTMBCPrRJ4geOQs=",
         "owner": "nodu",
         "repo": "defaults",
-        "rev": "895030dcadfe92351eecc6b85b83136a6ad8e7c9",
+        "rev": "d97db913e43da5ca0ffca37b4769119384e0cb61",
         "type": "github"
       },
       "original": {

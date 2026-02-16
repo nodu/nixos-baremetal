@@ -200,7 +200,7 @@ rpi3/deploy:
 	nix copy --to ssh://$(NIXUSER)@$(RPIADDR) ./result
 	# readlink runs locally to resolve the store path; this is intentional
 	# because nix copy already pushed this exact path to the Pi
-	ssh -p22 $(NIXUSER)@$(RPIADDR) " \
+	ssh -t -p22 $(NIXUSER)@$(RPIADDR) " \
 		sudo nix-env -p /nix/var/nix/profiles/system --set $$(readlink -f ./result) && \
 		sudo /nix/var/nix/profiles/system/bin/switch-to-configuration switch \
 	"
