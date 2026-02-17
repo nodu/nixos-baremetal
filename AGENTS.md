@@ -4,16 +4,20 @@ Instructions for AI coding agents working in this NixOS configuration repository
 
 ## Repository Overview
 
-Personal NixOS configuration for a Framework 13 AMD laptop. Uses Nix flakes, home-manager, GNOME + i3 (X11 primary), and Sway (Wayland secondary). Single host: `baremetal`.
+Personal NixOS configuration using Nix flakes, home-manager, GNOME + i3 (X11 primary), and Sway (Wayland secondary). Two hosts: `baremetal` (Framework 13 AMD, x86_64) and `rpi3` (Raspberry Pi 3, aarch64 headless server).
 
 ## Build / Test / Apply Commands
 
 ```bash
+make help             # Show all available targets (default)
 make test             # Test configuration without switching (catches eval errors)
 make switch           # Apply configuration changes (requires sudo)
 make switch-logs      # Apply with detailed build logs
 make list             # List system generations (for rollback)
+make set-current gen=N # Switch to a specific generation
+make clean            # Run garbage collection
 make clean-generations # Delete generations older than 10 days
+make clean-boot-partition # Clean up old boot entries
 make optimise         # Optimize/deduplicate nix store
 ```
 
@@ -26,6 +30,17 @@ nx-update-input <input>       # Update specific flake input
 nx-search <query>             # Search for packages
 nx-info-size <package>        # Show package size information
 nx-shell <packages>           # Create temporary shell with packages
+```
+
+### Raspberry Pi 3 Deployment
+
+```bash
+make rpi3/deploy         # Build on Framework (cross-compile via binfmt), push and activate on Pi
+make rpi3/build          # Build rpi3 config locally (cross-compile)
+make rpi3/copy           # Copy configuration files to Pi
+make rpi3/switch         # Rebuild and switch (run directly on the Pi)
+make rpi3/switch-remote  # Rebuild and switch via SSH
+make rpi3/secrets        # Copy SSH keys to Pi
 ```
 
 ### VM/Remote Deployment
@@ -44,18 +59,24 @@ There is no unit test suite, linter, or CI pipeline. The primary validation meth
 | Path | Purpose |
 |------|---------|
 | `flake.nix` | Flake definition: inputs, outputs, nixpkgs/unstable channels, overlays |
-| `configuration.nix` | System-level config: boot, networking, services, system packages |
-| `hardware-configuration.nix` | Auto-generated hardware config (**do not edit**) |
-| `home/home-baremetal.nix` | User-level config: user packages, dotfiles, programs, shell |
+| `hosts/baremetal/configuration.nix` | System-level config for Framework 13: boot, networking, services, system packages |
+| `hosts/baremetal/hardware-configuration.nix` | Auto-generated hardware config (**do not edit**) |
+| `hosts/rpi3/configuration.nix` | System-level config for Raspberry Pi 3 (headless, SSH-only) |
+| `hosts/rpi3/hardware-configuration.nix` | Auto-generated hardware config (**do not edit**) |
+| `home/home-baremetal.nix` | User-level config for baremetal: GUI apps, dev tools, dotfiles |
+| `home/home-rpi3.nix` | User-level config for rpi3: minimal, imports shared modules |
+| `home/shared/` | Shared home-manager modules: `shell.nix`, `git.nix`, `cli.nix`, `gpg.nix`, `ssh.nix`, `neovim.nix` |
 | `home/i3/`, `home/sway/` | Window manager configs (nix modules + external config files) |
-| `modules/` | Custom NixOS modules (`vpns.nix`, `fhs-compat.nix`) and package derivations (`vpn.nix`, `handy.nix`) |
+| `modules/` | Custom NixOS modules (`vpns.nix`, `fhs-compat.nix`) and package derivations (`vpn.nix`) |
 | `Makefile` | Build/deploy commands |
 
 ### Where to Add Things
 
-- **System packages**: `configuration.nix` in `environment.systemPackages`
-- **User packages**: `home/home-baremetal.nix` in `home.packages`
-- **NixOS services/modules**: `modules/` directory, imported in `configuration.nix`
+- **System packages (baremetal)**: `hosts/baremetal/configuration.nix` in `environment.systemPackages`
+- **System packages (rpi3)**: `hosts/rpi3/configuration.nix` in `environment.systemPackages`
+- **User packages (baremetal)**: `home/home-baremetal.nix` in `home.packages`
+- **Shared user config**: `home/shared/` modules (imported by both hosts)
+- **NixOS services/modules**: `modules/` directory, imported in the host's `configuration.nix`
 - **WM-specific packages/config**: `home/i3/i3.nix` or `home/sway/sway.nix`
 
 ## Desktop & Development Environment
@@ -162,7 +183,7 @@ in
 
 ## Stable vs Unstable Packages
 
-- Default: `pkgs` (nixpkgs 25.05, stable)
+- Default: `pkgs` (nixpkgs 25.11, stable)
 - Unstable: `unstable` (nixpkgs-unstable), passed via `specialArgs`
 - Use `unstable.` only when a newer version is specifically needed
 - Version pinning: specific nixpkgs commit via `builtins.fetchTarball` with SHA256
@@ -177,7 +198,9 @@ in
 - System uses experimental Nix features (flakes, nix-command)
 - Home-manager manages user environment separately from system
 - Framework 13 hardware optimizations are applied via nixos-hardware
+- RPi3 uses binfmt cross-compilation from the x86_64 host for builds
 - Auto garbage collection runs every 30 days, store optimization enabled
+- The `NIXNAME` variable in the Makefile controls which host config is built (default: `baremetal`)
 
 ## Key Workflows
 
@@ -187,6 +210,12 @@ in
 2. Test with `make test` to catch errors
 3. Apply with `make switch`
 4. Use `make list` to see generations for rollback if needed
+
+### RPi3 Deployment
+
+1. Edit `hosts/rpi3/configuration.nix` or `home/home-rpi3.nix`
+2. Cross-compile and deploy: `make rpi3/deploy`
+3. Or copy and rebuild on Pi: `make rpi3/copy && make rpi3/switch-remote`
 
 ### Managing System State
 
@@ -198,7 +227,7 @@ in
 
 - Use `nx-update-flakes()` to update all inputs
 - Use `nx-update-input <input>` for targeted updates
-- Check nixpkgs versions in flake.nix - system uses 25.05, some packages from unstable
+- Check nixpkgs versions in flake.nix - system uses 25.11, some packages from unstable
 
 ### Package Discovery
 
