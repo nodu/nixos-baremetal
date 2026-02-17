@@ -31,6 +31,11 @@
       url = "github:nodu/defaults";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    opencode = {
+      url = "github:anomalyco/opencode/dev";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
   outputs = { self, nixpkgs, nixpkgs-unstable, nixos-hardware, home-manager, ... }@inputs:
@@ -73,7 +78,10 @@
         hardwareModules = [
           nixos-hardware.nixosModules.framework-13-7040-amd
         ];
-        extraSpecialArgs = { inherit handy; };
+        extraSpecialArgs = {
+          inherit handy;
+          opencode-packages = inputs.opencode.packages."x86_64-linux";
+        };
         extraModules = [
           { nixpkgs.overlays = overlays; }
           {
