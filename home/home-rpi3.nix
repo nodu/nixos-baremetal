@@ -36,6 +36,5 @@
 
     # Gaggimate
     pkgs.esptool
-    pkgs.picocom
   ];
 }

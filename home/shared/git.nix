@@ -2,9 +2,24 @@
 { config, lib, pkgs, ... }:
 
 {
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
+    options = {
+      line-numbers = true;
+      syntax-theme = "base16";
+      dark = true;
+      minus-style = "normal \"#3b1219\"";
+      minus-emph-style = "normal \"#6e2532\"";
+      plus-style = "normal \"#132d1d\"";
+      plus-emph-style = "normal \"#1f5e37\"";
+    };
+  };
+
   programs.git = {
     # located here: ~/.config/git/config
     enable = true;
+    lfs.enable = true;
     signing = {
       key = "";
       signByDefault = false;
@@ -39,14 +54,14 @@
       github.user = "nodu";
       push.default = "tracking";
       init.defaultBranch = "main";
-      url = {
-        "git@bitbucket.com:" = {
-          insteadOf = "https://bitbucket.com/";
-        };
-        "git@github.com:" = {
-          insteadOf = "https://github.com/";
-        };
-      };
+      # url = {
+      #   "git@bitbucket.com:" = {
+      #     insteadOf = "https://bitbucket.com/";
+      #   };
+      #   "git@github.com:" = {
+      #     insteadOf = "https://github.com/";
+      #   };
+      # };
     };
   };
 }

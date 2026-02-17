@@ -1,6 +1,6 @@
 # Order 5
 { inputs, ... }:
-{ config, lib, pkgs, unstable, handy, ... }:
+{ config, lib, pkgs, unstable, handy, opencode-packages, ... }:
 # https://mipmip.github.io/home-manager-option-search
 
 let
@@ -149,7 +149,7 @@ in
     #pkgs.tshark
 
     # pkgs.postgresql_11
-    # pkgs.kubectl
+    pkgs.kubectl
     # pkgs.krew
     # pkgs.terraform
     # pkgs.vault
@@ -159,7 +159,7 @@ in
     # pkgs.beekeeper-studio
 
     unstable.claude-code
-    unstable.opencode
+    opencode-packages.opencode
     openCodeDesktop
     gcloud
     pkgs.go

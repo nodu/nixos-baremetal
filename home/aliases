@@ -173,25 +173,6 @@ nvimNewSplit() {
 
 function dsf() { diff -u $1 $2 | diff-so-fancy; }
 
-TRANS_USERPASS="user:pass"
-
-alias trans-ls="docker exec -it transmission transmission-remote -n $TRANS_USERPASS -l"
-
-function trans-add() {
-	docker exec -it transmission transmission-remote -n $TRANS_USERPASS -a $1
-}
-function trans-rm() {
-	docker exec -it transmission transmission-remote -n $TRANS_USERPASS -t $1 -r
-}
-function trans-stop() {
-	docker exec -it transmission transmission-remote -n $TRANS_USERPASS -t $1 -S
-}
-function trans-start() {
-	docker exec -it transmission transmission-remote -n $TRANS_USERPASS -t $1 -s
-}
-function trans-start-all() {
-	docker exec -it transmission transmission-remote -n $TRANS_USERPASS --torrent all --start
-}
 
 alias switch-to-windows='~/dotenv/switch-to-windows.sh'
 #alias aws='docker run --rm -it -v ~/dotenv/aws:/root/.aws -v $(pwd):/aws amazon/aws-cli'
