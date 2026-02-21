@@ -14,8 +14,8 @@ do_toggle() {
 		xset s off
 		dunstify "Screensaver: Off"
 	else
-		xset +dpms dpms 0 310 310
-		xset s 280 300
+		xset +dpms dpms 0 330 330
+		xset s 300 300
 		dunstify "Screensaver: On"
 	fi
 }

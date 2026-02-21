@@ -35,6 +35,7 @@
       pkgs.acpi
       pkgs.font-awesome
       pkgs.libnotify
+      pkgs.batsignal
     ];
 
   services.blueman-applet.enable = true;
@@ -112,6 +113,21 @@
       urgency_normal = { background = "#37474f"; foreground = "#eceff1"; timeout = 10; };
     };
   };
+
+  #----- Battery Notifications -----
+  systemd.user.services.batsignal = {
+    Unit = {
+      Description = "Battery level notification daemon";
+      After = [ "graphical-session.target" ];
+      PartOf = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStart = "${pkgs.batsignal}/bin/batsignal -n BAT1 -w 15 -c 7 -d 4 -e";
+      Restart = "on-failure";
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
+
   services.picom = {
     enable = true;
     shadow = true;

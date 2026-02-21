@@ -91,6 +91,34 @@ There is no unit test suite, linter, or CI pipeline. The primary validation meth
 - **Git**: Configured for multiple identities, SSH key management via secrets
 - **Docker**: Enabled for containerized development
 
+## Power Management (baremetal)
+
+The Framework 13 AMD uses **s2idle** (S0ix) for suspend -- not S3 deep sleep. s2idle drains more power than S3, so suspend-then-hibernate is configured to prevent battery death during suspend. Hibernation resume is auto-detected via the systemd initrd.
+
+### Behavior
+
+| Trigger | What happens |
+|---|---|
+| **Idle 5 min** | Screen locks via xss-lock/i3lock ([`home/i3/i3.config:61`](home/i3/i3.config)) |
+| **Idle 5.5 min** | Display off via DPMS ([`home/i3/i3.config:60`](home/i3/i3.config)) |
+| **Idle 10 min** | Suspend-then-hibernate via logind IdleAction ([`hosts/baremetal/configuration.nix:39-42`](hosts/baremetal/configuration.nix)) |
+| **Lid close** | Immediate suspend-then-hibernate ([`hosts/baremetal/configuration.nix:38`](hosts/baremetal/configuration.nix)) |
+| **Power button** | Immediate suspend-then-hibernate ([`hosts/baremetal/configuration.nix:37`](hosts/baremetal/configuration.nix)) |
+| **During suspend, every 1 min** | systemd wakes to check battery drain, hibernates early if needed ([`hosts/baremetal/configuration.nix:47-50`](hosts/baremetal/configuration.nix)) |
+| **During suspend, after 2h** | Hibernate regardless ([`hosts/baremetal/configuration.nix:48`](hosts/baremetal/configuration.nix)) |
+| **Awake, battery 15%** | Warning notification via batsignal/dunst ([`home/i3/i3.nix`](home/i3/i3.nix)) |
+| **Awake, battery 5%** | Critical notification via batsignal/dunst ([`home/i3/i3.nix`](home/i3/i3.nix)) |
+| **Awake, battery 4%** | Danger notification via batsignal/dunst ([`home/i3/i3.nix`](home/i3/i3.nix)) |
+| **Awake, battery 3%** | UPower triggers hibernate ([`hosts/baremetal/configuration.nix:43-44`](hosts/baremetal/configuration.nix)) |
+
+### Key files
+
+- **System power config**: [`hosts/baremetal/configuration.nix`](hosts/baremetal/configuration.nix) -- logind (lid/power/idle actions), upower (critical battery action), systemd sleep (hibernate delay, suspend estimation)
+- **Screen lock/DPMS**: [`home/i3/i3.config`](home/i3/i3.config) -- xset timeouts (use `exec` not `exec_always` so toggle state survives i3 reload)
+- **Screensaver toggle**: [`home/i3/scripts/monitor/toggle-screensaver.sh`](home/i3/scripts/monitor/toggle-screensaver.sh) -- toggle DPMS/screensaver on/off (keep xset values in sync with i3.config)
+- **Battery notifications**: [`home/i3/i3.nix`](home/i3/i3.nix) -- batsignal systemd user service, sends notifications via dunst
+- **Swap/hibernation**: [`hosts/baremetal/hardware-configuration.nix`](hosts/baremetal/hardware-configuration.nix) -- 32GB swapfile, resume auto-detected by systemd initrd
+
 ## Nix Code Style
 
 ### Formatting

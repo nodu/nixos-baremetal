@@ -32,9 +32,22 @@
     };
 
     tailscale.enable = true;
-    logind.settings.Login.HandlePowerKey = "suspend";
+
+    #----- Power Management -----
+    logind.settings.Login = {
+      HandlePowerKey = "suspend-then-hibernate";
+      HandleLidSwitch = "suspend-then-hibernate";
+      IdleAction = "suspend-then-hibernate";
+      IdleActionSec = "5min";
+    };
     upower.criticalPowerAction = "Hibernate";
+    upower.percentageAction = 3;
   };
+
+  systemd.sleep.extraConfig = ''
+    HibernateDelaySec=2h
+    SuspendEstimationSec=1m
+  '';
 
   virtualisation.docker.enable = true;
 
