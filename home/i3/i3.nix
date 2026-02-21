@@ -19,7 +19,6 @@
     [
       pkgs.playerctl
       pkgs.brightnessctl
-      pkgs.xscreensaver
       pkgs.xss-lock
       pkgs.maim
       pkgs.xdotool
@@ -40,10 +39,6 @@
 
   services.blueman-applet.enable = true;
 
-  services.screen-locker.xss-lock = {
-    # https://discourse.nixos.org/t/how-to-config-hybrid-sleep-after-idle-and-lock/8728/9
-    extraOptions = "--session 2";
-  };
   programs.i3status = {
     enable = false;
 

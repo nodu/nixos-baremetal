@@ -31,7 +31,7 @@
       };
     };
 
-    tailscale.enable = true;
+    tailscale.enable = false;
 
     #----- Power Management -----
     logind.settings.Login = {
@@ -92,6 +92,9 @@
   xdg.portal.wlr.enable = true;
 
   security.pam.services.login.fprintAuth = false;
+  # Enable fingerprint auth for GDM login (overrides login's fprintAuth = false,
+  # since gdm-password substacks login)
+  security.pam.services.gdm-password.fprintAuth = true;
 
   # Set a shorter timeout for fprintd on i3lock so password auth doesn't wait 60s
   # The PAM stack is serialized, so fprintd must timeout before password auth is tried
@@ -99,28 +102,28 @@
   security.pam.services.i3lock.rules.auth.fprintd.settings.timeout = 3;
   security.pam.services.i3lock-color.rules.auth.fprintd.settings.timeout = 3;
 
-  # https://github.com/NixOS/nixpkgs/issues/171136#issuecomment-1627779037
-  # similarly to how other distributions handle the fingerprinting login
-  security.pam.services.gdm-fingerprint = lib.mkIf (config.services.fprintd.enable) {
-    # lock on suspend not working? no i3 lock mechanism?
-    text = ''
-      auth       required                    pam_shells.so
-      auth       requisite                   pam_nologin.so
-      auth       requisite                   pam_faillock.so      preauth
-      auth       required                    ${pkgs.fprintd}/lib/security/pam_fprintd.so
-      auth       optional                    pam_permit.so
-      auth       required                    pam_env.so
-      auth       [success=ok default=1]      ${pkgs.gdm}/lib/security/pam_gdm.so
-      auth       optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so
-
-      account    include                     login
-
-      password   required                    pam_deny.so
-
-      session    include                     login
-      session    optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start
-    '';
-  };
+  # # https://github.com/NixOS/nixpkgs/issues/171136#issuecomment-1627779037
+  # # similarly to how other distributions handle the fingerprinting login
+  # security.pam.services.gdm-fingerprint = lib.mkIf (config.services.fprintd.enable) {
+  #   # lock on suspend not working? no i3 lock mechanism?
+  #   text = ''
+  #     auth       required                    pam_shells.so
+  #     auth       requisite                   pam_nologin.so
+  #     auth       requisite                   pam_faillock.so      preauth
+  #     auth       required                    ${pkgs.fprintd}/lib/security/pam_fprintd.so
+  #     auth       optional                    pam_permit.so
+  #     auth       required                    pam_env.so
+  #     auth       [success=ok default=1]      ${pkgs.gdm}/lib/security/pam_gdm.so
+  #     auth       optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so
+  #
+  #     account    include                     login
+  #
+  #     password   required                    pam_deny.so
+  #
+  #     session    include                     login
+  #     session    optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start
+  #   '';
+  # };
 
 
   environment.pathsToLink = [ "/libexec" "/share/zsh" ];

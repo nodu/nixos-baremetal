@@ -14,6 +14,7 @@
     ./shared/cli.nix
     ./shared/gpg.nix
     ./shared/ssh.nix
+    ./shared/tmux.nix
   ];
 
   home.stateVersion = "25.11";
